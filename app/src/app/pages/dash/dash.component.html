@@ -1,0 +1,14 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title color="light"> PragueDash </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="light">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <app-dash-card *ngFor="let cardData of cards" [card]="cardData"> </app-dash-card>
+</ion-content>
