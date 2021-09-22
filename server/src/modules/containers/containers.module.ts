@@ -6,7 +6,9 @@ import { Container } from './entities/container.entity';
 import { ContainersController } from './controllers/containers/containers.controller';
 
 @Module({
-  providers: [ContainersService],
+  providers: [
+    ContainersService,
+  ],
   imports: [
     TypeOrmModule.forFeature([Container]),
     ConfigModule
