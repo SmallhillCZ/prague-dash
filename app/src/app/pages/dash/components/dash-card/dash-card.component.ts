@@ -1,6 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, ElementRef, Input, OnChanges, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { CardComponent, Cards } from 'src/app/cards/cards';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Card } from 'src/app/schema/card';
 
 @Component({

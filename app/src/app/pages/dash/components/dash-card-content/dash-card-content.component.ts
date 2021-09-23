@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, Input, OnChanges, OnInit, ViewContainerRef } from '@angular/core';
-import { Cards, CardComponent } from 'src/app/cards/cards';
+import { Cards } from 'src/app/cards/cards';
 import { Card } from 'src/app/schema/card';
+import { CardComponent } from 'src/app/schema/card-component';
 
 @Component({
   selector: 'app-dash-card-content',
@@ -25,7 +26,9 @@ export class DashCardContentComponent implements OnInit, OnChanges {
   }
 
   renderCard(card: Card) {
-    const cardMeta = Cards[card.type];
+    const cardMeta = Cards.find(item => item.id === card.type);
+
+    if (!cardMeta) return;
 
     this.viewContainerRef.clear();
 
@@ -33,7 +36,7 @@ export class DashCardContentComponent implements OnInit, OnChanges {
 
     const componentRef = this.viewContainerRef.createComponent<CardComponent>(componentFactory);
 
-    componentRef.instance.data = card.data;
+    componentRef.instance.card = card;
 
   }
 

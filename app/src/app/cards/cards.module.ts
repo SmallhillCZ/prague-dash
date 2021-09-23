@@ -1,29 +1,15 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SharedModule } from '../shared/shared.module';
-import { CardTramComponent } from './components/card-tram/card-tram.component';
-import { CardContainerComponent } from './components/card-container/card-container.component';
-import { CardParkingComponent } from './components/card-parking/card-parking.component';
-import { CardTramSettingsComponent } from './components/card-tram-settings/card-tram-settings.component';
+import { ContainerModule } from './container/container.module';
 
 
 
 @NgModule({
-  declarations: [
-    CardTramComponent,
-    CardTramSettingsComponent,
-    CardContainerComponent,
-    CardParkingComponent
-  ],
+  declarations: [],
   imports: [
-    CommonModule,
-    SharedModule
+    ContainerModule
   ],
   exports: [
-    CardTramComponent,
-    CardTramSettingsComponent,
-    CardContainerComponent,
-    CardParkingComponent
+    ContainerModule
   ]
 })
 export class CardsModule { }

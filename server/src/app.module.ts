@@ -21,6 +21,7 @@ import { ContainersModule } from './modules/containers/containers.module';
     ConfigModule.forRoot(),
 
     ContainersModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

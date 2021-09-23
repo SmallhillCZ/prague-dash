@@ -1,0 +1,1 @@
+<ion-label *ngFor="let type of card.data.types"> {{ typeNames[type.type][lang] }}: {{ type.occupancy ? (type.occupancy | percent) : "?" }} </ion-label>

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn, OneToMany } from 'typeorm';
+import { ContainerType } from './container-type.entity';
 
 @Entity()
 export class Container {
@@ -17,6 +18,6 @@ export class Container {
   @Column()
   district: string;
 
-  @Column({ nullable: true })
-  occupancy: number;
+  @OneToMany(() => ContainerType, container => container.container)
+  types: ContainerType[];
 }

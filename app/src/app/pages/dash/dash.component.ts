@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ExampleCards } from 'src/app/data/example-cards';
+import { map } from 'rxjs/operators';
+import { ApiService } from 'src/app/core/services/api.service';
+import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
 
 @Component({
@@ -9,9 +11,10 @@ import { Card } from 'src/app/schema/card';
 })
 export class DashComponent implements OnInit {
 
-  cards: Card[] = ExampleCards;
+  cards = this.dashboardService.dashboard
+    .pipe(map(dash => dash?.cards || []));
 
-  constructor() { }
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
   }

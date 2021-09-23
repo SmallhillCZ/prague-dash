@@ -1,12 +1,15 @@
 import { Cards } from "../cards/cards";
 
-export interface Card {
-  type: keyof typeof Cards;
-  data: any;
-  definition?: any;
-  settings?: any;
+export interface Card<Data = any> {
+  id: string;
+  type: string;
 
-  lastUpdate: string;
+  data: Data;
+
+  icon?: string;
+  title?: string;
   color?: string;
+
+  lastUpdate?: string;
   notifications?: boolean;
 }
