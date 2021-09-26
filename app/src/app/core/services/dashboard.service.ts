@@ -57,4 +57,13 @@ export class DashboardService {
     this.saveDashboard(dash);
   }
 
+  async removeCard(id: string) {
+    const dash = await this.getDashboard();
+    const i = dash.cards.findIndex(item => item.id === id);
+
+    dash.cards.splice(i, 1);
+
+    this.saveDashboard(dash);
+  }
+
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map } from 'rxjs/operators';
-import { ApiService } from 'src/app/core/services/api.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
 
+@UntilDestroy()
 @Component({
   selector: 'app-dash',
   templateUrl: './dash.component.html',
@@ -11,12 +12,16 @@ import { Card } from 'src/app/schema/card';
 })
 export class DashComponent implements OnInit {
 
-  cards = this.dashboardService.dashboard
-    .pipe(map(dash => dash?.cards || []));
+  pages: { cards: Card[]; }[] = [];
 
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
+    this.dashboardService.dashboard
+      .pipe(untilDestroyed(this))
+      .pipe(map(dash => dash?.cards || []))
+      .subscribe(cards => this.pages = [{ cards }]);
+
   }
 
 }

@@ -7,7 +7,6 @@ import { DashRoutingModule } from './dash-routing.module';
 import { DashComponent } from './dash.component';
 import { DashCardContentComponent } from './components/dash-card-content/dash-card-content.component';
 
-
 @NgModule({
   declarations: [
     DashComponent,
@@ -18,7 +17,7 @@ import { DashCardContentComponent } from './components/dash-card-content/dash-ca
     CommonModule,
     DashRoutingModule,
     SharedModule,
-    CardsModule
+    CardsModule,
   ]
 })
 export class DashModule { }

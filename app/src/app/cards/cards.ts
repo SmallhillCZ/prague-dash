@@ -1,7 +1,7 @@
-import { CardMeta } from "../schema/card-meta";
-import { ContainerCardMeta } from "./container/meta";
+import { CardType } from "../schema/card-meta";
+import { ContainerCardType } from "./container/meta";
 
 
-export const Cards: CardMeta[] = [
-  ContainerCardMeta
+export const Cards: CardType[] = [
+  ContainerCardType
 ];

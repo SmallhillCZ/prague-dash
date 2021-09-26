@@ -3,7 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './core/components/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: 'add', loadChildren: () => import("./pages/add/add.module").then(m => m.AddModule) },
+  { path: 'card/add', loadChildren: () => import("./pages/card-add/card-add.module").then(m => m.CardAddModule) },
+
+  { path: 'card/:id/settings', loadChildren: () => import("./pages/card-settings/card-settings.module").then(m => m.CardSettingsModule) },
 
   { path: 'dash', loadChildren: () => import("./pages/dash/dash.module").then(m => m.DashModule) },
 

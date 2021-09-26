@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title color="light"> PragueDash </ion-title>
     <ion-buttons slot="primary">
-      <ion-button routerLink="/add" color="light">
+      <ion-button routerLink="/card/add" color="light">
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
       <ion-button color="light">
@@ -13,5 +13,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <app-dash-card *ngFor="let cardData of cards | async" [card]="cardData"> </app-dash-card>
+  <!-- <ion-slides [pager]="pages.length > 1">
+    <ion-slide *ngFor="let page of pages">
+      <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
+    </ion-slide>
+  </ion-slides> -->
+
+  <ng-container *ngFor="let page of pages">
+    <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
+  </ng-container>
 </ion-content>

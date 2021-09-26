@@ -3,10 +3,10 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ card?.title?.en }}</ion-title>
+    <ion-title>{{ cardType?.title?.en }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-card-select-content *ngIf="card" [cardMeta]="card"></app-card-select-content>
+  <app-card-select-content *ngIf="cardType" [cardType]="cardType"></app-card-select-content>
 </ion-content>

@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nastavení karty</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group *ngIf="card && cardType && cardType.settingsComponent">
+    <ion-item-divider>
+      <ion-label>{{ cardType!.title["cs"] }}</ion-label>
+    </ion-item-divider>
+
+    <app-card-custom-settings [card]="card!"></app-card-custom-settings>
+  </ion-item-group>
+
+  <ion-item-group *ngIf="card">
+    <ion-item-divider>
+      <ion-label>Obecná nastavení</ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Barva</ion-label>
+      <ion-select [(ngModel)]="card.color" (ngModelChange)="saveCard()">
+        <ion-select-option>Bílá</ion-select-option>
+        <ion-select-option>Černá</ion-select-option>
+        <ion-select-option>Růžová</ion-select-option>
+        <ion-select-option>Modrá</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-item-group>
+
+  <div *ngIf="card" class="actions ion-padding">
+    <ion-button color="danger" (click)="deleteCard(card.id)">Smazat kartu</ion-button>
+  </div>
+</ion-content>

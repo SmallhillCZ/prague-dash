@@ -1,4 +1,23 @@
+// @import "~swiper/swiper";
+// @import "~@ionic/angular/css/ionic-swiper";
+
 ion-content,
 ion-toolbar {
   --background: transparent;
+}
+
+ion-slides {
+  height: 100%;
+}
+
+ion-slide {
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+:host {
+  background-image: url("/assets/img/bg.jpg");
+  background-size: cover;
+  background-position: center;
 }

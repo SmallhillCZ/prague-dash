@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CardMeta } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-meta';
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { Cards } from 'src/app/cards/cards';
 
@@ -12,7 +12,7 @@ import { Cards } from 'src/app/cards/cards';
 })
 export class CardSelectComponent implements OnInit {
 
-  card?: CardMeta;
+  cardType?: CardType;
 
   constructor(
     private route: ActivatedRoute
@@ -24,8 +24,8 @@ export class CardSelectComponent implements OnInit {
       .subscribe(params => this.setCard(params["id"]));
   }
 
-  setCard(id: string): void {
-    this.card = Cards.find(item => item.id === id);
+  setCard(type: string): void {
+    this.cardType = Cards.find(item => item.type === type);
   }
 
 }

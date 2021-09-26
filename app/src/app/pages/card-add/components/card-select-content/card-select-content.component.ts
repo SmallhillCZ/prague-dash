@@ -2,7 +2,7 @@ import { Component, ComponentFactoryResolver, Input, OnChanges, OnInit, ViewCont
 import { Cards } from 'src/app/cards/cards';
 import { Card } from 'src/app/schema/card';
 import { CardComponent } from 'src/app/schema/card-component';
-import { CardMeta } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-meta';
 import { CardSelectComponent } from 'src/app/schema/card-select-component';
 
 @Component({
@@ -12,7 +12,7 @@ import { CardSelectComponent } from 'src/app/schema/card-select-component';
 })
 export class CardSelectContentComponent implements OnInit, OnChanges {
 
-  @Input() cardMeta!: CardMeta;
+  @Input() cardType!: CardType;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -23,16 +23,16 @@ export class CardSelectContentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.renderCard(this.cardMeta);
+    this.renderCard(this.cardType);
   }
 
-  renderCard(cardMeta: CardMeta) {
+  renderCard(cardType: CardType) {
 
     this.viewContainerRef.clear();
 
-    if (!cardMeta.selectComponent) return;
+    if (!cardType.selectComponent) return;
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(cardMeta.selectComponent);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(cardType.selectComponent);
 
     const componentRef = this.viewContainerRef.createComponent<CardSelectComponent>(componentFactory);
 

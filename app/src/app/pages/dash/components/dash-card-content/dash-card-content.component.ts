@@ -26,13 +26,13 @@ export class DashCardContentComponent implements OnInit, OnChanges {
   }
 
   renderCard(card: Card) {
-    const cardMeta = Cards.find(item => item.id === card.type);
+    const cardType = Cards.find(item => item.type === card.type);
 
-    if (!cardMeta) return;
+    if (!cardType) return;
 
     this.viewContainerRef.clear();
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(cardMeta.component);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(cardType.component);
 
     const componentRef = this.viewContainerRef.createComponent<CardComponent>(componentFactory);
 

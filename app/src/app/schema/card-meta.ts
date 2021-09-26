@@ -3,8 +3,8 @@ import { CardComponent } from "./card-component";
 import { CardSelectComponent } from "./card-select-component";
 import { CardSettingsComponent } from "./card-settings-component";
 
-export interface CardMeta {
-  id: string;
+export interface CardType {
+  type: string;
   component: new (...args: any[]) => CardComponent;
   selectComponent?: new (...args: any[]) => CardSelectComponent;
   settingsComponent?: new (...args: any[]) => CardSettingsComponent;
