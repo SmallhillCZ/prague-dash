@@ -24,4 +24,8 @@ export class DashComponent implements OnInit {
 
   }
 
+  trackCardChanges(index: number, item: Card) {
+    return item.id;
+  }
+
 }

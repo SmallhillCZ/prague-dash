@@ -20,6 +20,6 @@
   </ion-slides> -->
 
   <ng-container *ngFor="let page of pages">
-    <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
+    <app-dash-card *ngFor="let cardData of page.cards; trackBy: trackCardChanges" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
   </ng-container>
 </ion-content>
