@@ -24,10 +24,10 @@
     <ion-item>
       <ion-label>Barva</ion-label>
       <ion-select [(ngModel)]="card.color" (ngModelChange)="saveCard()">
-        <ion-select-option>Bílá</ion-select-option>
-        <ion-select-option>Černá</ion-select-option>
-        <ion-select-option>Růžová</ion-select-option>
-        <ion-select-option>Modrá</ion-select-option>
+        <ion-select-option value="white">Bílá</ion-select-option>
+        <ion-select-option value="black">Černá</ion-select-option>
+        <ion-select-option value="pink">Růžová</ion-select-option>
+        <ion-select-option value="blue">Modrá</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-item-group>
