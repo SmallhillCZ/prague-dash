@@ -45,10 +45,15 @@ export class CardSettingsComponent implements OnInit, ViewWillEnter {
     this.navController.navigateRoot("/");
   }
 
-  async saveCard() {
+  async save() {
     if (!this.card) return;
-    console.log("change", this.card);
     this.dashboardService.updateCard(this.card);
+  }
+
+  async saveCustom(settings: any) {
+    if (!this.card) return;
+    this.card.settings = settings;
+    this.save();
   }
 
 }

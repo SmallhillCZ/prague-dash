@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nastavení</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #form="ngForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Jazyk</ion-label>
+        <ion-select name="language" [ngModel]="settings.language">
+          <ion-select-option value="cs">Česky</ion-select-option>
+          <ion-select-option value="en">English</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </form>
+
+  <div class="spacer"></div>
+  <div class="version">Verze {{ appVersion }}</div>
+</ion-content>

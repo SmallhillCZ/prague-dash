@@ -16,7 +16,6 @@ export class ContainerService {
     private api: ApiService,
     private dashboardService: DashboardService
   ) {
-    timer(0, 30000).subscribe(() => this.updateCards());
   }
 
   async addCard(container: ContainerData) {

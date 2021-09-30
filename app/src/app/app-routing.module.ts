@@ -9,6 +9,8 @@ const routes: Routes = [
 
   { path: 'dash', loadChildren: () => import("./pages/dash/dash.module").then(m => m.DashModule) },
 
+  { path: 'settings', loadChildren: () => import("./pages/settings/settings.module").then(m => m.SettingsModule) },
+
   { path: '', pathMatch: 'full', redirectTo: 'dash' },
 
   { path: '**', component: NotFoundComponent }

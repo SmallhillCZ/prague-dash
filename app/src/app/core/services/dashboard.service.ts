@@ -29,7 +29,7 @@ export class DashboardService {
 
   async saveDashboard(dash: Dashboard) {
     await this.storage.set("dashboard", dash);
-    this.dashboard.next(dash);
+    return this.loadDashboard();
   }
 
   async addCard(cardData: Omit<Card, "id">) {
@@ -44,6 +44,8 @@ export class DashboardService {
   }
 
   async updateCard(card: Card) {
+    card = JSON.parse(JSON.stringify(card));
+
     const dash = await this.getDashboard();
     const i = dash.cards.findIndex(item => item.id === card.id);
 

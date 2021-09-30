@@ -1,4 +1,5 @@
-import { Component, ComponentFactoryResolver, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Cards } from 'src/app/cards/cards';
 import { Card } from 'src/app/schema/card';
 import { CardComponent } from 'src/app/schema/card-component';
@@ -13,6 +14,10 @@ export class CardCustomSettingsComponent implements OnInit {
 
 
   @Input() card!: Card;
+
+  @Output() change = new EventEmitter<any>();
+
+  changeSubscription?: Subscription;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -33,11 +38,14 @@ export class CardCustomSettingsComponent implements OnInit {
 
     this.viewContainerRef.clear();
 
+    this.changeSubscription?.unsubscribe();
+
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(cardType.settingsComponent);
 
     const componentRef = this.viewContainerRef.createComponent<CardSettingsComponent>(componentFactory);
 
     componentRef.instance.card = card;
+    this.changeSubscription = componentRef.instance.change.subscribe((value) => this.change.emit(value));
 
   }
 

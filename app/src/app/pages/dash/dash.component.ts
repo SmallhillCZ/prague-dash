@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
 
@@ -12,20 +12,15 @@ import { Card } from 'src/app/schema/card';
 })
 export class DashComponent implements OnInit {
 
-  pages: { cards: Card[]; }[] = [];
+  // pages: { cards: Card[]; }[] = [];
+  cards = this.dashboardService.dashboard
+    .pipe(map(dash => dash?.cards || []));
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(
+    private dashboardService: DashboardService,
+    private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.dashboardService.dashboard
-      .pipe(untilDestroyed(this))
-      .pipe(map(dash => dash?.cards || []))
-      .subscribe(cards => this.pages = [{ cards }]);
-
-  }
-
-  trackCardChanges(index: number, item: Card) {
-    return item.id;
   }
 
 }

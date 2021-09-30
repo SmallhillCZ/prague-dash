@@ -1,4 +1,4 @@
 <ion-item>
   <ion-label>Zobrazovat i typy odpadu bez měřidla</ion-label>
-  <ion-checkbox slot="end"></ion-checkbox>
+  <ion-checkbox [(ngModel)]="settings.showNotMetered" (ngModelChange)="save()" slot="end"></ion-checkbox>
 </ion-item>

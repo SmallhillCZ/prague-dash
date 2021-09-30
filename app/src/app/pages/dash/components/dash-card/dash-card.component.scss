@@ -1,7 +1,33 @@
 @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-  ::ng-deep ion-card {
+  ion-card {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.7);
   }
+}
+
+@mixin card-light {
+  color: #111;
+}
+
+@mixin card-dark {
+  color: #eee;
+  ion-card-subtitle {
+    color: #ddd;
+  }
+}
+
+ion-card.color-pink {
+  background-color: rgba(248, 96, 124, 0.7);
+  @include card-light;
+}
+
+ion-card.color-black {
+  background-color: rgba(0, 0, 0, 0.7);
+  @include card-dark;
+}
+
+ion-card.color-blue {
+  background-color: rgba(24, 137, 243, 0.7);
+  @include card-dark;
 }
