@@ -21,14 +21,9 @@ export class StopsController {
     const options = {
       name: query.q,
       offset: query.offset ? Number(query.offset) : undefined,
-      coordinates: (!!query.lat && !!query.lon) ? { lat: Number(query.lat), lon: Number(query.lon) } : undefined
+      coordinates: (!!query.lat && !!query.lon) ? { lat: Number(query.lat), lon: Number(query.lon) } : undefined,
     };
 
     return this.stopsService.getStops(options);
-  }
-
-  @Get("/:name")
-  async stop(@Param("name") name: string) {
-    return this.stopsService.getDepartureBoard(name);
   }
 }

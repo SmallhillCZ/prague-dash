@@ -13,14 +13,27 @@ import { Card } from 'src/app/schema/card';
 export class DashComponent implements OnInit {
 
   // pages: { cards: Card[]; }[] = [];
-  cards = this.dashboardService.dashboard
-    .pipe(map(dash => dash?.cards || []));
+  cards: Card[] = [];
 
   constructor(
     private dashboardService: DashboardService,
-    private cdRef: ChangeDetectorRef) { }
+  ) { }
 
   ngOnInit(): void {
+    this.dashboardService.dashboard
+      .pipe(untilDestroyed(this))
+      .subscribe(dashboard => this.cards = dashboard?.cards || []);
+  }
+
+
+
+  doRefresh(event: any) {
+
+    this.cards = JSON.parse(JSON.stringify(this.cards));
+
+    setTimeout(() => {
+      event.target?.complete();
+    }, 500);
   }
 
 }

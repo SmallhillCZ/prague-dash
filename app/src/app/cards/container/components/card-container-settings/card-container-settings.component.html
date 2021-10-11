@@ -1,4 +1,4 @@
 <ion-item>
-  <ion-label>Zobrazovat i typy odpadu bez měřidla</ion-label>
-  <ion-checkbox [(ngModel)]="settings.showNotMetered" (ngModelChange)="save()" slot="end"></ion-checkbox>
+  <ion-label>Všechny typy odpadu</ion-label>
+  <ion-toggle [(ngModel)]="card.definition.showNotMetered" (ngModelChange)="save()" slot="end"></ion-toggle>
 </ion-item>

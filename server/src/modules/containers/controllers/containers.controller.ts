@@ -1,5 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ContainersService } from '../services/containers.service';
+
+export interface GetContainersQuery {
+  q: string;
+}
 
 @Controller('containers')
 export class ContainersController {
@@ -11,8 +15,10 @@ export class ContainersController {
   }
 
   @Get("/")
-  getContainers() {
-    return this.containersService.getContainers();
+  getContainers(@Query() query: GetContainersQuery) {
+    return this.containersService.getContainers({
+      location: query.q
+    });
   }
 
   @Get("/:id")

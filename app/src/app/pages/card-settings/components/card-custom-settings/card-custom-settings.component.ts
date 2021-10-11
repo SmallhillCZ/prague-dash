@@ -1,9 +1,9 @@
-import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Cards } from 'src/app/cards/cards';
 import { Card } from 'src/app/schema/card';
-import { CardComponent } from 'src/app/schema/card-component';
+import { CardType } from 'src/app/schema/card-meta';
 import { CardSettingsComponent } from 'src/app/schema/card-settings-component';
+import { CARDS } from 'src/app/schema/cards-token';
 
 @Component({
   selector: 'app-card-custom-settings',
@@ -21,7 +21,8 @@ export class CardCustomSettingsComponent implements OnInit {
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    @Inject(CARDS) private cards: CardType[]
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +33,7 @@ export class CardCustomSettingsComponent implements OnInit {
   }
 
   renderCard(card: Card) {
-    const cardType = Cards.find(item => item.type === card.type);
+    const cardType = this.cards.find(item => item.type === card.type);
 
     if (!cardType || !cardType.settingsComponent) return;
 

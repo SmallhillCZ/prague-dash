@@ -1,8 +1,7 @@
 <ion-card mode="ios" [ngClass]="classes">
   <ion-card-header>
     <ion-card-subtitle>
-      <ng-container *ngIf="card.icon"><ion-icon [name]="card.icon"></ion-icon>&nbsp;</ng-container>
-      <ion-label *ngIf="card.title">{{ card.title }}</ion-label>
+      <ion-label>{{ card.title }}</ion-label>
     </ion-card-subtitle>
   </ion-card-header>
   <ion-card-content>

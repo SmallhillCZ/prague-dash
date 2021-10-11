@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { Cards } from 'src/app/cards/cards';
-import { Card } from 'src/app/schema/card';
 import { CardType } from 'src/app/schema/card-meta';
+import { CARDS } from 'src/app/schema/cards-token';
 
 @Component({
   selector: 'app-card-add',
@@ -12,10 +10,9 @@ import { CardType } from 'src/app/schema/card-meta';
 })
 export class CardAddComponent implements OnInit {
 
-  cards = Cards;
-
   constructor(
-    private navController: NavController
+    private navController: NavController,
+    @Inject(CARDS) public cards: CardType[]
   ) { }
 
   ngOnInit(): void {

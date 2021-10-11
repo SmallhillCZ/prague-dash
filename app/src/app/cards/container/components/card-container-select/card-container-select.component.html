@@ -1,7 +1,12 @@
+<ion-searchbar [(ngModel)]="search" (ionChange)="loadContainers()" debounce="250"></ion-searchbar>
+
 <ion-list>
   <ion-item *ngFor="let container of containers" (click)="onSelect(container)">
     <ion-label>
-      {{ container.location }} - (<ng-container *ngFor="let type of container.types; let isLast = last">{{ typeNames[type.type][lang] }}<ng-container *ngIf="!isLast">, </ng-container></ng-container>)
+      <h2>{{ container.location }}</h2>
+      <p>
+        <ng-container *ngFor="let type of container.types; let isLast = last">{{ typeNames[type.type][lang] }}<ng-container *ngIf="!isLast">, </ng-container></ng-container>
+      </p>
     </ion-label>
   </ion-item>
 </ion-list>

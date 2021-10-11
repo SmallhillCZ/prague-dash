@@ -12,11 +12,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <!-- <ion-slides [pager]="pages.length > 1">
-    <ion-slide *ngFor="let page of pages">
-      <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
-    </ion-slide>
-  </ion-slides> -->
-  <app-dash-card *ngFor="let cardData of cards | async" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content> </ion-refresher-content>
+  </ion-refresher>
+  <app-dash-card *ngFor="let cardData of cards" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
 </ion-content>

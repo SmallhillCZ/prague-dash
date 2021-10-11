@@ -4,12 +4,10 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ContainersModule } from './modules/containers/containers.module';
-import { StopsModule } from './modules/stops/stops.module';
-import { StopsService } from './modules/stops/services/stops.service';
-import { StopsController } from './modules/stops/controllers/stops.controller';
-import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
+import { ContainersModule } from './modules/containers/containers.module';
+import { PublicTransportModule } from './modules/public-transport/public-transport.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -27,7 +25,7 @@ import { CoreModule } from './core/core.module';
 
     ContainersModule,
 
-    StopsModule,
+    PublicTransportModule,
 
     SharedModule,
 

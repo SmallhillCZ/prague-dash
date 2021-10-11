@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { NavController, ViewWillEnter } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Cards } from 'src/app/cards/cards';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
 import { CardType } from 'src/app/schema/card-meta';
+import { CARDS } from 'src/app/schema/cards-token';
 
 @UntilDestroy()
 @Component({
@@ -21,7 +21,8 @@ export class CardSettingsComponent implements OnInit, ViewWillEnter {
   constructor(
     private route: ActivatedRoute,
     private navController: NavController,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    @Inject(CARDS) private cards: CardType[]
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +38,7 @@ export class CardSettingsComponent implements OnInit, ViewWillEnter {
   private loadCard(id: string) {
     this.card = this.dashboardService.dashboard.value?.cards.find(item => item.id === id);
 
-    this.cardType = Cards.find(item => item.type === this.card?.type);
+    this.cardType = this.cards.find(item => item.type === this.card?.type);
   }
 
   async deleteCard(id: string) {
@@ -50,9 +51,9 @@ export class CardSettingsComponent implements OnInit, ViewWillEnter {
     this.dashboardService.updateCard(this.card);
   }
 
-  async saveCustom(settings: any) {
+  async saveCustom(definition: any) {
     if (!this.card) return;
-    this.card.settings = settings;
+    this.card.definition = definition;
     this.save();
   }
 

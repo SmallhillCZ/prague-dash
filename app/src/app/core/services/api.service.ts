@@ -1,5 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
+export type ApiParams = HttpParams | {
+  [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
+};
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +14,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  get<T>(endpoint: string) {
-    return this.http.get<T>(this.root + "/" + endpoint).toPromise();
+  get<T>(endpoint: string, params?: ApiParams) {
+    return this.http.get<T>(this.root + "/" + endpoint, { params }).toPromise();
   }
 }

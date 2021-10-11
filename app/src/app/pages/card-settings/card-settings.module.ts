@@ -5,6 +5,7 @@ import { CardSettingsRoutingModule } from './card-settings-routing.module';
 import { CardSettingsComponent } from './card-settings.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CardCustomSettingsComponent } from './components/card-custom-settings/card-custom-settings.component';
+import { CardsModule } from 'src/app/cards/cards.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { CardCustomSettingsComponent } from './components/card-custom-settings/c
   imports: [
     CommonModule,
     CardSettingsRoutingModule,
-    SharedModule
+    SharedModule,
+    CardsModule
   ]
 })
 export class CardSettingsModule { }

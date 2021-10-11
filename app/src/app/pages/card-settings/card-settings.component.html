@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ card?.title }}</ion-title>
+    <ion-title>Nastavení karty</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -20,6 +20,11 @@
     <ion-item-divider>
       <ion-label>Obecná nastavení</ion-label>
     </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Název</ion-label>
+      <ion-input [(ngModel)]="card.title" (ngModelChange)="save()"></ion-input>
+    </ion-item>
 
     <ion-item>
       <ion-label>Barva</ion-label>

@@ -1,0 +1,22 @@
+h3 {
+  margin-top: 0;
+  margin-bottom: 1em;
+  text-align: center;
+  ion-badge {
+    vertical-align: middle;
+  }
+}
+table {
+  td.route {
+    width: 3rem;
+  }
+  td.departure {
+    width: 3rem;
+    text-align: right;
+  }
+  td.delay {
+    font-size: 0.8em;
+    width: 3rem;
+    text-align: right;
+  }
+}

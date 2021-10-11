@@ -1,33 +1,26 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
-import { Card } from 'src/app/schema/card';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardSettingsComponent } from 'src/app/schema/card-settings-component';
-import { ContainerData } from '../../schema/container-data';
-import { ContainerSettings } from '../../schema/container-settings';
+import { ContainerCard } from '../../schema/container-card';
+import { ContainerDefinition } from '../../schema/container-definition';
 
 @Component({
   selector: 'app-card-container-settings',
   templateUrl: './card-container-settings.component.html',
   styleUrls: ['./card-container-settings.component.scss']
 })
-export class CardContainerSettingsComponent implements CardSettingsComponent, OnInit, OnChanges {
+export class CardContainerSettingsComponent implements CardSettingsComponent, OnInit {
 
-  @Input() card!: Card<ContainerData, ContainerSettings>;
+  @Input() card!: ContainerCard;
 
-  @Output() change = new EventEmitter<ContainerSettings>();
+  @Output() change = new EventEmitter<ContainerDefinition>();
 
-  settings: ContainerSettings = {};
 
   constructor() { }
 
   ngOnInit(): void {
-    this.settings = this.card.settings || {};
-  }
-
-  ngOnChanges() {
   }
 
   save() {
-    this.change.emit(this.settings);
+    this.change.emit(this.card.definition);
   }
 }

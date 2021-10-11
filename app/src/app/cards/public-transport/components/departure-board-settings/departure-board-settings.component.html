@@ -1,0 +1,38 @@
+<ion-list *ngIf="definition">
+  <ion-item>
+    <ion-label>Počet spojů</ion-label>
+    <ion-input type="number" min="1" max="20" [(ngModel)]="definition.limit" (ngModelChange)="save()"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Označení nízkopodlažních spojů</ion-label>
+    <ion-toggle [(ngModel)]="definition.showWheelchairAccessible" (ngModelChange)="save()"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Započítat zpoždění do času</ion-label>
+    <ion-toggle [(ngModel)]="definition.addDelay" (ngModelChange)="save()"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Zobrazení času</ion-label>
+    <ion-select [(ngModel)]="definition.timeDisplay" (ngModelChange)="save()">
+      <ion-select-option value="time">Čas odjezdu</ion-select-option>
+      <ion-select-option value="remaining">Počet minut do odjezdu</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Nástupiště</ion-label>
+    <ion-select multiple>
+      <ion-select-option></ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Linky</ion-label>
+    <ion-select multiple>
+      <ion-select-option></ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-list>

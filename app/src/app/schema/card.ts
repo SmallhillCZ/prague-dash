@@ -1,14 +1,11 @@
-import { Cards } from "../cards/cards";
 
-export interface Card<Data = any, Settings = any> {
+export interface Card<Definition = any> {
   id: string;
   type: string;
 
-  data: Data;
-  settings?: Settings;
+  definition: Definition;
 
-  icon?: string;
-  title?: string;
+  title: string;
   color?: string;
 
   lastUpdate?: string;

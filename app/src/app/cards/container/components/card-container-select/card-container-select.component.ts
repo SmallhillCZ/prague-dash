@@ -1,44 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ApiService } from 'src/app/core/services/api.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
-import { SettingsService } from 'src/app/core/services/settings.service';
 import { Card } from 'src/app/schema/card';
-import { ContainerService } from '../../container.service';
+import { CardSelectComponent } from 'src/app/schema/card-select-component';
+import { ContainerService } from '../../services/container.service';
 import { ContainerData } from '../../schema/container-data';
 import { ContainerTypeNames } from '../../schema/container-type';
+import { CreateCardOptions } from 'src/app/schema/create-card-options';
+import { ContainerCard } from '../../schema/container-card';
 
 @Component({
   selector: 'app-card-container-select',
   templateUrl: './card-container-select.component.html',
   styleUrls: ['./card-container-select.component.scss']
 })
-export class CardContainerSelectComponent implements OnInit {
+export class CardContainerSelectComponent implements CardSelectComponent, OnInit {
 
   containers: ContainerData[] = [];
 
   typeNames = ContainerTypeNames;
 
-  lang = "en" as "en";
+  search: string = "";
+
+  lang = "cs" as "cs";
+
+  @Output()
+  select = new EventEmitter<CreateCardOptions<ContainerCard>>();
 
   constructor(
-    private dashboardService: DashboardService,
     private containerService: ContainerService,
-    private navController: NavController
   ) { }
 
   ngOnInit(): void {
     this.loadContainers();
   }
 
-  private async loadContainers() {
-    this.containers = await this.containerService.getContainers();
+  async loadContainers() {
+    const options = {
+      search: this.search || undefined
+    };
+    this.containers = await this.containerService.getContainers(options);
   }
 
   async onSelect(container: ContainerData) {
-    await this.containerService.addCard(container);
-
-    this.navController.navigateRoot("/");
+    this.select.emit({ title: "🗑️ " + container.location, definition: { id: container.id } });
   }
 
 }
