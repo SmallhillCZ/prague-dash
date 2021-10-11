@@ -19,10 +19,10 @@ export class ContainersDownloadService {
     private configService: ConfigService
   ) {
 
-    this.downloadContainers();
+    // this.downloadContainers();
   }
 
-  @Interval(60000)
+  @Interval(30 * 60 * 1000)
   async downloadContainers() {
 
     var timeStart = process.hrtime();
@@ -34,12 +34,14 @@ export class ContainersDownloadService {
       headers: { "x-access-token": this.configService.get<string>('GOLEMIO_TOKEN') }
     };
 
-    const response = await axios.get<ContainerResponse>("https://api.golemio.cz/v2/sortedwastestations/?onlyMonitored=true&limit=5", requestOptions)
+    const response = await axios.get<ContainerResponse>("https://api.golemio.cz/v2/sortedwastestations/?onlyMonitored=true", requestOptions)
       .then(res => res.data);
 
     let c = 0;
 
     for (let feature of response.features) {
+
+
 
       const containerData: Container = {
         "id": feature.properties.id,
@@ -52,12 +54,13 @@ export class ContainersDownloadService {
 
       await this.containerRepository.insert(containerData);
 
-      const containerTypesData: ContainerType[] = feature.properties.containers.map(container => ({
-        container: containerData,
-        id: container.container_id,
-        type: container.trash_type.id,
-        occupancy: container.last_measurement?.percent_calculated / 100
-      }));
+      const containerTypesData: ContainerType[] = feature.properties.containers
+        .map(container => ({
+          container: containerData,
+          id: container.container_id,
+          type: container.trash_type.id || 0,
+          occupancy: container.last_measurement?.percent_calculated / 100
+        }));
 
       await this.containerTypeRepository.insert(containerTypesData);
 

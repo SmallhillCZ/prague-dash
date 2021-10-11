@@ -1,0 +1,28 @@
+import { Logger } from "@nestjs/common";
+import { Database } from "sqlite";
+import { StopTime } from "../entities/stop-time.entity";
+import { Stop } from "../entities/stop.entity";
+import { StopData } from "../schema/stop-data";
+import { StopTimeData } from "../schema/stop-time-data";
+import { BaseWriter } from "./_base.writer";
+
+export class StopTimesWriter extends BaseWriter<StopTimeData, StopTime> {
+
+  constructor(db: Database, logger: Logger) {
+    super(db, "stop-times", logger);
+  }
+
+  transform(chunks: StopTimeData[]) {
+
+    return chunks
+      .filter(chunk => !!chunk.stop_id)
+      .map(chunk => ({
+        id: chunk.stop_id,
+        stop_id: chunk.stop_id,
+        trip_id: chunk.trip_id,
+        departure_time: ""
+      }));
+
+  }
+
+}

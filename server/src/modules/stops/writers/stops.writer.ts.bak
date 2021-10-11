@@ -1,0 +1,27 @@
+import { Logger } from "@nestjs/common";
+import { Database } from "sqlite";
+import { Stop } from "../entities/stop.entity";
+import { StopData } from "../schema/stop-data";
+import { BaseWriter } from "./_base.writer";
+
+export class StopsWriter extends BaseWriter<StopData, Stop> {
+
+  constructor(db: Database, logger: Logger) {
+    super(db, "stops", logger);
+  }
+
+
+  transform(chunks: StopData[]): Stop[] {
+
+    return chunks
+      .filter(chunk => !!chunk.stop_id)
+      .map(chunk => ({
+        id: chunk.stop_id,
+        name: chunk.stop_name,
+        times: []
+      }));
+
+  }
+
+
+}

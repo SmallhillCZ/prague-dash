@@ -1,4 +1,5 @@
 export enum ContainerType {
+  "unknown" = 0,
   "tinted_glass" = 1,
   "electric_waste" = 2,
   "metals" = 3,
@@ -10,6 +11,10 @@ export enum ContainerType {
 }
 
 export const ContainerTypeNames: { [key in ContainerType]: { cs: string, en: string; } } = {
+  0: {
+    cs: "Neznámý",
+    en: "Unknown"
+  },
   1: {
     cs: "Barevné sklo",
     en: "Tinted glass"

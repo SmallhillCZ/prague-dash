@@ -1,0 +1,47 @@
+import { Logger } from "@nestjs/common";
+import { Database } from "sqlite";
+import { Writable } from "stream";
+import { Repository } from "typeorm";
+
+export abstract class BaseWriter<Input, Output> extends Writable {
+
+  c = 0;
+
+  first = true;
+
+  constructor(private db: Database, private table: string, private logger?: Logger) {
+    super({ objectMode: true });
+  }
+
+  abstract transform(chunks: Input[]): Output[];
+
+  _write(chunk: Input, encoding: BufferEncoding, callback: (error?: Error | null) => void) {
+    this._writev([{ chunk, encoding }], callback);
+  }
+
+  async _writev(chunks: { chunk: Input, encoding: BufferEncoding; }[], callback: (error?: Error | null) => void) {
+
+    if (this.first) {
+      this.first = false;
+      this.logger?.verbose(`Clearing repository....`);
+      await this.db.run(`DELETE FROM ${this.table}`);
+    }
+
+    const data = this.transform(chunks.map(chunk => chunk.chunk));
+    const cols = Object.keys(data);
+    await this.db.run(
+      `INSERT INTO ${this.table} (${cols.join(",")}) VALUES (?)`,
+      data
+    );
+
+
+    this.c += chunks.length;
+
+    callback();
+  }
+
+  _final(callback: (error?: Error | null) => void) {
+    this.logger?.verbose(`Written ${this.c} records to database.`);
+    callback();
+  }
+}

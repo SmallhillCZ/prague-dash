@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContainersModule } from './modules/containers/containers.module';
+import { StopsModule } from './modules/stops/stops.module';
+import { StopsService } from './modules/stops/services/stops.service';
+import { StopsController } from './modules/stops/controllers/stops.controller';
 
 @Module({
   imports: [
@@ -21,6 +24,8 @@ import { ContainersModule } from './modules/containers/containers.module';
     ConfigModule.forRoot(),
 
     ContainersModule,
+
+    StopsModule,
 
   ],
   controllers: [AppController],
