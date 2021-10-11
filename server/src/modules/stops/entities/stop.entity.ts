@@ -1,5 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { StopTime } from './stop-time.entity';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Stop {
@@ -14,9 +13,4 @@ export class Stop {
 
   @Column()
   lon: number;
-
-  @OneToMany(() => StopTime, stopTime => stopTime.stop_id)
-  times: StopTime[];
-
-
 }

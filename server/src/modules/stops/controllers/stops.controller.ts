@@ -1,5 +1,12 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { StopsService } from '../services/stops.service';
+
+export interface GetStopsQuery {
+  q?: string,
+  lat?: string,
+  lon?: string,
+  offset?: string;
+}
 
 @Controller('stops')
 export class StopsController {
@@ -9,12 +16,19 @@ export class StopsController {
   ) { };
 
   @Get("/")
-  async stops() {
-    return this.stopsService.getStops();
+  async stops(@Query() query?: GetStopsQuery) {
+
+    const options = {
+      name: query.q,
+      offset: query.offset ? Number(query.offset) : undefined,
+      coordinates: (!!query.lat && !!query.lon) ? { lat: Number(query.lat), lon: Number(query.lon) } : undefined
+    };
+
+    return this.stopsService.getStops(options);
   }
 
-  @Get("/:id")
-  async stop(@Param("id") id: string) {
-    return this.stopsService.getStop(id);
+  @Get("/:name")
+  async stop(@Param("name") name: string) {
+    return this.stopsService.getDepartureBoard(name);
   }
 }

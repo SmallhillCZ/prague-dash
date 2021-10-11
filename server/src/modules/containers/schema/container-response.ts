@@ -1,42 +1,34 @@
-export interface ContainerResponse {
+import { FeatureCollection } from "src/shared/schema/golemio-api";
 
-  "features":
-  {
-    "geometry": {
-      "coordinates": [number, number],
-      "type": "Point";
-    },
-    "properties": {
-      "accessibility": {
-        "description": string,
-        "id": number;
-      },
-      "containers": {
-        "cleaning_frequency": { "duration": string, "frequency": number, "id": number; },
-        "container_type": string,
-        "trash_type": { "description": string, "id": number; },
-        "knsko_id": number,
-        "container_id": string,
-        "last_measurement": { "measured_at_utc": string, "percent_calculated": number, "prediction_utc": string; },
-        "last_pick": string,
-        "sensor_code": string,
-        "sensor_supplier": string,
-        "sensor_id": string;
-      }[]
-      ,
-      "district": string,
-      "id": string,
-      "is_monitored": boolean,
-      "name": string,
-      "station_number": string,
-      "updated_at": string,
-      "knsko_id": number;
-    },
-    "type": "Feature";
-  }[];
-
-  "type": "FeatureCollection";
+export interface ContainerProperties {
+  "accessibility": {
+    "description": string,
+    "id": number;
+  },
+  "containers": {
+    "cleaning_frequency": { "duration": string, "frequency": number, "id": number; },
+    "container_type": string,
+    "trash_type": { "description": string, "id": number; },
+    "knsko_id": number,
+    "container_id": string,
+    "last_measurement": { "measured_at_utc": string, "percent_calculated": number, "prediction_utc": string; },
+    "last_pick": string,
+    "sensor_code": string,
+    "sensor_supplier": string,
+    "sensor_id": string;
+  }[]
+  ,
+  "district": string,
+  "id": string,
+  "is_monitored": boolean,
+  "name": string,
+  "station_number": string,
+  "updated_at": string,
+  "knsko_id": number;
 }
+
+export type ContainerResponse = FeatureCollection<ContainerProperties>;
+
 
 // "geometry": {
 //   "coordinates": [number, number],

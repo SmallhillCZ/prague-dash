@@ -13,13 +13,14 @@ export class ContainersDownloadService {
 
   private readonly logger = new Logger(ContainersDownloadService.name);
 
+  private readonly headers = { "x-access-token": this.configService.get<string>('GOLEMIO_TOKEN') };
+
   constructor(
     @InjectRepository(Container) private containerRepository: Repository<Container>,
     @InjectRepository(ContainerType) private containerTypeRepository: Repository<ContainerType>,
     private configService: ConfigService
   ) {
-
-    // this.downloadContainers();
+    this.downloadContainers();
   }
 
   @Interval(30 * 60 * 1000)
@@ -27,21 +28,23 @@ export class ContainersDownloadService {
 
     var timeStart = process.hrtime();
 
-    await this.containerTypeRepository.clear();
-    await this.containerRepository.clear();
 
+    this.logger.verbose("Downloading new container data...");
     const requestOptions: AxiosRequestConfig = {
-      headers: { "x-access-token": this.configService.get<string>('GOLEMIO_TOKEN') }
+      headers: this.headers
     };
 
     const response = await axios.get<ContainerResponse>("https://api.golemio.cz/v2/sortedwastestations/?onlyMonitored=true", requestOptions)
       .then(res => res.data);
 
+    this.logger.verbose("Clearing old container data...");
+    await this.containerTypeRepository.clear();
+    await this.containerRepository.clear();
+
+    this.logger.verbose("Saving new container data to database...");
     let c = 0;
 
     for (let feature of response.features) {
-
-
 
       const containerData: Container = {
         "id": feature.properties.id,
