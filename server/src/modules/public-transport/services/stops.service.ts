@@ -26,7 +26,7 @@ export class StopsService {
       .leftJoinAndSelect("stops.platforms", "platforms");
 
     if (options.name) {
-      query = query.andWhere({ "stops.name": Like(`%${options.name}%`) });
+      query = query.andWhere({ "name": Like(`%${options.name}%`) });
     }
 
     if (options.id) {
