@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 export type ApiParams = HttpParams | {
   [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
@@ -10,7 +11,7 @@ export type ApiParams = HttpParams | {
 })
 export class ApiService {
 
-  private root = "http://localhost:3000";
+  private root = environment.apiRoot;
 
   constructor(private http: HttpClient) { }
 
