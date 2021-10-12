@@ -1,13 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import axios, { AxiosRequestConfig } from 'axios';
-import * as path from 'path';
 import { Repository } from 'typeorm';
-import { StopPlatform } from '../entities/stop-platform.entity';
 import { Stop } from '../entities/stop.entity';
-import { DepartureBoardResponse } from '../schema/departure-board-response';
 import { StopsResponse } from '../schema/stops-response';
 
 @Injectable()
@@ -15,7 +12,6 @@ export class StopsDownloadService {
 
   private readonly logger = new Logger(StopsDownloadService.name);
 
-  private readonly tmpDir = path.resolve(this.configService.get("TMP_DIR"), "stops");
 
   private readonly headers = { "x-access-token": this.configService.get<string>("GOLEMIO_TOKEN") };
 
