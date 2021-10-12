@@ -1,5 +1,7 @@
 {
   "name": "Prague Dash",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
