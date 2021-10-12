@@ -1,19 +1,21 @@
-FROM node:lts as builder
+FROM node:lts
 
 WORKDIR /app
 
+# Install packages
 COPY package.json package-lock.json ./
 
 RUN npm ci
 
-COPY . .
+# Build
+COPY src src
+COPY nest-cli.json tsconfig.json tsconfig.build.json ./
 
 RUN npm run build
 
-FROM node:lts-alpine as runner
+# Run
+ENV NODE_ENV production
 
-WORKDIR /app
-
-COPY --from=builder /app /app
+EXPOSE 3000
 
 CMD npm start

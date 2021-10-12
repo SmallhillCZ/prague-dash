@@ -1,3 +1,7 @@
+# temporary artifacts
 dist
 node_modules
 tmp
+
+# keys
+.env
