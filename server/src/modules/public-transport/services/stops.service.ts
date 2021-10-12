@@ -26,7 +26,7 @@ export class StopsService {
       .leftJoinAndSelect("stops.platforms", "platforms");
 
     if (options.name) {
-      query = query.andWhere({ name: Like(`%${options.name}%`) });
+      query = query.andWhere({ "stops.name": Like(`%${options.name}%`) });
     }
 
     if (options.id) {
@@ -38,7 +38,7 @@ export class StopsService {
       query = query.orderBy(`(platforms.lat - ${options.coordinates.lat}) * (platforms.lat - ${options.coordinates.lat}) + (platforms.lon - ${options.coordinates.lon}) * (platforms.lon - ${options.coordinates.lon})`);
     }
     else {
-      query = query.orderBy({ name: "ASC" });
+      query = query.orderBy({ "stops.name": "ASC" });
     }
 
     if (options.offset) {
