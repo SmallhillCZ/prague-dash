@@ -7,6 +7,10 @@ h3 {
   }
 }
 table {
+  tr.at-stop {
+    font-weight: bold;
+  }
+
   td.route {
     width: 3rem;
   }
@@ -15,7 +19,7 @@ table {
     text-align: right;
   }
   td.delay {
-    font-size: 0.8em;
+    font-size: 0.7em;
     width: 3rem;
     text-align: right;
   }

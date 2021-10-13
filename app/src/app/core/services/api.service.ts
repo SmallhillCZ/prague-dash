@@ -33,6 +33,7 @@ export class ApiService {
 
     Object.entries(params).forEach(([key, value]) => {
       if (value === undefined) return;
+
       if (Array.isArray(value)) stringParams[key] = value.map(item => String(item));
       else stringParams[key] = String(value);
     });

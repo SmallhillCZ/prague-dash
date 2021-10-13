@@ -6,13 +6,15 @@ import { DepartureBoardCardComponent } from './components/departure-board-card/d
 import { DepartureBoardSelectComponent } from './components/departure-board-select/departure-board-select.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DepartureBoardSettingsComponent } from './components/departure-board-settings/departure-board-settings.component';
+import { RouteBadgeComponent } from './components/route-badge/route-badge.component';
 
 
 @NgModule({
   declarations: [
     DepartureBoardCardComponent,
     DepartureBoardSelectComponent,
-    DepartureBoardSettingsComponent
+    DepartureBoardSettingsComponent,
+    RouteBadgeComponent
   ],
   imports: [
     CommonModule,

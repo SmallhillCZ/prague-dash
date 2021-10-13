@@ -1,18 +1,25 @@
-<table *ngIf="types" class="card-table">
-  <tr *ngFor="let type of types">
-    <td class="name">{{ type.name }}</td>
-    <td *ngIf="type.occupancy !== null" class="chart">
-      <app-bar-chart [percentage]="type.occupancy"></app-bar-chart>
-    </td>
-    <td *ngIf="type.occupancy !== null" class="occupancy">{{ type.occupancy | percent }}</td>
-    <td *ngIf="type.occupancy === null" class="occupancy" colspan="2"></td>
-  </tr>
-</table>
+<ion-card-header>
+  <ion-card-subtitle>
+    <ion-label>{{ card.title }}</ion-label>
+  </ion-card-subtitle>
+</ion-card-header>
+<ion-card-content>
+  <table *ngIf="types" class="card-table">
+    <tr *ngFor="let type of types">
+      <td class="name">{{ type.name }}</td>
+      <td *ngIf="type.occupancy !== null" class="chart">
+        <app-bar-chart [percentage]="type.occupancy"></app-bar-chart>
+      </td>
+      <td *ngIf="type.occupancy !== null" class="occupancy">{{ type.occupancy | percent }}</td>
+      <td *ngIf="type.occupancy === null" class="occupancy" colspan="2"></td>
+    </tr>
+  </table>
 
-<table *ngIf="!types" class="card-table">
-  <tr *ngFor="let type of loadingTypes">
-    <td class="name"><ion-skeleton-text></ion-skeleton-text></td>
-    <td class="chart"><ion-skeleton-text></ion-skeleton-text></td>
-    <td class="occupancy"><ion-skeleton-text></ion-skeleton-text></td>
-  </tr>
-</table>
+  <table *ngIf="!types" class="card-table">
+    <tr *ngFor="let type of loadingTypes">
+      <td class="name"><ion-skeleton-text></ion-skeleton-text></td>
+      <td class="chart"><ion-skeleton-text></ion-skeleton-text></td>
+      <td class="occupancy"><ion-skeleton-text></ion-skeleton-text></td>
+    </tr>
+  </table>
+</ion-card-content>

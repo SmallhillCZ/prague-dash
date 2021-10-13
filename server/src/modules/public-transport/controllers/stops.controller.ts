@@ -16,7 +16,7 @@ export class StopsController {
   ) { };
 
   @Get("/")
-  async stops(@Query() query?: GetStopsQuery) {
+  async getStops(@Query() query?: GetStopsQuery) {
 
     const options = {
       name: query.q,
@@ -28,12 +28,7 @@ export class StopsController {
   }
 
   @Get("/:name")
-  async stop(@Param("name") name: string) {
-    const stop = await this.stopsService.getStops({ name, limit: 1 })
-      .then(stops => stops[0]);
-
-    if (!stop) throw new NotFoundException();
-
-    return stop;
+  async getStop(@Param() name: string) {
+    return this.stopsService.getStops({ name });
   }
 }

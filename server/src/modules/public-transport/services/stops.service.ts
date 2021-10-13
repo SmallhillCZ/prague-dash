@@ -52,6 +52,10 @@ export class StopsService {
 
   }
 
+  async getStop(options: { name: string; }) {
+    return this.stopsRepository.findOne({ name: options.name });
+  }
+
   async getClosestStop(options: { lat: number, lon: number; }) {
     return this.stopsRepository.createQueryBuilder("stops")
       .leftJoinAndSelect("stops.platforms", "platforms")
