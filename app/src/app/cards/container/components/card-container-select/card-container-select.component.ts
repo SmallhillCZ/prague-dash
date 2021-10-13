@@ -1,13 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { NavController } from '@ionic/angular';
-import { DashboardService } from 'src/app/core/services/dashboard.service';
-import { Card } from 'src/app/schema/card';
+import { Geolocation } from '@capacitor/geolocation';
 import { CardSelectComponent } from 'src/app/schema/card-select-component';
-import { ContainerService } from '../../services/container.service';
-import { ContainerData } from '../../schema/container-data';
-import { ContainerTypeNames } from '../../schema/container-type';
 import { CreateCardOptions } from 'src/app/schema/create-card-options';
 import { ContainerCard } from '../../schema/container-card';
+import { ContainerData } from '../../schema/container-data';
+import { ContainerTypeNames } from '../../schema/container-type';
+import { ContainerService } from '../../services/container.service';
 
 @Component({
   selector: 'app-card-container-select',
@@ -36,10 +34,18 @@ export class CardContainerSelectComponent implements CardSelectComponent, OnInit
   }
 
   async loadContainers() {
-    const options = {
-      search: this.search || undefined
-    };
-    this.containers = await this.containerService.getContainers(options);
+
+    const coordinates = await Geolocation.getCurrentPosition({ enableHighAccuracy: true })
+      .then(position => {
+        if (position) return { lat: position.coords.latitude, lon: position.coords.longitude };
+        else return undefined;
+      })
+      .catch(err => undefined);
+
+    this.containers = await this.containerService.getContainers({
+      search: this.search || undefined,
+      coordinates
+    });
   }
 
   async onSelect(container: ContainerData) {

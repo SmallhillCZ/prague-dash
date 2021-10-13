@@ -2,8 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { Geolocation } from '@capacitor/geolocation';
 import { CardSelectComponent, CardSelectComponentButton } from 'src/app/schema/card-select-component';
 import { CreateCardOptions } from 'src/app/schema/create-card-options';
-import { DepartureBoardCard, DepartureBoardCardDefinition } from '../../schema/departure-board-card';
-import { DepartureBoardData } from '../../schema/departure-board-data';
+import { DepartureBoardCard } from '../../schema/departure-board-card';
 import { StopData } from '../../schema/stop-data';
 import { StopsService } from '../../services/stops.service';
 

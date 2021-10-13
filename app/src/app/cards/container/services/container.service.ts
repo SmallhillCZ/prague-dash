@@ -16,10 +16,15 @@ export class ContainerService {
     return await this.api.get<ContainerData>(`containers/${id}`);
   }
 
-  async getContainers(options: { search?: string; }) {
+  async getContainers(options: { search?: string, coordinates?: { lat: number, lon: number; }; }) {
     const params: any = {};
 
     if (options.search) params["q"] = options.search;
+
+    if (options.coordinates) {
+      params["lat"] = options.coordinates.lat;
+      params["lon"] = options.coordinates.lon;
+    }
 
     return this.api.get<ContainerData[]>("containers", params);
   }
