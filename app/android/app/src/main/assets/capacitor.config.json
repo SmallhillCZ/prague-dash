@@ -1,0 +1,9 @@
+{
+	"appId": "cz.smallhill.praguedash",
+	"appName": "PragueDash",
+	"webDir": "www",
+	"bundledWebRuntime": false,
+	"server": {
+		"url": "http://192.168.0.115:8100"
+	}
+}

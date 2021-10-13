@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
-import { DepartureBoardData, DepartureData } from '../schema/departure-board-data';
+import { DepartureBoardData } from '../schema/departure-board-data';
 
 @Injectable({
   providedIn: 'root'

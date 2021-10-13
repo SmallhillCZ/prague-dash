@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@capacitor/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +8,8 @@ export class StorageService {
 
   constructor() { }
 
-  async get<T>(name: string): Promise<T | null> {
-    const value = window.localStorage.getItem(name);
+  async get<T>(key: string): Promise<T | null> {
+    const value = await Storage.get({ key }).then(res => res.value);
 
     if (value === null) return null;
 
@@ -20,7 +21,7 @@ export class StorageService {
     }
   }
 
-  async set<T = unknown>(name: string, value: T) {
-    return window.localStorage.setItem(name, JSON.stringify(value));
+  async set<T = unknown>(key: string, value: T) {
+    return Storage.set({ key, value: JSON.stringify(value) });
   }
 }
