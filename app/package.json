@@ -1,6 +1,7 @@
 {
   "name": "prague-dash",
   "version": "1.0.4",
+  "license": "UNLICENSED",
   "scripts": {
     "build": "ng build",
     "dev": "ng serve",

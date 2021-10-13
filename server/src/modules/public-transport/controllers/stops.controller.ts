@@ -28,7 +28,9 @@ export class StopsController {
   }
 
   @Get("/:name")
-  async getStop(@Param() name: string) {
-    return this.stopsService.getStops({ name });
+  async getStop(@Param("name") name: string) {
+    const stop = await this.stopsService.getStop({ name });
+    if (!stop) throw new NotFoundException();
+    return stop;
   }
 }

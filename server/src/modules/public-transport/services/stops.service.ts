@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { coordinatesToDistanceSql } from 'src/utils/coordinates-to-distance-sql';
@@ -53,7 +53,7 @@ export class StopsService {
   }
 
   async getStop(options: { name: string; }) {
-    return this.stopsRepository.findOne({ name: options.name });
+    return this.stopsRepository.findOne({ name: options.name, }, { relations: ["platforms"] });
   }
 
   async getClosestStop(options: { lat: number, lon: number; }) {
