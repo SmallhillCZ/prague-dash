@@ -32,8 +32,7 @@ export class DepartureBoardsService {
       names: typeof options.name === "string" ? [options.name] : options.name,
       ids: typeof options.id === "string" ? [options.id] : options.id,
       // filter: "routeHeadingOnce",
-      // skip: ["cancelled", "atStop"] // doesnt work despite docs 
-      skip: "canceled", // works, but might fail as they fix it TODO:
+      skip: ["canceled"],
       limit: options.limit ? Math.min(options.limit, 20) : 5
     };
 
