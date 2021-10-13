@@ -3,6 +3,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DateTime } from 'luxon';
 import { timer } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { CardComponent } from 'src/app/schema/card-component';
 import { DepartureBoardCard } from '../../schema/departure-board-card';
 import { DepartureBoardData, DepartureData } from '../../schema/departure-board-data';
@@ -18,7 +19,7 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
   departureBoard?: DepartureBoardData;
 
-  loadingDepartures = Array(8).fill(null);
+  loadingDepartures?: any[];
 
   now = DateTime.local();
 
@@ -37,6 +38,11 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
         .pipe(untilDestroyed(this))
         .subscribe(() => this.now = DateTime.local());
     }
+
+    timer(0, 60 * 1000)
+      .pipe(take(30))
+      .pipe(untilDestroyed(this))
+      .subscribe((i) => this.loadDepartures());
   }
 
   getRemainingTime(departure: string, now: DateTime) {
@@ -47,6 +53,9 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
   }
 
   private async loadDepartures() {
+
+    this.loadingDepartures = new Array(this.card.definition.limit || 5).fill(null);
+
     if (this.card.definition.name) {
       this.departureBoard = await this.departureBoardsService.getDepartureBoard({ name: this.card.definition.name, limit: this.card.definition.limit });
     }
