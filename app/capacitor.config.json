@@ -2,5 +2,6 @@
   "appId": "cz.smallhill.praguedash",
   "appName": "PragueDash",
   "webDir": "www",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "launchAutoHide": false
 }
