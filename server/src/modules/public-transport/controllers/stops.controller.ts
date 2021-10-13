@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Query, Res } from '@nestjs/common';
 import { StopsService } from '../services/stops.service';
 
 export interface GetStopsQuery {
@@ -25,5 +25,15 @@ export class StopsController {
     };
 
     return this.stopsService.getStops(options);
+  }
+
+  @Get("/:name")
+  async stop(@Param("name") name: string) {
+    const stop = await this.stopsService.getStops({ name, limit: 1 })
+      .then(stops => stops[0]);
+
+    if (!stop) throw new NotFoundException();
+
+    return stop;
   }
 }
