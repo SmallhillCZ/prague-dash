@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { coordinatesToDistanceSql } from 'src/utils/coordinates-to-distance-sql';
 import { Like, Repository } from 'typeorm';
 import { StopPlatform } from '../entities/stop-platform.entity';
 import { Stop } from '../entities/stop.entity';
@@ -30,12 +31,11 @@ export class StopsService {
     }
 
     if (options.id) {
-      query = query.andWhere("platform.id IN (:...ids)", { "ids": Array.isArray(options.id) ? options.id : [options.id] });
+      query = query.andWhere("platforms.id IN (:...ids)", { "ids": Array.isArray(options.id) ? options.id : [options.id] });
     }
 
     if (options.coordinates) {
-      // SQLite doesnt have SQRT or POW by default, so we use just basic math operations
-      query = query.orderBy(`(platforms.lat - ${options.coordinates.lat}) * (platforms.lat - ${options.coordinates.lat}) + (platforms.lon - ${options.coordinates.lon}) * (platforms.lon - ${options.coordinates.lon})`);
+      query = query.orderBy(coordinatesToDistanceSql("platforms", options.coordinates));
     }
     else {
       query = query.orderBy({ "stops.name": "ASC" });

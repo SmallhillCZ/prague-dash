@@ -3,6 +3,8 @@ import { ContainersService } from '../services/containers.service';
 
 export interface GetContainersQuery {
   q: string;
+  lat?: string;
+  lon?: string;
 }
 
 @Controller('containers')
@@ -17,7 +19,8 @@ export class ContainersController {
   @Get("/")
   getContainers(@Query() query: GetContainersQuery) {
     return this.containersService.getContainers({
-      location: query.q
+      location: query.q,
+      coordinates: (!!query.lat && !!query.lon) ? { lat: Number(query.lat), lon: Number(query.lon) } : undefined,
     });
   }
 

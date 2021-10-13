@@ -46,6 +46,8 @@ export class ContainersDownloadService {
 
     for (let feature of response.features) {
 
+      if (!feature.properties.name) return;
+
       const containerData: Container = {
         "id": feature.properties.id,
         "district": feature.properties.district,
