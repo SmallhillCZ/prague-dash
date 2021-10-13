@@ -23,7 +23,9 @@ export class StopsService {
     }
 
     return this.api.get<StopData[]>("stops", params);
+  }
 
-
+  async getStop(options: { name: string; }) {
+    return this.api.get<StopData>("stops/" + options.name);
   }
 }

@@ -8,8 +8,8 @@ export const DepartureBoardsCardType: CardType = {
   type: "departure-board",
 
   title: {
-    cs: "Odjezdové tabule",
-    en: "Departure boards"
+    cs: "Zastávková tabule",
+    en: "Departure board"
   },
 
   component: DepartureBoardCardComponent,

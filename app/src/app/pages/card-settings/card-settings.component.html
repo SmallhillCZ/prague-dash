@@ -8,19 +8,21 @@
 </ion-header>
 
 <ion-content>
-  <ion-item-group *ngIf="card && cardType && cardType.settingsComponent">
-    <ion-item-divider>
-      <ion-label>{{ cardType!.title["cs"] }}</ion-label>
-    </ion-item-divider>
+  <ng-container *ngIf="card && cardType && cardType.settingsComponent">
+    <ion-list-header>
+      <ion-label>
+        <h1>{{ cardType.title["cs"] }}</h1>
+      </ion-label>
+    </ion-list-header>
 
-    <app-card-custom-settings [card]="card!" (change)="saveCustom($event)"></app-card-custom-settings>
-  </ion-item-group>
+    <app-card-custom-settings *ngIf="card && cardType && cardType.settingsComponent" [card]="card!" (change)="saveCustom($event)"></app-card-custom-settings>
+  </ng-container>
+
+  <ion-list-header>
+    <ion-label><h1>Obecná nastavení</h1></ion-label>
+  </ion-list-header>
 
   <ion-item-group *ngIf="card">
-    <ion-item-divider>
-      <ion-label>Obecná nastavení</ion-label>
-    </ion-item-divider>
-
     <ion-item>
       <ion-label>Název</ion-label>
       <ion-input [(ngModel)]="card.title" (ngModelChange)="save()"></ion-input>
@@ -36,6 +38,10 @@
       </ion-select>
     </ion-item>
   </ion-item-group>
+
+  <ion-list-header>
+    <ion-label><h1>Smazat kartu</h1></ion-label>
+  </ion-list-header>
 
   <div *ngIf="card" class="actions ion-padding">
     <ion-button color="danger" (click)="deleteCard(card.id)">Smazat kartu</ion-button>

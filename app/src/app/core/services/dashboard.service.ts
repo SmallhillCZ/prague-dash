@@ -41,7 +41,8 @@ export class DashboardService {
     const card: Card = {
       ...options,
       id,
-      type
+      type,
+      color: "white"
     };
 
     dash?.cards.push(card);

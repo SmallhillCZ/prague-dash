@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { Geolocation } from '@capacitor/geolocation';
 import { CardSelectComponent, CardSelectComponentButton } from 'src/app/schema/card-select-component';
 import { CreateCardOptions } from 'src/app/schema/create-card-options';
-import { DepartureBoardCard } from '../../schema/departure-board-card';
+import { DepartureBoardCard, DepartureBoardCardDefinition } from '../../schema/departure-board-card';
 import { StopData } from '../../schema/stop-data';
 import { StopsService } from '../../services/stops.service';
 
@@ -14,7 +14,7 @@ import { StopsService } from '../../services/stops.service';
 export class DepartureBoardSelectComponent implements CardSelectComponent, OnInit, OnDestroy {
 
   @Output()
-  select = new EventEmitter<CreateCardOptions>();
+  select = new EventEmitter<CreateCardOptions<DepartureBoardCard>>();
 
   @Output()
   buttons = new EventEmitter<CardSelectComponentButton[]>();
@@ -59,6 +59,8 @@ export class DepartureBoardSelectComponent implements CardSelectComponent, OnIni
       title: "🚌 " + stop.name,
       definition: {
         name: stop.name,
+        allPlatforms: true,
+        platforms: {}
       },
     };
     this.select.emit(definition);
@@ -67,7 +69,10 @@ export class DepartureBoardSelectComponent implements CardSelectComponent, OnIni
   selectClosestStop() {
     this.select.emit({
       title: "🚌 Nejbližší zastávka",
-      definition: { closest: true }
+      definition: {
+        allPlatforms: true,
+        platforms: {}
+      },
     });
   }
 

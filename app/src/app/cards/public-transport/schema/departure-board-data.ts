@@ -1,3 +1,5 @@
+import { RouteType } from "./route-type";
+
 export interface DepartureData {
 
   delay: {
@@ -19,7 +21,7 @@ export interface DepartureData {
     is_regional: boolean,
     is_substitute_transport: boolean,
     short_name: string,
-    type: number,
+    type: RouteType,
   },
   stop: {
     name: string,
@@ -28,15 +30,35 @@ export interface DepartureData {
     is_wheelchair_accessible: number;
   },
   trip: {
+    direction: string,
     headsign: string,
     id: string,
+    is_at_stop: boolean,
     is_canceled: boolean,
-    is_wheelchair_accessible: 1;
+    is_wheelchair_accessible: boolean,
+    short_name: string,
   };
+}
+
+interface StopData {
+  level_id: string,
+  location_type: number,
+  parent_station: string,
+  platform_code: string,
+  stop_lat: number,
+  stop_lon: number,
+  asw_id: {
+    node: number,
+    stop: number,
+  },
+  stop_id: string,
+  stop_name: string,
+  wheelchair_boarding: number,
+  zone_id: string,
 }
 
 export interface DepartureBoardData {
   departures: DepartureData[];
-  stops: any[];
+  stops: StopData[];
   infotexts: any[];
 }
