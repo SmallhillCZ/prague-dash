@@ -1,7 +1,12 @@
 {
-  "name": "Prague Dash",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
+  "defaultProject": "prague-dash",
+  "projects": {
+    "prague-dash": {
+      "name": "Prague Dash",
+      "integrations": {
+        "capacitor": {}
+      },
+      "type": "angular"
+    }
+  }
 }
