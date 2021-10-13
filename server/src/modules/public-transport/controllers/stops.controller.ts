@@ -16,7 +16,7 @@ export class StopsController {
   ) { };
 
   @Get("/")
-  async stops(@Query() query?: GetStopsQuery) {
+  async getStops(@Query() query?: GetStopsQuery) {
 
     const options = {
       name: query.q,
@@ -25,5 +25,10 @@ export class StopsController {
     };
 
     return this.stopsService.getStops(options);
+  }
+
+  @Get("/:name")
+  async getStop(@Param() name: string) {
+    return this.stopsService.getStops({ name });
   }
 }
