@@ -11,6 +11,7 @@ export interface GetStopsOptions {
   id?: string | string[];
   coordinates?: { lat: number, lon: number; };
   offset?: number;
+  limit?: number;
 }
 
 @Injectable()
@@ -45,7 +46,7 @@ export class StopsService {
       query = query.offset(options.offset);
     }
 
-    query = query.limit(100);
+    query = query.limit(options.limit ? Math.min(options.limit, 100) : 100);
 
     return query.getMany();
 
