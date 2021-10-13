@@ -5,9 +5,7 @@ export interface Card<Definition = any> {
 
   definition: Definition;
 
-  title: string;
   color?: string;
-
   lastUpdate?: string;
   notifications?: boolean;
 }

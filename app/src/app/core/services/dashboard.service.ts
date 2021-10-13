@@ -1,7 +1,6 @@
-import { ComponentFactoryResolver, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Card } from 'src/app/schema/card';
-import { CreateCardOptions } from 'src/app/schema/create-card-options';
 import { Dashboard } from 'src/app/schema/dashboard';
 import { StorageService } from './storage.service';
 
@@ -33,16 +32,16 @@ export class DashboardService {
     return this.loadDashboard();
   }
 
-  async createCard(type: string, options: CreateCardOptions) {
+  async createCard(type: string, definition: Card["definition"]) {
 
     const dash = await this.getDashboard();
 
     const id = String(dash.cards.reduce((acc, cur) => Math.max(acc, Number(cur.id)), 0) + 1); // TODO: generate better unique id
     const card: Card = {
-      ...options,
       id,
       type,
-      color: "white"
+      color: "white",
+      definition,
     };
 
     dash?.cards.push(card);

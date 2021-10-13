@@ -1,13 +1,15 @@
 import { Card } from "src/app/schema/card";
 
-export interface DepartureBoardCardDefinition {
-  name?: string;
-  allPlatforms: boolean;
+export class DepartureBoardCardDefinition {
+
   limit?: number;
+  allPlatforms: boolean = true;
   showWheelchairAccessible?: boolean;
-  timeDisplay?: "time" | "remaining";
+  timeDisplay: "time" | "remaining" = "remaining";
   addDelay?: boolean;
-  platforms: { [id: string]: boolean; };
+  platforms: { [id: string]: boolean; } = {};
+
+  constructor(public name: string | null) { }
 }
 
 export type DepartureBoardCard = Card<DepartureBoardCardDefinition>;

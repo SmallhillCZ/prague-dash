@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardSettingsComponent } from 'src/app/schema/card-settings-component';
-import { ContainerCard } from '../../schema/container-card';
-import { ContainerDefinition } from '../../schema/container-definition';
+import { ContainerCard, ContainerCardDefinition } from '../../schema/container-card';
 
 @Component({
   selector: 'app-card-container-settings',
@@ -12,7 +11,7 @@ export class CardContainerSettingsComponent implements CardSettingsComponent, On
 
   @Input() card!: ContainerCard;
 
-  @Output() change = new EventEmitter<ContainerDefinition>();
+  @Output() change = new EventEmitter<ContainerCardDefinition>();
 
 
   constructor() { }

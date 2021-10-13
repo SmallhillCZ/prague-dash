@@ -33,6 +33,7 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
   card!: DepartureBoardCard;
 
   ngOnInit(): void {
+    console.log(this.card);
     this.loadDepartures();
 
     if (this.card.definition.timeDisplay) {

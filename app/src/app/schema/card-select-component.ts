@@ -1,5 +1,5 @@
 import { EventEmitter } from "@angular/core";
-import { CreateCardOptions } from "./create-card-options";
+import { Card } from "./card";
 
 export interface CardSelectComponentButton {
   icon: string;
@@ -8,7 +8,7 @@ export interface CardSelectComponentButton {
 
 export interface CardSelectComponent {
 
-  select: EventEmitter<CreateCardOptions>;
+  select: EventEmitter<Card["definition"]>;
 
   buttons?: EventEmitter<CardSelectComponentButton[]>;
 }

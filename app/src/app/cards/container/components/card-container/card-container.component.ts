@@ -19,6 +19,8 @@ export class CardContainerComponent implements CardComponent, OnInit {
 
   @Input() card!: ContainerCard;
 
+  location?: string;
+
   types?: { name: string, occupancy: number; }[];
 
   loadingTypes = Array(3).fill(null);
@@ -33,6 +35,8 @@ export class CardContainerComponent implements CardComponent, OnInit {
 
   async loadData() {
     const data = await this.containerService.getContainer(this.card.definition.id);
+    this.location = data.location;
+
     this.types = data.types
       .filter(item => this.card.definition?.showNotMetered || !!item.occupancy)
       .map(item => ({ name: this.typeNames[item.type][this.lang], occupancy: item.occupancy }));

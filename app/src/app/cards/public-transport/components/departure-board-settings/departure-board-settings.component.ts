@@ -24,22 +24,12 @@ export class DepartureBoardSettingsComponent implements CardSettingsComponent, O
 
   stop?: StopData;
 
-  defaultSettings: DepartureBoardCardDefinition = {
-    addDelay: false,
-    allPlatforms: true,
-    platforms: {},
-    limit: 5,
-    name: undefined,
-    showWheelchairAccessible: false,
-    timeDisplay: "time"
-  };
-
   constructor(
     private stopsService: StopsService
   ) { }
 
   ngOnInit(): void {
-    this.definition = Object.assign({}, this.defaultSettings, this.card.definition);
+    this.definition = Object.assign(new DepartureBoardCardDefinition(null), this.card.definition);
 
     this.loadDepartureBoard();
   }

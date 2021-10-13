@@ -24,11 +24,6 @@
 
   <ion-item-group *ngIf="card">
     <ion-item>
-      <ion-label>Název</ion-label>
-      <ion-input [(ngModel)]="card.title" (ngModelChange)="save()"></ion-input>
-    </ion-item>
-
-    <ion-item>
       <ion-label>Barva</ion-label>
       <ion-select [(ngModel)]="card.color" (ngModelChange)="save()">
         <ion-select-option value="white">Bílá</ion-select-option>

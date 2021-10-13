@@ -1,8 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
 import { CardSelectComponent } from 'src/app/schema/card-select-component';
-import { CreateCardOptions } from 'src/app/schema/create-card-options';
-import { ContainerCard } from '../../schema/container-card';
+import { ContainerCardDefinition } from '../../schema/container-card';
 import { ContainerData } from '../../schema/container-data';
 import { ContainerTypeNames } from '../../schema/container-type';
 import { ContainerService } from '../../services/container.service';
@@ -23,7 +22,7 @@ export class CardContainerSelectComponent implements CardSelectComponent, OnInit
   lang = "cs" as "cs";
 
   @Output()
-  select = new EventEmitter<CreateCardOptions<ContainerCard>>();
+  select = new EventEmitter<ContainerCardDefinition>();
 
   constructor(
     private containerService: ContainerService,
@@ -49,7 +48,7 @@ export class CardContainerSelectComponent implements CardSelectComponent, OnInit
   }
 
   async onSelect(container: ContainerData) {
-    this.select.emit({ title: "🗑️ " + container.location, definition: { id: container.id } });
+    this.select.emit({ id: container.id });
   }
 
 }

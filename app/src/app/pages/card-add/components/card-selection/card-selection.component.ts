@@ -1,14 +1,12 @@
-import { Component, ComponentFactoryResolver, Inject, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavController, ViewDidEnter, ViewWillEnter } from '@ionic/angular';
+import { NavController, ViewWillEnter } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { Subscription } from 'rxjs';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
 import { CardType } from 'src/app/schema/card-meta';
-import { CardSelectComponent, CardSelectComponentButton } from 'src/app/schema/card-select-component';
+import { CardSelectComponentButton } from 'src/app/schema/card-select-component';
 import { CARDS } from 'src/app/schema/cards-token';
-import { CreateCardOptions } from 'src/app/schema/create-card-options';
 
 @UntilDestroy()
 @Component({
@@ -43,7 +41,7 @@ export class CardSelectionComponent implements OnInit, ViewWillEnter {
 
   }
 
-  async createCard(options: CreateCardOptions) {
+  async createCard(options: Card["definition"]) {
     if (!this.cardType) return;
 
     await this.dashboardService.createCard(this.cardType.type, options);
