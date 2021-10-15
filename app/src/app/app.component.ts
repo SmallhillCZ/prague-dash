@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { App } from '@capacitor/app';
 import { IonRouterOutlet, Platform, ViewDidEnter } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 @Component({
   selector: 'app-root',
@@ -17,16 +18,25 @@ export class AppComponent implements ViewDidEnter {
     private platform: Platform,
   ) {
 
+    this.init();
+  }
+
+  ionViewDidEnter() {
+    SplashScreen.hide();
+  }
+
+  init() {
     // Quit on back button when on root page
     this.platform.backButton.subscribeWithPriority(-1, () => {
       if (!this.routerOutlet.canGoBack()) {
         App.exitApp();
       }
     });
-  }
 
-  ionViewDidEnter() {
-    SplashScreen.hide();
+    if (this.platform.is("android")) {
+      // StatusBar.setOverlaysWebView({ overlay: true });      
+      // TODO: make bg image under, but not header
+    }
   }
 
 
