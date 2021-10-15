@@ -14,5 +14,4 @@ export const ContainerCardType: CardType = {
     "cs": "Tříděný odpad",
     "en": "Sorted Waste"
   },
-  icon: "trash-outline"
 };

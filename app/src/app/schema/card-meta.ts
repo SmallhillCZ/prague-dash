@@ -10,5 +10,4 @@ export interface CardType {
   settingsComponent?: new (...args: any[]) => CardSettingsComponent;
 
   title: { [lang in Language]: string };
-  icon?: string;
 }

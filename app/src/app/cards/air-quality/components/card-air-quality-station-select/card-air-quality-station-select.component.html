@@ -1,0 +1,9 @@
+<ion-searchbar [(ngModel)]="search" (ionChange)="loadAirQualityStations()" debounce="250"></ion-searchbar>
+
+<ion-list>
+  <ion-item *ngFor="let station of stations" (click)="onSelect(station)">
+    <ion-label>
+      <h2>{{ station.properties.name }}</h2>
+    </ion-label>
+  </ion-item>
+</ion-list>

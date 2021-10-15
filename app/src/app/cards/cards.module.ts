@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { AirQualityModule } from './air-quality/air-quality.module';
 import { ContainerModule } from './container/container.module';
 import { PublicTransportModule } from './public-transport/public-transport.module';
 1;
@@ -6,11 +7,13 @@ import { PublicTransportModule } from './public-transport/public-transport.modul
   declarations: [],
   imports: [
     ContainerModule,
-    PublicTransportModule
+    PublicTransportModule,
+    AirQualityModule
   ],
   exports: [
     ContainerModule,
-    PublicTransportModule
+    PublicTransportModule,
+    AirQualityModule
   ]
 })
 export class CardsModule { }

@@ -5,6 +5,7 @@
   "scripts": {
     "build": "ng build",
     "dev": "ng serve",
+    "dev:local": "ng serve --configuration=local",
     "dev:android": "ionic capacitor run android -l --external",
     "open:android": "cap open android",
     "sync:android": "cap sync android"
