@@ -2,7 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GolemioService } from 'src/core/services/golemio.service';
+import { GolemioService } from 'src/shared/services/golemio.service';
+import { coordinatesFromTuple } from 'src/utils/coordinates-from-tuple';
 import { Repository } from 'typeorm';
 import { Stop } from '../entities/stop.entity';
 import { StopsResponse } from '../schema/stops-response';
@@ -62,8 +63,7 @@ export class StopsDownloadService {
             stop,
             id: item.properties.stop_id,
             name: item.properties.platform_code,
-            lat: item.geometry.coordinates[1],
-            lon: item.geometry.coordinates[0]
+            ...coordinatesFromTuple(item.geometry.coordinates)
           });
 
 

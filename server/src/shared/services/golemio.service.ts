@@ -5,14 +5,16 @@ import axios, { AxiosRequestConfig } from 'axios';
 @Injectable()
 export class GolemioService {
 
-  private apiRoot = "https://api.golemio.cz/v2/";
+  private apiRoot = "https://api.golemio.cz/v2";
   private token = this.configService.get<string>('GOLEMIO_TOKEN');
 
   constructor(
     private configService: ConfigService
   ) { }
 
-  get<T>(endpoint: string, params: AxiosRequestConfig["params"]) {
+  get<T>(endpoint: string, params?: AxiosRequestConfig["params"]) {
+
+    const url = this.getFullUrl(endpoint);
 
     const requestOptions: AxiosRequestConfig = {
       headers: {
@@ -21,7 +23,7 @@ export class GolemioService {
       params
     };
 
-    return axios.get<T>(this.getFullUrl(endpoint), requestOptions);
+    return axios.get<T>(url, requestOptions);
 
   }
 

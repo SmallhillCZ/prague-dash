@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GolemioService } from 'src/core/services/golemio.service';
+import { GolemioService } from 'src/shared/services/golemio.service';
 import { DepartureBoardResponse } from '../schema/departure-board-response';
 
 export interface GetDepartureBoardOptions {

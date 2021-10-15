@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SharedModule } from 'src/shared/shared.module';
 import { DepartureBoardsController } from './controllers/departure-boards.controller';
 import { StopsController } from './controllers/stops.controller';
 import { StopPlatform } from './entities/stop-platform.entity';
@@ -13,7 +14,8 @@ import { StopsService } from './services/stops.service';
   providers: [StopsService, StopsDownloadService, DepartureBoardsService],
   imports: [
     TypeOrmModule.forFeature([Stop, StopPlatform]),
-    ConfigModule
+    ConfigModule,
+    SharedModule
   ],
   controllers: [StopsController, DepartureBoardsController]
 })

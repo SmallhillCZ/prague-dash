@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GolemioService } from 'src/core/services/golemio.service';
+import { GolemioService } from 'src/shared/services/golemio.service';
 import { Repository } from 'typeorm';
 import { ContainerType } from '../entities/container-type.entity';
 import { Container } from '../entities/container.entity';

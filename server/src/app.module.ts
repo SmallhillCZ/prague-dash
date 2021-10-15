@@ -3,10 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { CoreModule } from './core/core.module';
 import { ContainersModule } from './modules/containers/containers.module';
 import { PublicTransportModule } from './modules/public-transport/public-transport.module';
 import { SharedModule } from './shared/shared.module';
+import { AirQualityModule } from './modules/air-quality/air-quality.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { SharedModule } from './shared/shared.module';
       synchronize: true,
     }),
 
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
 
     ContainersModule,
 
@@ -28,7 +28,7 @@ import { SharedModule } from './shared/shared.module';
 
     SharedModule,
 
-    CoreModule,
+    AirQualityModule,
 
   ],
   controllers: [AppController],

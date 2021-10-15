@@ -1,4 +1,10 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { GolemioService } from './services/golemio.service';
 
-@Module({})
-export class SharedModule {}
+@Module({
+  imports: [],
+  providers: [GolemioService],
+  exports: [GolemioService]
+})
+export class SharedModule { }

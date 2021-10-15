@@ -6,6 +6,7 @@ import { ContainersController } from './controllers/containers.controller';
 import { ContainersService } from './services/containers.service';
 import { Container } from './entities/container.entity';
 import { ContainerType } from './entities/container-type.entity';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   providers: [
@@ -14,7 +15,8 @@ import { ContainerType } from './entities/container-type.entity';
   ],
   imports: [
     TypeOrmModule.forFeature([Container, ContainerType]),
-    ConfigModule
+    ConfigModule,
+    SharedModule
   ],
   controllers: [ContainersController],
   exports: [ContainersService]
