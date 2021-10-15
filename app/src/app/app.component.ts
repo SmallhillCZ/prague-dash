@@ -22,10 +22,10 @@ export class AppComponent implements ViewDidEnter {
   }
 
   ionViewDidEnter() {
-    SplashScreen.hide();
+
   }
 
-  init() {
+  async init() {
     // Quit on back button when on root page
     this.platform.backButton.subscribeWithPriority(-1, () => {
       if (!this.routerOutlet.canGoBack()) {
@@ -37,6 +37,8 @@ export class AppComponent implements ViewDidEnter {
       // StatusBar.setOverlaysWebView({ overlay: true });      
       // TODO: make bg image under, but not header
     }
+
+    await SplashScreen.hide();
   }
 
 
