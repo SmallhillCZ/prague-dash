@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
-import axios from 'axios';
-import { Repository } from 'typeorm';
-import { Stop } from '../entities/stop.entity';
+import { GolemioService } from 'src/core/services/golemio.service';
 import { DepartureBoardResponse } from '../schema/departure-board-response';
 
 export interface GetDepartureBoardOptions {
@@ -15,11 +11,8 @@ export interface GetDepartureBoardOptions {
 @Injectable()
 export class DepartureBoardsService {
 
-  private readonly headers = { "x-access-token": this.configService.get<string>("GOLEMIO_TOKEN") };
-
   constructor(
-    @InjectRepository(Stop) private stopsRepository: Repository<Stop>,
-    private configService: ConfigService
+    private golemio: GolemioService
   ) { }
 
   async getDepartureBoard(options: GetDepartureBoardOptions) {
@@ -36,7 +29,7 @@ export class DepartureBoardsService {
       limit: options.limit ? Math.min(options.limit, 20) : 5
     };
 
-    return axios.get<DepartureBoardResponse[]>("https://api.golemio.cz/v2/pid/departureboards/", { params, headers: this.headers })
+    return this.golemio.get<DepartureBoardResponse[]>("pid/departureboards", params)
       .then(res => res.data);
   }
 

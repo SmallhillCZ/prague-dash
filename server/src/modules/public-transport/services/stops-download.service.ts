@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import axios, { AxiosRequestConfig } from 'axios';
+import { GolemioService } from 'src/core/services/golemio.service';
 import { Repository } from 'typeorm';
 import { Stop } from '../entities/stop.entity';
 import { StopsResponse } from '../schema/stops-response';
@@ -12,12 +12,10 @@ export class StopsDownloadService {
 
   private readonly logger = new Logger(StopsDownloadService.name);
 
-
-  private readonly headers = { "x-access-token": this.configService.get<string>("GOLEMIO_TOKEN") };
-
   constructor(
     @InjectRepository(Stop) private stopsRepository: Repository<Stop>,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private golemio: GolemioService
   ) {
 
     this.updateStops();
@@ -38,14 +36,7 @@ export class StopsDownloadService {
 
     while (1) { // loop until any data
 
-      const requestOptions: AxiosRequestConfig = {
-        headers: this.headers,
-        params: {
-          offset
-        }
-      };
-
-      const data = await axios.get<StopsResponse>("https://api.golemio.cz/v2/gtfs/stops/", requestOptions)
+      const data = await this.golemio.get<StopsResponse>("gtfs/stops", { offset })
         .then(res => res.data);
 
       if (!data.features.length) break; // break when no more data

@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import axios, { AxiosRequestConfig } from 'axios';
+import { GolemioService } from 'src/core/services/golemio.service';
 import { Repository } from 'typeorm';
 import { ContainerType } from '../entities/container-type.entity';
 import { Container } from '../entities/container.entity';
@@ -13,12 +13,11 @@ export class ContainersDownloadService {
 
   private readonly logger = new Logger(ContainersDownloadService.name);
 
-  private readonly headers = { "x-access-token": this.configService.get<string>('GOLEMIO_TOKEN') };
-
   constructor(
     @InjectRepository(Container) private containerRepository: Repository<Container>,
     @InjectRepository(ContainerType) private containerTypeRepository: Repository<ContainerType>,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private golemio: GolemioService
   ) {
     this.downloadContainers();
   }
@@ -30,11 +29,7 @@ export class ContainersDownloadService {
 
 
     this.logger.verbose("Downloading new container data...");
-    const requestOptions: AxiosRequestConfig = {
-      headers: this.headers
-    };
-
-    const response = await axios.get<ContainerResponse>("https://api.golemio.cz/v2/sortedwastestations/?onlyMonitored=true", requestOptions)
+    const response = await this.golemio.get<ContainerResponse>("sortedwastestations/?", { onlyMonitored: "true" })
       .then(res => res.data);
 
     this.logger.verbose("Clearing old container data...");

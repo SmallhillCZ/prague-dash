@@ -1,9 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { coordinatesToDistanceSql } from 'src/utils/coordinates-to-distance-sql';
 import { Like, Repository } from 'typeorm';
-import { StopPlatform } from '../entities/stop-platform.entity';
 import { Stop } from '../entities/stop.entity';
 
 export interface GetStopsOptions {
@@ -19,8 +17,6 @@ export class StopsService {
 
   constructor(
     @InjectRepository(Stop) private stopsRepository: Repository<Stop>,
-    @InjectRepository(StopPlatform) private platformsRepository: Repository<StopPlatform>,
-    private configService: ConfigService
   ) { }
 
   getStops(options: GetStopsOptions = {}): Promise<Stop[]> {

@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { GolemioService } from './services/golemio.service';
 
-@Module({})
-export class CoreModule {}
+@Module({
+  providers: [GolemioService]
+})
+export class CoreModule { }
