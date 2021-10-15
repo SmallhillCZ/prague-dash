@@ -1,17 +1,25 @@
 import { FeatureCollection } from "src/shared/schema/golemio-api";
 
+export enum AirQualityComponentType {
+  "SO2" = "SO2",
+  "NO2" = "NO2",
+  "O3" = "O3",
+  "PM10" = "PM10",
+  "PM2_5" = "PM2_5",
+}
+
 export interface AirQualityStationComponent {
   _id: string;
   averaged_time: {
     averaged_hours: number,
     value: number;
   },
-  type: "NO2" | "PM10";
+  type: AirQualityComponentType;
 }
 
 export interface AirQualityStationMeasurement {
   AQ_hourly_inde: number;
-  component: AirQualityStationComponent[];
+  components: AirQualityStationComponent[];
 }
 
 
