@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: "Zpracování osobních údajů (Privacy Policy)"
 ---
 
