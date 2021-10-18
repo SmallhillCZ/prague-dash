@@ -8,7 +8,11 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   if (configService.get("CORS_ENABLE")) app.enableCors({
-    origin: ["http://localhost", "http://localhost:4200"]
+    origin: [
+      "http://localhost",
+      "http://localhost:4200",
+      "https://praguedash.cz"
+    ]
   });
 
   const port = configService.get('PORT') ? Number(configService.get('PORT')) : 3000;
