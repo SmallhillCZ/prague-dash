@@ -6,6 +6,7 @@ export interface GetDepartureBoardOptions {
   name?: string | string[];
   id?: string | string[];
   limit?: number;
+  offset?: number;
 }
 
 @Injectable()
@@ -26,7 +27,8 @@ export class DepartureBoardsService {
       ids: typeof options.id === "string" ? [options.id] : options.id,
       // filter: "routeHeadingOnce",
       skip: ["canceled"],
-      limit: options.limit ? Math.min(options.limit, 20) : 5
+      limit: options.limit ? Math.min(options.limit, 20) : 5,
+      offset: options.offset
     };
 
     return this.golemio.get<DepartureBoardResponse[]>("pid/departureboards", params)

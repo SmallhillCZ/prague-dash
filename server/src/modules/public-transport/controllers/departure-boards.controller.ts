@@ -6,12 +6,14 @@ export interface GetDepartureBoardsQuery {
   name: string | string[];
   id?: string | string[];
   limit?: string;
+  offset?: string;
 }
 
 export interface GetClosestDepartureBoardsQuery {
   lat: string;
   lon: string;
   limit?: string;
+  offset?: string;
 }
 
 @Controller('departure-boards')
@@ -28,7 +30,8 @@ export class DepartureBoardsController {
     const options: GetDepartureBoardOptions = {
       name: query.name,
       id: query.id,
-      limit: Number(query.limit)
+      limit: query.limit ? Number(query.limit) : undefined,
+      offset: query.offset ? Number(query.offset) : undefined,
     };
 
     return this.departureBoardsService.getDepartureBoard(options);
@@ -37,14 +40,20 @@ export class DepartureBoardsController {
   @Get("/closest")
   async getClosestDepartureBoard(@Query() query?: GetClosestDepartureBoardsQuery) {
 
-    const options = {
+    const stopOptions = {
       lat: Number(query.lat),
       lon: Number(query.lon),
     };
 
-    const closestStop = await this.stopsService.getClosestStop(options);
+    const closestStop = await this.stopsService.getClosestStop(stopOptions);
 
-    return this.departureBoardsService.getDepartureBoard({ name: closestStop.name, limit: query.limit ? Number(query.limit) : undefined });
+    const departureBoardOptions = {
+      name: closestStop.name,
+      limit: query.limit ? Number(query.limit) : undefined,
+      offset: query.offset ? Number(query.offset) : undefined,
+    };
+
+    return this.departureBoardsService.getDepartureBoard(departureBoardOptions);
   }
 
 }
