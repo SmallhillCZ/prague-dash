@@ -4,12 +4,13 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "ng build",
+    "build:docs": "ng build --configuration=demo",
     "dev": "ng serve",
     "dev:local": "ng serve --configuration=local",
     "dev:android": "ionic capacitor run android -l --external",
     "open:android": "cap open android",
     "sync:android": "cap sync android",
-    "sync:docs": "shx rm -fr ../docs/app && shx cp -r ./www ../docs/app"
+    "sync:docs": "shx rm -fr ../demo/demo && shx cp -r ./www ../docs/demo"
   },
   "private": true,
   "dependencies": {
