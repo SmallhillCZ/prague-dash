@@ -4,7 +4,7 @@ title: "Zpracování osobních údajů (Privacy Policy)"
 ---
 
 # Zpracování osobních údajů
-{: .mt-5}
+{: .mt-5 .mb-4}
 
 Aplikace PragueDash ani její serverové součásti **nezpracovávají žádné osobní informace**.
 
@@ -13,7 +13,7 @@ Všechna nastavení a data jsou uložena u vás v telefonu nebo v prohlížeči,
 Webové stránky praguedash.cz (tyto stránky) neskladují cookies ani jiná osobní data.
 
 # Privacy Policy
-{: .mt-5}
+{: .mt-5 .mb-4}
 
 The PragueDash app including its server components **does not process any personal data**.
 
