@@ -33,12 +33,12 @@
     <link rel="icon" type="image/png" href="/assets/img/icon.png" />
   </head>
   <body>
-    {% include header.html %}
+    <div class="flex-wrapper">
+      {% include header.html %}
 
-    <div class="content">
       <main class="container">{{ content }}</main>
-    </div>
 
-    {% include footer.html %}
+      {% include footer.html %}
+    </div>
   </body>
 </html>

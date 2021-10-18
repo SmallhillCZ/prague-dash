@@ -10,14 +10,20 @@ body {
   background-color: #ecf0f1 !important;
 }
 
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 header {
   nav.navbar {
     background-color: #ecf0f1 !important;
   }
 }
 
-.content {
-  background-color: #fff;
+main {
+  flex-grow: 1;
 }
 
 footer {
