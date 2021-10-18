@@ -44,9 +44,14 @@ export class DashComponent implements OnInit {
   openDetail(card: Card) {
     const type = this.cardTypes.find(item => item.type === card.type);
 
-    if (!type || !type.detailComponent) return;
+    if (!type) return;
 
-    this.navController.navigateForward('/card/' + card.id);
+    if (type.detailComponent) {
+      this.navController.navigateForward('/card/' + card.id);
+    }
+    else if (type.settingsComponent) {
+      this.navController.navigateForward('/card/' + card.id + '/settings');
+    }
   }
 
 }
