@@ -1,3 +1,25 @@
+<script>
+  data = {
+    cards: [
+      { id: "2", type: "container", color: "white", definition: { id: "c422a869-b451-5c6e-8901-b0456dc5e6ed" } },
+      {
+        id: "1",
+        type: "departure-board",
+        color: "white",
+        definition: {
+          name: "Lipanská",
+          limit: 5,
+          allPlatforms: true,
+          timeDisplay: "remaining",
+          platforms: { U339Z1P: true, U339Z2P: true },
+        },
+      },
+    ],
+  };
+
+  window.localStorage.setItem("CapacitorStorage.dashboard", JSON.stringify(data));
+</script>
+
 <div class="demo">
   <img src="{{ '/assets/img/screen.png' | relative_url }}" />
   <iframe src="/demo/" class="app" frameborder="0" seamless></iframe>
