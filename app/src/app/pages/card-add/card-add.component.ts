@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { CardType } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 
 @Component({

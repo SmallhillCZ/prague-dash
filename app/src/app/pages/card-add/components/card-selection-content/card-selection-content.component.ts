@@ -2,7 +2,7 @@ import { Component, ComponentFactoryResolver, EventEmitter, Inject, Input, OnCha
 import { ActivatedRoute } from '@angular/router';
 import { untilDestroyed } from '@ngneat/until-destroy';
 import { Subscription } from 'rxjs';
-import { CardType } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-type';
 import { CardSelectComponentButton, CardSelectComponent } from 'src/app/schema/card-select-component';
 import { CARDS } from 'src/app/schema/cards-token';
 

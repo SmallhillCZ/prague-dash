@@ -1,8 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map, tap } from 'rxjs/operators';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
+import { CardType } from 'src/app/schema/card-type';
+import { CARDS } from 'src/app/schema/cards-token';
 
 @UntilDestroy()
 @Component({
@@ -17,6 +20,8 @@ export class DashComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
+    @Inject(CARDS) private cardTypes: CardType[],
+    private navController: NavController
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +39,14 @@ export class DashComponent implements OnInit {
     setTimeout(() => {
       event.target?.complete();
     }, 500);
+  }
+
+  openDetail(card: Card) {
+    const type = this.cardTypes.find(item => item.type === card.type);
+
+    if (!type || !type.detailComponent) return;
+
+    this.navController.navigateForward('/card/' + card.id);
   }
 
 }

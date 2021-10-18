@@ -7,43 +7,8 @@
   </ion-card-subtitle>
 </ion-card-header>
 <ion-card-content>
-  <table *ngIf="departureBoard" class="card-table">
-    <tr *ngFor="let departure of departureBoard.departures" [class.at-stop]="departure.trip.is_at_stop">
-      <td class="route">
-        <app-route-badge [route]="departure.route"></app-route-badge>
-      </td>
-
-      <td class="headsign">
-        {{ departure.trip.headsign }}
-        <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible">&nbsp;♿</ng-container>
-      </td>
-
-      <td class="departure" *ngIf="!card.definition.addDelay" [ngSwitch]="card.definition.timeDisplay">
-        <ng-container *ngSwitchCase="'remaining'">{{ getRemainingTime(departure.departure_timestamp.scheduled, now) }} min</ng-container>
-        <ng-container *ngSwitchDefault>{{ departure.departure_timestamp.scheduled | date: "H:mm" }}</ng-container>
-      </td>
-      <td class="departure" *ngIf="card.definition.addDelay" [ngSwitch]="card.definition.timeDisplay">
-        <ng-container *ngSwitchCase="'remaining'">{{ getRemainingTime(departure.departure_timestamp.predicted, now) }} min</ng-container>
-        <ng-container *ngSwitchDefault>{{ departure.departure_timestamp.predicted | date: "H:mm" }}</ng-container>
-      </td>
-
-      <td class="delay" *ngIf="!card.definition.addDelay">
-        <ion-text color="danger" *ngIf="departure.delay.is_available && departure.delay.minutes > 0">+{{ departure.delay.minutes }}&nbsp;min</ion-text>
-        <ion-text color="dark-warning" *ngIf="departure.delay.is_available && departure.delay.minutes === 0 && departure.delay.seconds > 30">+30&nbsp;s</ion-text>
-      </td>
-      <td class="delay" *ngIf="card.definition.addDelay">
-        <ion-text color="danger" *ngIf="departure.delay.is_available && departure.delay.minutes > 0">(+{{ departure.delay.minutes }}&nbsp;min)</ion-text>
-        <ion-text color="dark-warning" *ngIf="departure.delay.is_available && departure.delay.minutes === 0 && departure.delay.seconds > 30">(+30&nbsp;s)</ion-text>
-      </td>
-    </tr>
-  </table>
-
-  <table *ngIf="!departureBoard" class="card-table">
-    <tr *ngFor="let departure of loadingDepartures">
-      <td class="route"><ion-badge color="light">&nbsp;</ion-badge></td>
-      <td class="headsign"><ion-skeleton-text></ion-skeleton-text></td>
-      <td class="departure"><ion-skeleton-text></ion-skeleton-text></td>
-      <td class="delay"><ion-skeleton-text></ion-skeleton-text></td>
-    </tr>
-  </table>
+  <app-departure-board-content
+    [options]="card.definition"
+    [departureBoard]="departureBoard"
+  ></app-departure-board-content>
 </ion-card-content>

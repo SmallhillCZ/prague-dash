@@ -4,7 +4,7 @@ import { NavController, ViewWillEnter } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
-import { CardType } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 
 @UntilDestroy()

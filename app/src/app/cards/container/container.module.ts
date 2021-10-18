@@ -5,7 +5,7 @@ import { CardContainerComponent } from './components/card-container/card-contain
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ContainerService } from './services/container.service';
 import { CardContainerSettingsComponent } from './components/card-container-settings/card-container-settings.component';
-import { CardType } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 import { ContainerCardType } from './container-card-type';
 

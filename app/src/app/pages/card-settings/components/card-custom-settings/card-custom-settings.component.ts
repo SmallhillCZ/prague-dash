@@ -1,7 +1,7 @@
 import { Component, ComponentFactoryResolver, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Card } from 'src/app/schema/card';
-import { CardType } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-type';
 import { CardSettingsComponent } from 'src/app/schema/card-settings-component';
 import { CARDS } from 'src/app/schema/cards-token';
 

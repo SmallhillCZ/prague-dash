@@ -1,4 +1,4 @@
-import { CardType } from "src/app/schema/card-meta";
+import { CardType } from "src/app/schema/card-type";
 import { CardAirQualityStationSelectComponent } from "./components/card-air-quality-station-select/card-air-quality-station-select.component";
 import { CardAirQualityStationComponent } from "./components/card-air-quality-station/card-air-quality-station.component";
 

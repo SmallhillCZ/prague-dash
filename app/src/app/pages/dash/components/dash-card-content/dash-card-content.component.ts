@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ComponentFactoryResolver, Inject, Input, OnChanges, OnInit, ViewContainerRef } from '@angular/core';
 import { Card } from 'src/app/schema/card';
 import { CardComponent } from 'src/app/schema/card-component';
-import { CardType } from 'src/app/schema/card-meta';
+import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 
 @Component({

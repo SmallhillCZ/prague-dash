@@ -16,5 +16,5 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content> </ion-refresher-content>
   </ion-refresher>
-  <app-dash-card *ngFor="let cardData of cards" [card]="cardData" [routerLink]="'/card/' + cardData.id + '/settings'"> </app-dash-card>
+  <app-dash-card *ngFor="let cardData of cards" [card]="cardData" (click)="openDetail(cardData)"> </app-dash-card>
 </ion-content>

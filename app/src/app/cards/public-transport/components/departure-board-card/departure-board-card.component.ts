@@ -1,14 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Geolocation } from '@capacitor/geolocation';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DateTime } from 'luxon';
 import { timer } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { CardComponent } from 'src/app/schema/card-component';
-import { DepartureBoardCard, DepartureBoardCardDefinition } from '../../schema/departure-board-card';
-import { DepartureBoardData, DepartureData } from '../../schema/departure-board-data';
-import { RouteType } from '../../schema/route-type';
+import { DepartureBoardCard } from '../../schema/departure-board-card';
+import { DepartureBoardData } from '../../schema/departure-board-data';
 import { DepartureBoardsService } from '../../services/departure-boards.service';
 
 @UntilDestroy()
@@ -33,14 +30,8 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
   card!: DepartureBoardCard;
 
   ngOnInit(): void {
-    console.log(this.card);
-    this.loadDepartures();
 
-    if (this.card.definition.timeDisplay) {
-      timer(0, 1000)
-        .pipe(untilDestroyed(this))
-        .subscribe(() => this.now = DateTime.local());
-    }
+    this.loadDepartures();
 
     timer(0, 60 * 1000)
       .pipe(take(30))
@@ -48,31 +39,10 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
       .subscribe((i) => this.loadDepartures());
   }
 
-
-
-  getRemainingTime(departure: string, now: DateTime) {
-    const diff = DateTime.fromISO(departure).diff(now, "minutes");
-    if (diff.minutes <= 0 && diff.seconds <= 0) return "0";
-
-    return String(Math.floor(diff.minutes));
-  }
-
   private async loadDepartures() {
 
-    this.loadingDepartures = new Array(this.card.definition.limit || 5).fill(null);
+    this.departureBoard = await this.departureBoardsService.loadDepartures(this.card.definition);
 
-    if (this.card.definition.allPlatforms && this.card.definition.name) {
-      this.departureBoard = await this.departureBoardsService.getDepartureBoard({ name: this.card.definition.name, limit: this.card.definition.limit });
-    }
-    else if (!this.card.definition.allPlatforms && this.card.definition.name) {
-      const id = Object.entries(this.card.definition.platforms).filter(entry => !!entry[1]).map(entry => entry[0]);
-      this.departureBoard = await this.departureBoardsService.getDepartureBoard({ name: this.card.definition.name, id, limit: this.card.definition.limit });
-    }
-    else {
-      const position = await Geolocation.getCurrentPosition({ enableHighAccuracy: true })
-        .then(res => ({ lat: res.coords.latitude, lon: res.coords.longitude }));
-      this.departureBoard = await this.departureBoardsService.getClosestDepartureBoard({ ...position, limit: this.card.definition.limit });
-    }
   }
 
 }
