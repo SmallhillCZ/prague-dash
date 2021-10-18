@@ -4,8 +4,11 @@ services:
   docs:
     image: jekyll/jekyll:pages
     container_name: docs.praguedash
-    command: jekyll serve --force_polling
+    command: jekyll serve
     ports:
       - 4000:4000
     volumes:
       - ./docs:/srv/jekyll
+    environment:
+      JEKYLL_UID: 1008
+      JEKYLL_GID: 1008
