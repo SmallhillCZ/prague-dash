@@ -55,8 +55,8 @@ export class DepartureBoardSelectComponent implements CardSelectComponent, OnIni
 
   selectStop(stop: StopData) {
     const definition = new DepartureBoardCardDefinition(stop.name);
+    definition.platforms = stop.platforms.reduce((acc, cur) => (acc[cur.id] = true, acc), {} as { [id: string]: boolean; });
     this.select.emit(definition);
-
   }
 
   selectClosestStop() {
