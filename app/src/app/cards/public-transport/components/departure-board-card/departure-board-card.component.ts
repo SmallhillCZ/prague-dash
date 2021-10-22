@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ScreenReader } from '@capacitor/screen-reader';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DateTime } from 'luxon';
 import { timer } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ScreenReaderService } from 'src/app/core/services/screen-reader.service';
 import { CardComponent } from 'src/app/schema/card-component';
 import { DepartureBoardCard } from '../../schema/departure-board-card';
 import { DepartureBoardData } from '../../schema/departure-board-data';
-import { RouteType } from '../../schema/route-type';
+import { RouteType, RouteTypes } from '../../schema/route-type';
 import { DepartureBoardsService } from '../../services/departure-boards.service';
 
 @UntilDestroy()
@@ -25,7 +25,8 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
   now = DateTime.local();
 
   constructor(
-    private departureBoardsService: DepartureBoardsService
+    private departureBoardsService: DepartureBoardsService,
+    private screenReaderService: ScreenReaderService
   ) { }
 
   @Input()
@@ -43,7 +44,7 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
     this.departureBoard = await this.departureBoardsService.loadDepartures(this.card.definition);
 
-    const isScreenReaderEnabled = await ScreenReader.isEnabled()
+    const isScreenReaderEnabled = await this.screenReaderService.isEnabled()
       .then(res => res.value)
       .catch(() => false); // catch in browser where isEnabled not supported and prevent reading
 
@@ -60,28 +61,17 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
     this.departureBoard?.departures.forEach(departure => {
       const minutes = Math.round(Math.abs(DateTime.fromISO(departure.departure_timestamp.predicted).diffNow("minutes").minutes));
 
-      switch (departure.route.type) {
+      let minutesString = "minut";
+      if (minutes === 1) minutesString = "minutuF";
+      if (minutes >= 2 && minutes <= 4) minutesString = "minuty";
 
-        case RouteType.Bus:
-          value += `Autobus ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
-          break;
+      const lineString = RouteTypes[departure.route.type]?.name.cs || "Linka";
 
-        case RouteType.Tram:
-          value += `Tramvaj ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
-          break;
-
-        case RouteType.Subway:
-          value += `Metro ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
-          break;
-
-        default:
-          `Linka ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
-          break;
-      }
+      value += `${lineString} ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} ${minutesString}.`;
 
     });
 
-    await ScreenReader.speak({ value, language: "cs" });
+    await this.screenReaderService.speak({ value, language: "cs" });
   }
 
 }

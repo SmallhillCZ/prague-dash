@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { App } from '@capacitor/app';
-import { ScreenReader } from '@capacitor/screen-reader';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { IonRouterOutlet, Platform, ViewDidEnter } from '@ionic/angular';
 @Component({
@@ -36,10 +35,6 @@ export class AppComponent implements ViewDidEnter {
       // StatusBar.setOverlaysWebView({ overlay: true });      
       // TODO: make bg image under, but not header
     }
-
-    ScreenReader.addListener('stateChange' as any, ({ value }) => {
-      console.log(`Screen reader is now ${value ? 'on' : 'off'}`);
-    });
 
     await SplashScreen.hide();
   }
