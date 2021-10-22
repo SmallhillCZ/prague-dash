@@ -7,7 +7,7 @@ import { take } from 'rxjs/operators';
 import { CardComponent } from 'src/app/schema/card-component';
 import { DepartureBoardCard } from '../../schema/departure-board-card';
 import { DepartureBoardData } from '../../schema/departure-board-data';
-import { RouteType, RouteTypes } from '../../schema/route-type';
+import { RouteType } from '../../schema/route-type';
 import { DepartureBoardsService } from '../../services/departure-boards.service';
 
 @UntilDestroy()
@@ -63,12 +63,19 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
       switch (departure.route.type) {
 
         case RouteType.Bus:
+          value += `Autobus ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
+          break;
+
         case RouteType.Tram:
-          value += `${RouteTypes[departure.route.type]?.name.cs} číslo ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
+          value += `Tramvaj ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
           break;
 
         case RouteType.Subway:
-          value += `Metro linky ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
+          value += `Metro ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
+          break;
+
+        default:
+          `Linka ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} minut.`;
           break;
       }
 
