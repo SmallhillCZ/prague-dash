@@ -9,7 +9,7 @@
     "dev:android": "ionic capacitor run android -l --external",
     "open:android": "cap open android",
     "sync:android": "cap sync android",
-    "sync:docs": "shx rm -fr ../demo/demo && shx cp -r ./www ../docs/demo",
+    "sync:docs": "shx rm -fr ../docs/demo && shx cp -r ./www ../docs/demo",
     "deploy:docs": "npm run build:docs && npm run sync:docs"
   },
   "private": true,
