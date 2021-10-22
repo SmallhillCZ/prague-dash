@@ -13,9 +13,7 @@ import packageJSON from "../../../../package.json";
 })
 export class SettingsComponent implements AfterViewInit {
 
-  settings: AppSettings = {
-    language: "cs"
-  };
+  settings?: AppSettings;
 
   appVersion = packageJSON.version;
 
@@ -25,10 +23,19 @@ export class SettingsComponent implements AfterViewInit {
     private settingsService: SettingsService
   ) { }
 
+
+
   ngAfterViewInit(): void {
+
+    this.loadSettings();
+
     this.form.valueChanges
       ?.pipe(untilDestroyed(this))
       .subscribe(data => this.settingsService.saveSettings(data));
+  }
+
+  async loadSettings() {
+    this.settings = await this.settingsService.getSettings();
   }
 
 }

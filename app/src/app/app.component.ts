@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { App } from '@capacitor/app';
-import { IonRouterOutlet, Platform, ViewDidEnter } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { StatusBar, Style } from '@capacitor/status-bar';
-
+import { IonRouterOutlet, Platform, ViewDidEnter } from '@ionic/angular';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

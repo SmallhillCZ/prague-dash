@@ -1,7 +1,7 @@
 <ion-card-header>
   <ion-card-subtitle>
     <ion-label>
-      🚏 {{departureBoard?.stops?.[0]?.stop_name}}
+      🚏 {{departureBoard?.stops?.[0]?.stop_name || "Načítám..."}}
       <ion-icon *ngIf="!card.definition.name" name="locate"></ion-icon>
     </ion-label>
   </ion-card-subtitle>
