@@ -6,13 +6,15 @@ import { ScreenReader, SpeakOptions } from '@capacitor/screen-reader';
 })
 export class ScreenReaderService {
 
+  language = "cs";
+
   constructor() { }
 
   async isEnabled() {
     return ScreenReader.isEnabled();
   }
 
-  async speak(options: SpeakOptions) {
-    return ScreenReader.speak(options);
+  async speak(value: string) {
+    return ScreenReader.speak({ value, language: this.language });
   }
 }

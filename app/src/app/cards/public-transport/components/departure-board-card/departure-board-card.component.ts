@@ -4,10 +4,11 @@ import { DateTime } from 'luxon';
 import { timer } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ScreenReaderService } from 'src/app/core/services/screen-reader.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { CardComponent } from 'src/app/schema/card-component';
 import { DepartureBoardCard } from '../../schema/departure-board-card';
 import { DepartureBoardData } from '../../schema/departure-board-data';
-import { RouteType, RouteTypes } from '../../schema/route-type';
+import { RouteTypes } from '../../schema/route-type';
 import { DepartureBoardsService } from '../../services/departure-boards.service';
 
 @UntilDestroy()
@@ -26,7 +27,8 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
   constructor(
     private departureBoardsService: DepartureBoardsService,
-    private screenReaderService: ScreenReaderService
+    private screenReaderService: ScreenReaderService,
+    private settingsService: SettingsService
   ) { }
 
   @Input()
@@ -44,9 +46,7 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
     this.departureBoard = await this.departureBoardsService.loadDepartures(this.card.definition);
 
-    const isScreenReaderEnabled = await this.screenReaderService.isEnabled()
-      .then(res => res.value)
-      .catch(() => false); // catch in browser where isEnabled not supported and prevent reading
+    const isScreenReaderEnabled = await this.settingsService.getSettings().then(settings => settings.screenReaderEnabled);
 
     if (isScreenReaderEnabled) {
       this.screenReaderSpeak();
@@ -54,24 +54,34 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
   }
 
   async screenReaderSpeak() {
-    let value = "";
-
-    value += `Odjezdy ze zastávky ${this.departureBoard?.stops[0].stop_name}: `;
+    this.screenReaderService.speak(`Odjezdy ze zastávky ${this.departureBoard?.stops[0].stop_name}: `);
 
     this.departureBoard?.departures.forEach(departure => {
-      const minutes = Math.round(Math.abs(DateTime.fromISO(departure.departure_timestamp.predicted).diffNow("minutes").minutes));
+      const minutes = Math.floor(Math.abs(DateTime.fromISO(departure.departure_timestamp.predicted).diffNow("minutes").minutes));
 
-      let minutesString = "minut";
-      if (minutes === 1) minutesString = "minutuF";
-      if (minutes >= 2 && minutes <= 4) minutesString = "minuty";
+      let minutesString = "";
+
+      switch (minutes) {
+        case 0: minutesString = "nyní"; break;
+        case 1: minutesString = "za jednu minutu"; break;
+        case 2: minutesString = "za dvě minuty"; break;
+        case 3: minutesString = "za tři minuty"; break;
+        case 4: minutesString = "za čtyři minuty"; break;
+        case 5: minutesString = "za pět minut"; break;
+        case 6: minutesString = "za šest minut"; break;
+        case 7: minutesString = "za sedm minut"; break;
+        case 8: minutesString = "za osm minut"; break;
+        case 9: minutesString = "za devět minut"; break;
+        case 10: minutesString = "za deset minut"; break;
+        default: `za ${minutes} minut`; break;
+      }
 
       const lineString = RouteTypes[departure.route.type]?.name.cs || "Linka";
 
-      value += `${lineString} ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí za ${minutes} ${minutesString}.`;
+      this.screenReaderService.speak(`${lineString} ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí ${minutesString}.`);
 
     });
 
-    await this.screenReaderService.speak({ value, language: "cs" });
   }
 
 }
