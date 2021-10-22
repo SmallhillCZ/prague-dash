@@ -15,7 +15,11 @@
       </ion-label>
     </ion-list-header>
 
-    <app-card-custom-settings *ngIf="card && cardType && cardType.settingsComponent" [card]="card!" (change)="saveCustom($event)"></app-card-custom-settings>
+    <app-card-custom-settings
+      *ngIf="card && cardType && cardType.settingsComponent"
+      [card]="card!"
+      (change)="saveCustom($event)"
+    ></app-card-custom-settings>
   </ng-container>
 
   <ion-list-header>

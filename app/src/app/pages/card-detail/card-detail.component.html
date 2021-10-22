@@ -1,10 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons>
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title> {{ cardType?.title?.cs || "Detail karty" }} </ion-title>
-    <ion-buttons slot="primary">
+    <ion-title>{{ cardType?.title?.cs || "Detail karty" }}</ion-title>
+    <ion-buttons slot="end">
       <ion-button *ngIf="cardType?.settingsComponent" routerLink="settings">
         <ion-icon name="settings-outline"></ion-icon>
       </ion-button>
