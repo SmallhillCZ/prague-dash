@@ -1,3 +1,5 @@
+import { LanguageValue } from "src/app/schema/language";
+
 export enum RouteType {
   "Tram" = 0,
   "Subway" = 1,
@@ -10,3 +12,10 @@ export enum RouteType {
   "Trolleybus" = 11,
   "Monorail" = 12,
 }
+
+export const RouteTypes: { [id in RouteType]?: { name: LanguageValue<string>; } } = {
+
+  [RouteType.Tram]: { name: { cs: "Tramvaj", en: "Tram" } },
+  [RouteType.Subway]: { name: { cs: "Metro", en: "Subway" } },
+  [RouteType.Bus]: { name: { cs: "Autobus", en: "Bus" } },
+};
