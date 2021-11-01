@@ -1,7 +1,41 @@
-<div class="ion-padding">
-  <app-departure-board-content [options]="options" [departureBoard]="departureBoard"></app-departure-board-content>
+<ion-refresher slot="fixed" (ionRefresh)="loadDepartures($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
 
-  <div class="load-more">
-    <ion-button (click)="loadMore()">Načíst více</ion-button>
-  </div>
-</div>
+<ion-list>
+  <ion-item *ngFor="let departure of departureBoard?.departures">
+    <ion-avatar slot="start">
+      <div class="circle" [ngStyle]="departure.route | routeStyle">
+        <div class="text">{{ departure.route.short_name }}</div>
+      </div>
+    </ion-avatar>
+
+    <ion-label>
+      <h2>
+        {{ departure.trip.headsign }}
+        <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible">
+          ♿
+        </ng-container>
+      </h2>
+    </ion-label>
+
+    <ion-label class="time" slot="end">
+      {{ departure | departureTime: card.definition }}
+      <br />
+      <ion-text class="delay" [color]="departure | departureDelayColor">
+        {{ departure | departureDelay: card.definition }}
+      </ion-text>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
+<ion-list *ngIf="!departureBoard">
+  <ion-item *ngFor="let item of loadingArray">
+    <ion-avatar slot="start"><ion-skeleton-text></ion-skeleton-text></ion-avatar>
+    <ion-title><ion-skeleton-text></ion-skeleton-text></ion-title>
+  </ion-item>
+</ion-list>
+
+<ion-infinite-scroll [disabled]="!departureBoard" (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll-content> </ion-infinite-scroll-content>
+</ion-infinite-scroll>

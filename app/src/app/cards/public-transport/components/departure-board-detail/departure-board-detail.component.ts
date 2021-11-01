@@ -1,10 +1,8 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { Card } from 'src/app/schema/card';
+import { Component, Input, OnInit } from '@angular/core';
 import { CardDetailComponent } from 'src/app/schema/card-detail-component';
-import { DepartureBoardCard, DepartureBoardCardDefinition } from '../../schema/departure-board-card';
+import { DepartureBoardCard } from '../../schema/departure-board-card';
 import { DepartureBoardData } from '../../schema/departure-board-data';
 import { DepartureBoardsService } from '../../services/departure-boards.service';
-import { DepartureBoardContentComponentOptions } from '../departure-board-content/departure-board-content.component';
 
 @Component({
   selector: 'app-departure-board-detail',
@@ -17,23 +15,20 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
   @Input() card!: DepartureBoardCard;
 
   departureBoard?: DepartureBoardData;
-  options: DepartureBoardContentComponentOptions = {};
 
   limit = 40;
+
+  loadingArray = new Array(10).fill(null);
 
   constructor(
     private departureBoardsService: DepartureBoardsService
   ) { }
 
   ngOnInit(): void {
-    this.options = {
-      ...this.card.definition,
-      limit: this.limit
-    };
     this.loadDepartures();
   }
 
-  private async loadDepartures() {
+  async loadDepartures(refreshEvent?: any) {
 
     const definition = {
       ...this.card.definition,
@@ -42,9 +37,10 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
 
     this.departureBoard = await this.departureBoardsService.loadDepartures(definition);
 
+    if (refreshEvent) refreshEvent.target.complete();
   }
 
-  async loadMore() {
+  async loadMore(event: any) {
     const definition = {
       ...this.card.definition,
       limit: 20,
@@ -54,6 +50,12 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
     const departures = await this.departureBoardsService.loadDepartures(definition).then(departureBoard => departureBoard.departures);
 
     this.departureBoard?.departures.push(...departures);
+
+    event.target?.complete();
+
+    if (departures.length == 1000) {
+      event.target.disabled = true;
+    }
   }
 
 }

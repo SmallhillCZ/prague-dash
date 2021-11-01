@@ -36,6 +36,8 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
   ngOnInit(): void {
 
+    this.loadingDepartures = new Array(this.card.definition?.limit || 5).fill(null);
+
     timer(0, 60 * 1000)
       .pipe(take(30))
       .pipe(untilDestroyed(this))

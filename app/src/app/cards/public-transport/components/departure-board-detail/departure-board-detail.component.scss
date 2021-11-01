@@ -1,3 +1,28 @@
+ion-avatar {
+  .circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .text {
+    text-align: center;
+  }
+}
+
+ion-item {
+  .time {
+    text-align: right;
+  }
+  .delay {
+    font-size: 0.7em;
+  }
+}
+
 .load-more {
   text-align: center;
   margin-top: 1em;

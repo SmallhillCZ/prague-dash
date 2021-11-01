@@ -7,8 +7,35 @@
   </ion-card-subtitle>
 </ion-card-header>
 <ion-card-content>
-  <app-departure-board-content
-    [options]="card.definition"
-    [departureBoard]="departureBoard"
-  ></app-departure-board-content>
+  <table *ngIf="departureBoard" class="card-table">
+    <tr *ngFor="let departure of departureBoard.departures" [class.at-stop]="departure.trip.is_at_stop">
+      <td class="route">
+        <app-route-badge [route]="departure.route"></app-route-badge>
+      </td>
+
+      <td class="headsign">
+        {{ departure.trip.headsign }}
+        <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible"
+          >&nbsp;♿</ng-container
+        >
+      </td>
+
+      <td class="departure">
+        {{ departure | departureTime: card.definition }}
+      </td>
+
+      <td class="delay">
+        <ion-text [color]="departure | departureDelayColor">{{ departure | departureDelay: card.definition }}</ion-text>
+      </td>
+    </tr>
+  </table>
+
+  <table *ngIf="!departureBoard" class="card-table">
+    <tr *ngFor="let departure of loadingDepartures">
+      <td class="route"><ion-badge color="light">&nbsp;</ion-badge></td>
+      <td class="headsign"><ion-skeleton-text></ion-skeleton-text></td>
+      <td class="departure"><ion-skeleton-text></ion-skeleton-text></td>
+      <td class="delay"><ion-skeleton-text></ion-skeleton-text></td>
+    </tr>
+  </table>
 </ion-card-content>
