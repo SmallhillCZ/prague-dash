@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Card } from 'src/app/schema/card';
+import { CardType } from 'src/app/schema/card-type';
+import { CARDS } from 'src/app/schema/cards-token';
 import { Dashboard } from 'src/app/schema/dashboard';
 import { StorageService } from './storage.service';
 
@@ -12,7 +14,8 @@ export class DashboardService {
   dashboard = new BehaviorSubject<Dashboard | undefined>(undefined);
 
   constructor(
-    private storage: StorageService
+    private storage: StorageService,
+    @Inject(CARDS) private cardTypes: CardType[],
   ) {
     this.loadDashboard();
   }
@@ -23,11 +26,13 @@ export class DashboardService {
   }
 
   async loadDashboard() {
-    const dash = await this.getDashboard();
+    let dash = await this.getDashboard();
+    dash = this.fixDash(dash);
     this.dashboard.next(dash);
   }
 
   async saveDashboard(dash: Dashboard) {
+    dash = this.fixDash(dash);
     await this.storage.set("dashboard", dash);
     return this.loadDashboard();
   }
@@ -72,6 +77,13 @@ export class DashboardService {
     dash.cards.splice(i, 1);
 
     this.saveDashboard(dash);
+  }
+
+  fixDash(dash: Dashboard): Dashboard {
+    // filter out invalid cards
+    dash.cards = dash.cards.filter(item => this.cardTypes.some(type => type.type === item.type));
+
+    return dash;
   }
 
 }

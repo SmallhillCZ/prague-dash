@@ -1,0 +1,8 @@
+<ion-reorder-group disabled="false" (ionItemReorder)="onReorder($event)">
+  <!-- Default reorder icon, end aligned items -->
+  <ion-item *ngFor="let item of values">
+    <ion-checkbox [(ngModel)]="item.active" (ngModelChange)="onCheck()" slot="start"></ion-checkbox>
+    <ion-label>{{ item.meta.title.cs }}</ion-label>
+    <ion-reorder *ngIf="item.active" slot="end"></ion-reorder>
+  </ion-item>
+</ion-reorder-group>

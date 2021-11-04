@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './components/login/login.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { CardsModule } from '../cards/cards.module';
 
 
 
@@ -14,7 +15,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    CardsModule
   ],
 })
 export class CoreModule { }

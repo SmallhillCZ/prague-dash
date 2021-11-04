@@ -3,8 +3,9 @@ import { DepartureBoardCardComponent } from "./components/departure-board-card/d
 import { DepartureBoardDetailComponent } from "./components/departure-board-detail/departure-board-detail.component";
 import { DepartureBoardSelectComponent } from "./components/departure-board-select/departure-board-select.component";
 import { DepartureBoardSettingsComponent } from "./components/departure-board-settings/departure-board-settings.component";
+import { DepartureBoardCard } from "./schema/departure-board-card";
 
-export const DepartureBoardsCardType: CardType = {
+export const DepartureBoardsCardType: CardType<DepartureBoardCard> = {
 
   type: "departure-board",
 

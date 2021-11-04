@@ -1,0 +1,19 @@
+.item {
+  display: inline-block;
+  width: 50%;
+}
+
+.item:nth-child(odd) {
+  padding-right: 1em;
+}
+.item:nth-child(even) {
+  padding-left: 1em;
+}
+
+.title {
+  display: inline-block;
+}
+
+.value {
+  float: right;
+}

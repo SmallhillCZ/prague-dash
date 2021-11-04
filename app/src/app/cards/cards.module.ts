@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AirQualityModule } from './air-quality/air-quality.module';
+import { AstronomicalModule } from './astronomical/astronomical.module';
 import { ContainerModule } from './container/container.module';
 import { PublicTransportModule } from './public-transport/public-transport.module';
 1;
@@ -8,12 +9,14 @@ import { PublicTransportModule } from './public-transport/public-transport.modul
   imports: [
     ContainerModule,
     PublicTransportModule,
-    AirQualityModule
+    AirQualityModule,
+    AstronomicalModule
   ],
   exports: [
     ContainerModule,
     PublicTransportModule,
-    AirQualityModule
+    AirQualityModule,
+    AstronomicalModule
   ]
 })
 export class CardsModule { }

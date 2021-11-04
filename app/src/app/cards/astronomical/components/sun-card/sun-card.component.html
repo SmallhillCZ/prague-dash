@@ -1,0 +1,26 @@
+<ion-card-header>
+  <ion-card-subtitle>☀️ Slunce</ion-card-subtitle>
+</ion-card-header>
+<ion-card-content *ngIf="times">
+  <div class="item" *ngFor="let value of card.definition.showValues" [ngSwitch]="value">
+    <ng-container *ngSwitchCase="'sunset'">
+      <span class="title">Západ:</span>
+      <span class="value">{{ times.sunset | date: "H:mm" }}</span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'sunrise'">
+      <span class="title">Východ:</span>
+      <span class="value">{{ times.sunrise | date: "H:mm" }}</span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'dawn'">
+      <span class="title">Úsvit:</span>
+      <span class="value">{{ times.dawn | date: "H:mm" }}</span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'dusk'">
+      <span class="title">Soumrak:</span>
+      <span class="value">{{ times.dusk | date: "H:mm" }}</span>
+    </ng-container>
+  </div>
+</ion-card-content>

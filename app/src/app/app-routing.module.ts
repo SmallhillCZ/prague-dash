@@ -3,16 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './core/components/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: 'card/add', loadChildren: () => import("./pages/card-add/card-add.module").then(m => m.CardAddModule) },
-
-  { path: 'card/:id/settings', loadChildren: () => import("./pages/card-settings/card-settings.module").then(m => m.CardSettingsModule) },
-  { path: 'card/:id', loadChildren: () => import("./pages/card-detail/card-detail.module").then(m => m.CardDetailModule) },
-
-  { path: 'dash', loadChildren: () => import("./pages/dash/dash.module").then(m => m.DashModule) },
+  { path: '', loadChildren: () => import("./pages/dash/dash.module").then(m => m.DashModule) },
 
   { path: 'settings', loadChildren: () => import("./pages/settings/settings.module").then(m => m.SettingsModule) },
-
-  { path: '', pathMatch: 'full', redirectTo: 'dash' },
 
   { path: '**', component: NotFoundComponent }
 ];

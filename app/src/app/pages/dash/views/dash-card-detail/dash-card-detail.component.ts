@@ -9,11 +9,11 @@ import { CARDS } from 'src/app/schema/cards-token';
 import { Dashboard } from 'src/app/schema/dashboard';
 
 @Component({
-  selector: 'app-card-detail',
-  templateUrl: './card-detail.component.html',
-  styleUrls: ['./card-detail.component.scss']
+  selector: 'app-dash-card-detail',
+  templateUrl: './dash-card-detail.component.html',
+  styleUrls: ['./dash-card-detail.component.scss']
 })
-export class CardDetailComponent implements OnInit {
+export class DashCardDetailComponent implements OnInit {
 
   card?: Card;
   cardType?: CardType;

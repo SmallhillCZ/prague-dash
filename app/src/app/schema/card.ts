@@ -1,7 +1,8 @@
+import { CardType } from "./card-type";
 
-export interface Card<Definition = any> {
+export interface Card<T = string, Definition = any> {
   id: string;
-  type: string;
+  type: T;
 
   definition: Definition;
 

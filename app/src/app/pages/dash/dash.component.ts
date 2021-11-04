@@ -49,7 +49,7 @@ export class DashComponent implements OnInit {
     if (type.detailComponent) {
       this.navController.navigateForward('/card/' + card.id);
     }
-    else if (type.settingsComponent) {
+    else {
       this.navController.navigateForward('/card/' + card.id + '/settings');
     }
   }

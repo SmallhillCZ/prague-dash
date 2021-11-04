@@ -5,12 +5,12 @@ import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 
 @Component({
-  selector: 'app-dash-card-content',
-  templateUrl: './dash-card-content.component.html',
-  styleUrls: ['./dash-card-content.component.scss'],
+  selector: 'app-card-content',
+  templateUrl: './card-content.component.html',
+  styleUrls: ['./card-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashCardContentComponent implements OnInit, OnChanges {
+export class CardContentComponent implements OnInit, OnChanges {
 
   @Input() card!: Card;
 

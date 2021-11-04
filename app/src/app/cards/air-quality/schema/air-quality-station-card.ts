@@ -4,4 +4,4 @@ export interface AirQualityStationCardDefinition {
   id: string;
 }
 
-export type AirQualityStationCard = Card<AirQualityStationCardDefinition>;
+export type AirQualityStationCard = Card<"air-quality-station", AirQualityStationCardDefinition>;

@@ -9,11 +9,11 @@ import { CARDS } from 'src/app/schema/cards-token';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-card-settings',
-  templateUrl: './card-settings.component.html',
-  styleUrls: ['./card-settings.component.scss']
+  selector: 'app-dash-card-settings',
+  templateUrl: './dash-card-settings.component.html',
+  styleUrls: ['./dash-card-settings.component.scss']
 })
-export class CardSettingsComponent implements OnInit, ViewWillEnter {
+export class DashCardSettingsComponent implements OnInit, ViewWillEnter {
 
   card?: Card;
   cardType?: CardType;

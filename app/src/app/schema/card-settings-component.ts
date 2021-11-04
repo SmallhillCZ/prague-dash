@@ -1,8 +1,8 @@
 import { EventEmitter } from "@angular/core";
 import { Card } from "./card";
 
-export interface CardSettingsComponent {
-  card: Card;
+export interface CardSettingsComponent<CustomCard extends Card = Card> {
+  card: CustomCard;
 
-  change: EventEmitter<any>;
+  change: EventEmitter<CustomCard["definition"]>;
 }

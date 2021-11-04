@@ -5,4 +5,4 @@ export interface ContainerCardDefinition {
   showNotMetered?: boolean;
 }
 
-export type ContainerCard = Card<ContainerCardDefinition>;
+export type ContainerCard = Card<"container", ContainerCardDefinition>;

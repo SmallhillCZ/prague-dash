@@ -10,11 +10,11 @@ import { CARDS } from 'src/app/schema/cards-token';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-card-selection',
-  templateUrl: './card-selection.component.html',
-  styleUrls: ['./card-selection.component.scss']
+  selector: 'app-dash-card-selection',
+  templateUrl: './dash-card-selection.component.html',
+  styleUrls: ['./dash-card-selection.component.scss']
 })
-export class CardSelectionComponent implements OnInit, ViewWillEnter {
+export class DashCardSelectionComponent implements OnInit, ViewWillEnter {
 
   cardType?: CardType;
 

@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dash/add"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ cardType?.title?.cs }}</ion-title>
+    <ion-buttons *ngIf="buttons" slot="end">
+      <ion-button *ngFor="let button of buttons" (click)="button.handler()"
+        ><ion-icon [name]="button.icon"></ion-icon
+      ></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-card-selection-content
+    [cardType]="cardType"
+    (buttons)="buttons = $event"
+    (select)="createCard($event)"
+  ></app-card-selection-content>
+</ion-content>

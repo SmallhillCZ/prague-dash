@@ -12,4 +12,4 @@ export class DepartureBoardCardDefinition {
   constructor(public name: string | null) { }
 }
 
-export type DepartureBoardCard = Card<DepartureBoardCardDefinition>;
+export type DepartureBoardCard = Card<"departure-board", DepartureBoardCardDefinition>;
