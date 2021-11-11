@@ -11,3 +11,18 @@ export interface CityvizorProfiles {
   gpsY?: number;
   url: string;
 }
+
+export interface CityvizorPayment {
+  profileId: number;
+  year: number;
+  paragraph: number;
+  item: number;
+  unit: number;
+  event: string;
+  incomeAmount: number;
+  expenditureAmount: number;
+  date: string;
+  counterpartyId: string;
+  counterpartyName: string;
+  description: string;
+}

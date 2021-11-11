@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { get } from 'http';
-import { CityvizorService, GetProfilesOptions } from '../../services/cityvizor.service';
+import { CityvizorService, GetProfilesOptions } from '../services/cityvizor.service';
 
 interface GetProfilesQuery {
   lat?: number;
@@ -23,8 +23,4 @@ export class ProfilesController {
     return this.cityvizor.getProfiles(options);
   }
 
-  @Get(":profile/payments")
-  getPayments(@Param("profile") profile: string) {
-
-  }
 }

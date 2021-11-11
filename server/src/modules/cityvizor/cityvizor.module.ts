@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ProfilesController } from './controllers/profiles/profiles.controller';
+import { PaymentsController } from './controllers/payments.controller';
+import { ProfilesController } from './controllers/profiles.controller';
 import { CityvizorService } from './services/cityvizor.service';
 
 @Module({
-  controllers: [ProfilesController],
+  controllers: [
+    ProfilesController,
+    PaymentsController
+  ],
   providers: [CityvizorService]
 })
 export class CityvizorModule { }
