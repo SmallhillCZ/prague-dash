@@ -14,9 +14,9 @@ export class StopPlatform {
   @Column({ nullable: true })
   name: string;
 
-  @Column()
+  @Column({ type: "numeric", precision: 8, scale: 5 })
   lat: number;
 
-  @Column()
+  @Column({ type: "numeric", precision: 8, scale: 5 })
   lon: number;
 }
