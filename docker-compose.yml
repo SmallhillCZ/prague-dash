@@ -3,7 +3,7 @@ version: "3.8"
 services:
   docs:
     image: jekyll/jekyll:pages
-    container_name: docs.praguedash
+    container_name: cz.praguedash.docs
     command: jekyll serve
     ports:
       - 4000:4000
@@ -12,3 +12,23 @@ services:
     environment:
       JEKYLL_UID: 1008
       JEKYLL_GID: 1008
+
+  server:
+    build: ./server
+    container_name: cz.praguedash.server
+    ports:
+      - 3000:3000
+
+  db:
+    image: postgres
+    container_name: cz.praguedash.db
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080

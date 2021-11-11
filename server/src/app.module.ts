@@ -1,34 +1,40 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module, ModuleMetadata } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as minimist from "minimist";
 import { AppController } from './app.controller';
-import { ContainersModule } from './modules/containers/containers.module';
-import { PublicTransportModule } from './modules/public-transport/public-transport.module';
+import { Modules } from './modules/modules';
 import { SharedModule } from './shared/shared.module';
-import { AirQualityModule } from './modules/air-quality/air-quality.module';
+
+/* DECIDE WHICH MODULES TO LOAD */
+const logger = new Logger("AppModule");
+
+var argv = minimist(process.argv.slice(2));
+
+let loadModules: ModuleMetadata["imports"] = [];
+let modules = argv["_"] || [];
+
+if (modules.length) {
+  logger.log(`Loading modules: ${modules}`);
+  loadModules = modules.map(item => Modules[item]);
+}
+else {
+  logger.log(`Loading all modules`);
+  loadModules = Object.values(Modules);
+}
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
 
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: ':memory:',
-      entities: ["dist/**/*.entity{.ts,.js}"],
-      dropSchema: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(),
 
     ConfigModule.forRoot({ isGlobal: true }),
 
-    ContainersModule,
-
-    PublicTransportModule,
-
     SharedModule,
 
-    AirQualityModule,
+    ...loadModules
 
   ],
   controllers: [AppController],
