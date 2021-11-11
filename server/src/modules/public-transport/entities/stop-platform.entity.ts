@@ -8,7 +8,7 @@ export class StopPlatform {
   @PrimaryColumn()
   id: string;
 
-  @ManyToOne(() => Stop, stop => stop.platforms)
+  @ManyToOne(() => Stop, stop => stop.platforms, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   stop: Stop;
 
   @Column({ nullable: true })

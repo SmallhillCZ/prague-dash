@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GolemioService } from 'src/shared/services/golemio.service';
@@ -15,7 +14,6 @@ export class StopsDownloadService {
 
   constructor(
     @InjectRepository(Stop) private stopsRepository: Repository<Stop>,
-    private configService: ConfigService,
     private golemio: GolemioService
   ) {
 
@@ -65,15 +63,12 @@ export class StopsDownloadService {
             name: item.properties.platform_code,
             ...coordinatesFromTuple(item.geometry.coordinates)
           });
-
-
-
         });
     }
 
 
     this.logger.verbose("Clearing old stops...");
-    await this.stopsRepository.clear();
+    await this.stopsRepository.delete({});
 
     const c = stops.length;
 
