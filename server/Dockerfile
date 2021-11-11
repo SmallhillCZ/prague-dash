@@ -8,8 +8,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 # Build
-COPY src src
-COPY nest-cli.json tsconfig.json tsconfig.build.json ./
+COPY . .
 
 RUN npm run build
 
