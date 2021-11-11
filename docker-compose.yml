@@ -30,5 +30,6 @@ services:
 
   adminer:
     image: adminer
+    container_name: cz.praguedash.adminer
     ports:
       - 8080:8080
