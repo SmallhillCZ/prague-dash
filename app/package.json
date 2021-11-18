@@ -1,5 +1,5 @@
 {
-  "name": "prague-dash",
+  "name": "praguedash-app",
   "version": "1.3.0",
   "scripts": {
     "build": "ng build",
