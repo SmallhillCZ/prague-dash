@@ -1,11 +1,11 @@
 {
-  "name": "prague-dash-server",
+  "name": "praguedash-server",
   "version": "1.0.4",
   "private": true,
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "build:docker": "docker build -t smallhillcz/prague-dash .",
+    "build:docker": "docker build -t smallhillcz/praguedash-server .",
     "dev": "nest start --watch",
     "start": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -14,7 +14,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "deploy": "npm run build:docker && cd /srv/prague-dash && docker-compose up -d"
+    "deploy": "npm run build:docker && docker push smallhillcz/praguedash-server"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
