@@ -47,6 +47,7 @@
     "@angular/cli": "~12.2.2",
     "@angular/compiler-cli": "~12.2.0",
     "@capacitor/cli": "3.2.4",
+    "@ionic/cli": "^6.18.1",
     "@types/luxon": "^2.0.4",
     "@types/node": "^12.11.1",
     "@types/suncalc": "^1.8.1",
