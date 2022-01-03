@@ -18,6 +18,8 @@ export class DashCardDetailComponent implements OnInit {
   card?: Card;
   cardType?: CardType;
 
+  cardTitle?: string;
+
   constructor(
     private route: ActivatedRoute,
     private dashboardService: DashboardService,

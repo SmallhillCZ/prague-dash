@@ -3,15 +3,15 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ cardType?.title?.cs || "Detail karty" }}</ion-title>
+    <ion-title>{{ cardTitle || cardType?.title?.cs || "Detail karty" }}</ion-title>
     <ion-buttons slot="end">
       <ion-button *ngIf="cardType?.settingsComponent" routerLink="settings">
-        <ion-icon name="settings-outline"></ion-icon>
+        <ion-icon name="create-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-card-detail-content *ngIf="card" [card]="card"></app-card-detail-content>
+  <app-card-detail-content *ngIf="card" [card]="card" (title)="cardTitle = $event"></app-card-detail-content>
 </ion-content>
