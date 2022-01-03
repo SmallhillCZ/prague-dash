@@ -8,13 +8,15 @@ import { CardContainerSettingsComponent } from './components/card-container-sett
 import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 import { ContainerCardType } from './container-card-type';
+import { CardContainerDetailComponent } from './components/card-container-detail/card-container-detail.component';
 
 
 @NgModule({
   declarations: [
     CardContainerComponent,
     CardContainerSelectComponent,
-    CardContainerSettingsComponent
+    CardContainerSettingsComponent,
+    CardContainerDetailComponent
   ],
   imports: [
     CommonModule,
