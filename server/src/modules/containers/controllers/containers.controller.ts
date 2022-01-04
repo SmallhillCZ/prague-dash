@@ -13,9 +13,7 @@ export class ContainersController {
 
   constructor(
     private containersService: ContainersService
-  ) {
-
-  }
+  ) { }
 
   @Get("/")
   getContainers(@Query() query: GetContainersQuery) {

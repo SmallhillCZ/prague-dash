@@ -6,7 +6,7 @@ import { GolemioService } from 'src/shared/services/golemio.service';
 import { coordinatesToDistanceCompare } from 'src/utils/coordinates-to-distance-compare';
 import { LimitOnUpdateNotSupportedError, Repository } from 'typeorm';
 import { ContainerLog } from '../entities/container-log.entity';
-import { Container } from '../schema/container';
+import { Container, ContainerType } from '../schema/container';
 import { ContainerResponse } from '../schema/container-response';
 
 
@@ -101,18 +101,28 @@ export class ContainersService {
 
     this.containers = response.features
       .filter(feature => !!feature.properties.name)
-      .map(feature => ({
-        "id": feature.properties.id,
-        "district": feature.properties.district,
-        "lon": feature.geometry.coordinates[0],
-        "lat": feature.geometry.coordinates[1],
-        "location": feature.properties.name,
-        "types": feature.properties.containers.map(container => ({
+      .map(feature => {
+
+        const container: Container = {
+          id: feature.properties.id,
+          district: feature.properties.district,
+          lon: feature.geometry.coordinates[0],
+          lat: feature.geometry.coordinates[1],
+          location: feature.properties.name,
+          accessibility: feature.properties.accessibility.id,
+          types: []
+        };
+
+        container.types = feature.properties.containers.map(container => ({
           id: container.container_id,
           type: container.trash_type.id || 0,
-          occupancy: container.last_measurement?.percent_calculated / 100
-        }))
-      }));
+          occupancy: container.last_measurement?.percent_calculated / 100,
+          cleaning_frequency: container.cleaning_frequency,
+          container_type: container.container_type,
+        }));
+
+        return container;
+      });
 
     await this.saveLogs(this.containers);
 
