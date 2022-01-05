@@ -69,9 +69,9 @@ export class DashComponent implements ViewDidEnter, ViewDidLeave {
 
     combineLatest([dash, params])
       .subscribe(([dash, params]) => {
-        if (!dash || !params["page"]) return;
+        if (!dash) return;
         const i = params["page"] ? dash.pages.findIndex(item => item.id === params["page"]) : 0;
-        this.currentPage = i ? dash.pages[i] : undefined;
+        this.currentPage = dash.pages[i];
         window.setTimeout(() => this.swiper?.slideTo(i || 0), 500);
       });
   }
