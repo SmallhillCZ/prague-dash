@@ -33,15 +33,18 @@ export class DashEditPageComponent implements OnInit {
     const dash = this.dashboardService.dashboard.pipe(untilDestroyed(this));
     const params = this.route.params.pipe(untilDestroyed(this));
 
-    dash.subscribe(dash => this.dashboard = dash);
-
     combineLatest([dash, params]).subscribe(([dash, params]) => {
+      this.dashboard = dash;
       this.page = dash?.pages.find(item => item.id === params["page"]);
     });
   }
 
   onReorder(event: ItemReorderCustomEvent) {
-    // this.dashboard?.cards.splice(event.detail.to, 0, ...this.dashboard?.pages.splice(event.detail.from, 1));
+    if (!this.dashboard || !this.page) return;
+
+    this.page.cards.splice(event.detail.to, 0, ...this.page?.cards.splice(event.detail.from, 1));
+
+    this.dashboardService.saveDashboard(this.dashboard);
     event.detail.complete(true);
   }
 

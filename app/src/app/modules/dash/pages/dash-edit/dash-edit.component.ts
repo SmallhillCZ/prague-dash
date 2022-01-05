@@ -27,7 +27,12 @@ export class DashEditComponent implements OnInit {
   }
 
   onReorder(event: ItemReorderCustomEvent) {
-    this.dashboard?.pages.splice(event.detail.to, 0, ...this.dashboard?.pages.splice(event.detail.from, 1));
+    if (!this.dashboard) return;
+
+    this.dashboard.pages.splice(event.detail.to, 0, ...this.dashboard?.pages.splice(event.detail.from, 1));
+
+    this.dashboardService.saveDashboard(this.dashboard);
+
     event.detail.complete(true);
   }
 
