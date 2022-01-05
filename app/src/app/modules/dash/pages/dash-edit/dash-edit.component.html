@@ -13,14 +13,18 @@
 </ion-header>
 
 <ion-content>
-  <ion-item lines="none">
+  <ion-item lines="none" class="title">
     <ion-label><h1>Stránky</h1></ion-label>
     <ion-button *ngIf="!sortPages" slot="end" fill="clear" (click)="sortPages = !sortPages">Seřadit</ion-button>
     <ion-button *ngIf="sortPages" slot="end" fill="clear" (click)="sortPages = !sortPages">Hotovo</ion-button>
   </ion-item>
+
   <ion-reorder-group [disabled]="!sortPages" (ionItemReorder)="onReorder($any($event))">
     <ion-item *ngFor="let page of dashboard?.pages" [detail]="!sortPages" (click)="onPageClick(page)">
-      <ion-label>{{ page.title }}</ion-label>
+      <ion-label>
+        <h2>{{ page.title }}</h2>
+        <p>Počet karet: {{ page.cards.length }}</p>
+      </ion-label>
       <ion-reorder slot="end"></ion-reorder>
     </ion-item>
   </ion-reorder-group>

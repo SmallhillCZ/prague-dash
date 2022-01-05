@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, ItemReorderCustomEvent, NavController } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
+import { SettingsService } from 'src/app/core/services/settings.service';
 import { Card } from 'src/app/schema/card';
+import { CardType } from 'src/app/schema/card-type';
+import { CARDS } from 'src/app/schema/cards-token';
 import { Dashboard, DashboardPage } from 'src/app/schema/dashboard';
 
 @UntilDestroy()
@@ -25,7 +28,9 @@ export class DashEditPageComponent implements OnInit {
     private dashboardService: DashboardService,
     private route: ActivatedRoute,
     private navController: NavController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    @Inject(CARDS) public cardTypes: CardType[],
+    private settings: SettingsService
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +66,7 @@ export class DashEditPageComponent implements OnInit {
   async deletePage() {
     const alert = await this.alertController.create({
       header: "Smazat stránku",
-      message: "Pozor: smažete i všechny karty na ní!",
+      message: "Pozor: smažete i všechny karty na stránce!",
       buttons: [
         { text: "Zrušit", role: "cancel" },
         { text: "Smazat", handler: () => this.deletePageConfirmed() }
@@ -80,5 +85,10 @@ export class DashEditPageComponent implements OnInit {
     await this.save();
 
     this.navController.navigateRoot("/");
+  }
+
+  getCardTypeTitle(card: Card): string | undefined {
+    const cardType = this.cardTypes.find(cardType => cardType.type === card.type);
+    return cardType?.title[this.settings.lang];
   }
 }

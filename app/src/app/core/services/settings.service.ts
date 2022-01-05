@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AppSettings } from 'src/app/schema/app-settings';
+import { Language } from 'src/app/schema/language';
 import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsService {
+
+  lang = Language.cs;
 
   settings = new BehaviorSubject<AppSettings | undefined>(undefined);
 
