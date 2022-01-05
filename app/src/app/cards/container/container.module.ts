@@ -9,6 +9,7 @@ import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 import { ContainerCardType } from './container-card-type';
 import { CardContainerDetailComponent } from './components/card-container-detail/card-container-detail.component';
+import { ContainerDetailCardComponent } from './components/container-detail-card/container-detail-card.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { CardContainerDetailComponent } from './components/card-container-detail
     CardContainerComponent,
     CardContainerSelectComponent,
     CardContainerSettingsComponent,
-    CardContainerDetailComponent
+    CardContainerDetailComponent,
+    ContainerDetailCardComponent
   ],
   imports: [
     CommonModule,

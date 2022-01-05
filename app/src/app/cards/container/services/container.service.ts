@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ContainerData } from '../schema/container-data';
+import { ContainerHistoryData } from '../schema/container-history';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ContainerService {
   }
 
   async getContainer(id: string): Promise<ContainerData> {
-    return await this.api.get<ContainerData>(`containers/${id}`);
+    return this.api.get<ContainerData>(`containers/${id}`);
   }
 
   async getContainers(options: { search?: string, coordinates?: { lat: number, lon: number; }; }) {
@@ -27,6 +28,10 @@ export class ContainerService {
     }
 
     return this.api.get<ContainerData[]>("containers", params);
+  }
+
+  async getHistory(id: string, type: number) {
+    return this.api.get<ContainerHistoryData[]>(`containers/${id}/${type}/history`);
   }
 
 }

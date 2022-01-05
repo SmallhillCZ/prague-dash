@@ -17,8 +17,8 @@ export interface GetContainersOptions {
 
 export interface GetHistoryOptions {
   id?: Container["id"],
-  type?: number,
-  since?: Date,
+  type: number,
+  since: Date,
   limit?: number;
 }
 
@@ -60,15 +60,12 @@ export class ContainersService {
   }
 
   getHistory(options: GetHistoryOptions) {
-    let query = this.containerLogRepository.createQueryBuilder();
+    let query = this.containerLogRepository.createQueryBuilder()
+      .select(["timestamp", "occupancy"])
+      .where({ type: options.type, id: options.id })
+      .andWhere("timestamp >= :since", { since: options.since });
 
-    if (options.id) query = query.andWhere({ id: options.id });
-
-    if (options.type) query = query.andWhere({ type: options.type });
-
-    if (options.since) query = query.andWhere("timestamp >= :value", options.since);
-
-    else return this.containerLogRepository.find();
+    return query.execute();
   }
 
   getLatestHistoryValues(options: { id?: Container["id"]; } = {}) {

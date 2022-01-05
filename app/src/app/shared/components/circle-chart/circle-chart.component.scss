@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  position: relative;
+}
+
+.circle {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgba(45, 209, 39, 0.5);
+  stroke-width: 2.8;
+  stroke-linecap: square;
+  animation: progress 1s ease-out forwards;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.1);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+}
+
+.circle.semi-full {
+  stroke: rgba(255, 173, 49, 0.5);
+}
+.circle.full {
+  stroke: rgba(255, 49, 128, 0.5);
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.percentage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  span {
+    text-align: center;
+  }
+}

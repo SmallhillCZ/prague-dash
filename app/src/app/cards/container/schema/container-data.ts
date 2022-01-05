@@ -1,5 +1,5 @@
 import { ContainerAccessibilityID } from "./container-accessibility";
-import { ContainerType } from "./container-type";
+import { ContainerTypeID } from "./container-type";
 
 export interface ContainerData {
   id: string;
@@ -8,15 +8,17 @@ export interface ContainerData {
   lat: number;
   location: string;
   accessibility: ContainerAccessibilityID,
-  types: {
-    id: string;
-    type: ContainerType;
-    occupancy: number;
-    cleaning_frequency: {
-      duration: string,
-      frequency: number,
-      id: number;
-    };
-    container_type: string;
-  }[];
+  types: ContainerDataType[];
+}
+
+export interface ContainerDataType {
+  id: string;
+  type: ContainerTypeID;
+  occupancy: number;
+  cleaning_frequency: {
+    duration: string,
+    frequency: number,
+    id: number;
+  };
+  container_type: string;
 }

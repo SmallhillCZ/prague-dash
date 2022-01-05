@@ -1,4 +1,6 @@
-export enum ContainerType {
+import { LanguageValue } from "src/app/schema/language";
+
+export enum ContainerTypeID {
   "unknown" = 0,
   "tinted_glass" = 1,
   "electric_waste" = 2,
@@ -10,41 +12,36 @@ export enum ContainerType {
   "textiles" = 8,
 }
 
-export const ContainerTypeNames: { [key in ContainerType]: { cs: string, en: string; } } = {
+export interface ContainerTypeInfo {
+  title: LanguageValue<string>;
+}
+
+export const ContainerTypes: { [key in ContainerTypeID]: ContainerTypeInfo } = {
   0: {
-    cs: "Neznámý",
-    en: "Unknown"
+    title: { cs: "Neznámý", en: "Unknown" }
   },
   1: {
-    cs: "Barevné sklo",
-    en: "Tinted glass"
+    title: { cs: "Barevné sklo", en: "Tinted glass" }
   },
   2: {
-    cs: "Elektrozařízení",
-    en: "Electric waste"
+    title: { cs: "Elektrozařízení", en: "Electric waste" }
   },
   3: {
-    cs: "Kovy",
-    en: "Metals"
+    title: { cs: "Kovy", en: "Metals" }
   },
   4: {
-    cs: "Nápojové kartóny",
-    en: "Beverage cartons"
+    title: { cs: "Nápojové kartóny", en: "Beverage cartons" }
   },
   5: {
-    cs: "Papír",
-    en: "Paper"
+    title: { cs: "Papír", en: "Paper" }
   },
   6: {
-    cs: "Plast",
-    en: "Plastics"
+    title: { cs: "Plast", en: "Plastics" }
   },
   7: {
-    cs: "Čiré sklo",
-    en: "Clear glass"
+    title: { cs: "Čiré sklo", en: "Clear glass" }
   },
   8: {
-    cs: "Textil",
-    en: "Textiles"
+    title: { cs: "Textil", en: "Textiles" }
   },
 };

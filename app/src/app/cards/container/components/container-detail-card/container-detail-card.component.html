@@ -1,0 +1,17 @@
+<ion-card (click)="toggleDetail()">
+  <ion-card-header>
+    <ion-card-title class="name">
+      <app-circle-chart *ngIf="type.occupancy !== null" [percentage]="type.occupancy"></app-circle-chart>
+      <h3>{{ getContainerTypeTitle(type, lang) }}</h3>
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content class="chart">
+    <div *ngIf="type.occupancy !== null" class="detail" [class.open]="open">
+      <app-chartsjs-chart type="line" [data]="chartData" [options]="chartOptions"></app-chartsjs-chart>
+    </div>
+    <div class="footer">
+      <p *ngIf="type.occupancy === null">Bez senzoru</p>
+      <p>Plán svozu: {{ parseCleaningFrequency(type.cleaning_frequency, lang) }}</p>
+    </div>
+  </ion-card-content>
+</ion-card>
