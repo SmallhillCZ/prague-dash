@@ -5,6 +5,8 @@ export function DashBoardMigrations(storage: StorageService) {
   return async () => {
     const dash = await storage.get("dashboard") as any;
 
+    if (!dash) return;
+
     if (!dash.pages) {
       dash.pages = [{ id: "0", cards: [] } as DashboardPage];
     }

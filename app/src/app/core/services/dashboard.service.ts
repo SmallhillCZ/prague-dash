@@ -33,7 +33,7 @@ export class DashboardService {
 
     if (!dash) {
       return {
-        pages: [{ id: "0", cards: [] }]
+        pages: [{ id: "0", title: "Hlavní", cards: [] }]
       } as Dashboard;
     }
 
