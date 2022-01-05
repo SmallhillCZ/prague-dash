@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { App } from '@capacitor/app';
+
 import { SplashScreen } from '@capacitor/splash-screen';
 import { IonRouterOutlet, Platform, ViewDidEnter } from '@ionic/angular';
 @Component({
@@ -24,12 +24,6 @@ export class AppComponent implements ViewDidEnter {
   }
 
   async init() {
-    // Quit on back button when on root page
-    this.platform.backButton.subscribeWithPriority(-1, () => {
-      if (!this.routerOutlet.canGoBack()) {
-        App.exitApp();
-      }
-    });
 
     if (this.platform.is("android")) {
       // StatusBar.setOverlaysWebView({ overlay: true });      

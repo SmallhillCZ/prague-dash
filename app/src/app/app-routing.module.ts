@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './core/components/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import("./pages/dash/dash.module").then(m => m.DashModule) },
+  { path: '', loadChildren: () => import("./modules/dash/dash.module").then(m => m.DashModule) },
 
-  { path: 'settings', loadChildren: () => import("./pages/settings/settings.module").then(m => m.SettingsModule) },
+  { path: 'settings', loadChildren: () => import("./modules/settings/settings.module").then(m => m.SettingsModule) },
 
   { path: '**', component: NotFoundComponent }
 ];

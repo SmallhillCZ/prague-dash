@@ -17,7 +17,7 @@ export class SettingsService {
   }
 
   async getSettings(): Promise<AppSettings> {
-    const data = await this.storage.get<Partial<AppSettings>>("settings");
+    const data = await this.storage.get("settings");
     return Object.assign(new AppSettings(), data);
   }
 

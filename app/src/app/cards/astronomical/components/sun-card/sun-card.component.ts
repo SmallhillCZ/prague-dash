@@ -26,7 +26,7 @@ export class SunCardComponent implements CardComponent, OnInit {
   }
 
   private async getSunTimes() {
-    const position = await Geolocation.getCurrentPosition();
+    const position = await Geolocation.getCurrentPosition({ enableHighAccuracy: false });
 
     const today = DateTime.local().toJSDate();
     const tomorrow = DateTime.local().plus({ days: 1 }).toJSDate();

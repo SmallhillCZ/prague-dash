@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Nastavení karty</ion-title>
+    <ion-title>{{ card?.title || "Nastavení karty" }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -27,6 +27,16 @@
   </ion-list-header>
 
   <ion-item-group *ngIf="card">
+    <ion-item>
+      <ion-label>Stránka</ion-label>
+      <ion-select [ngModel]="cardPage?.id" (ngModelChange)="changePage($event)">
+        <ion-select-option *ngFor="let page of pages" [value]="page.id">{{ page.title }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Název karty</ion-label>
+      <ion-input [(ngModel)]="card.title" (ngModelChange)="save()"></ion-input>
+    </ion-item>
     <ion-item>
       <ion-label>Barva</ion-label>
       <ion-select [(ngModel)]="card.color" (ngModelChange)="save()">

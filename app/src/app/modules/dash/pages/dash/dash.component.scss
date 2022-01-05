@@ -1,5 +1,18 @@
-// @import "~swiper/swiper";
-// @import "~@ionic/angular/css/ionic-swiper";
+:host {
+  background-image: url("~src/assets/img/bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+::ng-deep {
+  .swiper {
+    height: 100%;
+  }
+  .swiper-slide {
+    display: block !important;
+    height: 100%;
+  }
+}
 
 ion-content,
 ion-toolbar {
@@ -16,8 +29,12 @@ ion-slide {
   text-align: left;
 }
 
-:host {
-  background-image: url("~src/assets/img/bg.jpg");
-  background-size: cover;
-  background-position: center;
+.page {
+  position: relative;
+  text-align: left;
+  .title {
+    text-align: center;
+    font-size: 0.8em;
+    color: #eee;
+  }
 }

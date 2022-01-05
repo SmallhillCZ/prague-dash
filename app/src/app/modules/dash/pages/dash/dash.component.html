@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title color="light"> PragueDash </ion-title>
+    <ion-title color="light" mode="md"> PragueDash </ion-title>
     <ion-buttons slot="primary">
       <ion-button id="add-button" color="light">
         <ion-icon name="add-outline"></ion-icon>
@@ -9,11 +9,16 @@
         <ng-template>
           <ion-content>
             <ion-list>
-              <ion-item routerLink="/dash/add-card" [button]="true" [detail]="false">
+              <ion-item
+                *ngIf="currentPage"
+                [routerLink]="'/page/' + currentPage.id + '/add'"
+                [button]="true"
+                [detail]="false"
+              >
                 <ion-label>Přidat kartu</ion-label>
                 <ion-icon name="add-outline"></ion-icon>
               </ion-item>
-              <ion-item routerLink="/dash/add-card" [button]="true" [detail]="false">
+              <ion-item [button]="true" [detail]="false" (click)="addPage()">
                 <ion-label>Přidat stránku</ion-label>
                 <ion-icon name="reader-outline"></ion-icon>
               </ion-item>
@@ -21,16 +26,35 @@
           </ion-content>
         </ng-template>
       </ion-popover>
-      <ion-button color="light" routerLink="/settings">
-        <ion-icon name="settings-outline"></ion-icon>
+      <ion-button color="light" routerLink="/dash/edit">
+        <ion-icon name="options-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+<ion-content *ngIf="dashboard && dashboard.pages.length === 1">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event, dashboard.pages[0])">
     <ion-refresher-content> </ion-refresher-content>
   </ion-refresher>
-  <app-dash-card *ngFor="let cardData of cards" [card]="cardData" (click)="openDetail(cardData)"> </app-dash-card>
+  <app-dash-card *ngFor="let cardData of dashboard.pages[0]?.cards" [card]="cardData" (click)="openDetail(cardData)">
+  </app-dash-card>
+</ion-content>
+
+<ion-content *ngIf="dashboard && dashboard.pages.length > 1">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event, currentPage!)">
+    <ion-refresher-content> </ion-refresher-content>
+  </ion-refresher>
+  <swiper [config]="swiperConfig" (swiper)="onSwiper($event)" (slideChange)="onSlideChange($any($event))">
+    <ng-template *ngFor="let page of dashboard.pages" swiperSlide>
+      <div class="page">
+        <div class="title" data-swiper-parallax="70%" data-swiper-parallax-opacity="0">
+          {{ page.title || "Hlavní" }}
+        </div>
+
+        <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" (click)="openDetail(cardData)">
+        </app-dash-card>
+      </div>
+    </ng-template>
+  </swiper>
 </ion-content>

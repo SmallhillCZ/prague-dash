@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardDetailComponent } from 'src/app/schema/card-detail-component';
 import { DepartureBoardCard } from '../../schema/departure-board-card';
 import { DepartureBoardData } from '../../schema/departure-board-data';
@@ -13,6 +13,8 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
 
 
   @Input() card!: DepartureBoardCard;
+
+  @Output() title = new EventEmitter<string>();
 
   departureBoard?: DepartureBoardData;
 
@@ -36,6 +38,8 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
     };
 
     this.departureBoard = await this.departureBoardsService.loadDepartures(definition);
+
+    if (!this.card.definition.name) this.title.emit(this.departureBoard.stops[0].stop_name);
 
     if (refreshEvent) refreshEvent.target.complete();
   }

@@ -7,6 +7,7 @@ import { Card } from 'src/app/schema/card';
 import { CardType } from 'src/app/schema/card-type';
 import { CardSelectComponentButton } from 'src/app/schema/card-select-component';
 import { CARDS } from 'src/app/schema/cards-token';
+import { CardCreateData } from 'src/app/schema/card-create-data';
 
 @UntilDestroy()
 @Component({
@@ -36,17 +37,17 @@ export class DashCardSelectionComponent implements OnInit, ViewWillEnter {
       .pipe(untilDestroyed(this))
       .subscribe(params => {
         this.buttons = undefined;
-        this.cardType = this.cards.find(item => item.type === params["id"]);
+        this.cardType = this.cards.find(item => item.type === params["type"]);
       });
 
   }
 
-  async createCard(options: Card["definition"]) {
+  async createCard(createData: CardCreateData) {
     if (!this.cardType) return;
 
-    await this.dashboardService.createCard(this.cardType.type, options);
+    await this.dashboardService.createCard(this.route.snapshot.params["page"], this.cardType.type, createData);
 
-    this.navController.navigateRoot("/");
+    this.navController.navigateRoot("/dash", { queryParams: { page: this.route.snapshot.params["page"] } });
   }
 
 }

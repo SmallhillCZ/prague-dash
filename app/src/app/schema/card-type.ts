@@ -10,7 +10,7 @@ export interface CardType<C extends Card = Card> {
 
   component: new (...args: any[]) => CardComponent;
   detailComponent?: new (...args: any[]) => CardDetailComponent;
-  selectComponent?: new (...args: any[]) => CardSelectComponent;
+  selectComponent?: new (...args: any[]) => CardSelectComponent<C>;
   settingsComponent?: new (...args: any[]) => CardSettingsComponent;
 
   defaultDefinition?: any;
