@@ -1,13 +1,17 @@
 apply plugin: 'com.android.application'
 
+// This loads the custom app.properties file for applying it's values
+def appProperties = new Properties();
+file("app.properties").withInputStream { appProperties.load(it) }
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "cz.smallhill.praguedash"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15
-        versionName "1.3.0"
+        versionCode appProperties.getProperty('versionCode').toInteger()
+        versionName appProperties.getProperty('versionName')
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CardComponent } from 'src/app/schema/card-component';
 import { ContainerCard } from '../../schema/container-card';
-import { ContainerTypeNames } from '../../schema/container-type';
+import { ContainerTypes } from '../../schema/container-type';
 import { ContainerService } from '../../services/container.service';
 
 @UntilDestroy()
@@ -12,8 +12,6 @@ import { ContainerService } from '../../services/container.service';
   styleUrls: ['./card-container.component.scss']
 })
 export class CardContainerComponent implements CardComponent, OnInit {
-
-  typeNames = ContainerTypeNames;
 
   lang = "cs" as "cs";
 
@@ -39,7 +37,7 @@ export class CardContainerComponent implements CardComponent, OnInit {
 
     this.types = data.types
       .filter(item => this.card.definition?.showNotMetered || !!item.occupancy)
-      .map(item => ({ name: this.typeNames[item.type][this.lang], occupancy: item.occupancy }));
+      .map(item => ({ name: ContainerTypes[item.type].title[this.lang], occupancy: item.occupancy }));
 
     this.types.sort((a, b) => {
       if (a.occupancy === null) return 1;

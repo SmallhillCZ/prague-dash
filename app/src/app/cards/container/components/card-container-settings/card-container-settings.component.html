@@ -1,4 +1,7 @@
 <ion-item>
-  <ion-label>Všechny typy odpadu</ion-label>
+  <ion-label>
+    <h3>Všechny typy odpadu</h3>
+    <p>Zobrazí na kartě i neměřené typy odpadu</p>
+  </ion-label>
   <ion-toggle [(ngModel)]="card.definition.showNotMetered" (ngModelChange)="save()" slot="end"></ion-toggle>
 </ion-item>

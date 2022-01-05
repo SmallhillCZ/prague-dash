@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param, Query } from '@nestjs/common';
 import { ContainersService, GetHistoryOptions } from '../services/containers.service';
 import { DateTime } from "luxon";
 
@@ -13,9 +13,7 @@ export class ContainersController {
 
   constructor(
     private containersService: ContainersService
-  ) {
-
-  }
+  ) { }
 
   @Get("/")
   getContainers(@Query() query: GetContainersQuery) {
@@ -30,15 +28,20 @@ export class ContainersController {
     return this.containersService.getContainer(id);
   }
 
-  @Get("/:id/history")
-  getHistory(@Param("id") id: string, @Query() query: { since?: string; }) {
+  @Get("/:id/:type/history")
+  getHistory(@Param("id") id: string, @Param("type") type: string, @Query() query: { since?: string; }) {
 
     const since = DateTime.fromISO(query.since);
     const monthAgo = DateTime.local().minus({ month: 1 });
 
+    if (query.since && !since.isValid) throw new BadRequestException("Parameter since invalid.");
+    if (query.since && since < monthAgo) throw new BadRequestException("Parameter since more than a month ago.");
+
+
     const options: GetHistoryOptions = {
       id,
-      since: since.isValid && since > monthAgo ? since.toJSDate() : monthAgo.toJSDate()
+      type: parseInt(type),
+      since: since.isValid ? since.toJSDate() : monthAgo.toJSDate()
     };
 
     return this.containersService.getHistory(options);

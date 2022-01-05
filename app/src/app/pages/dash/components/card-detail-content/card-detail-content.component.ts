@@ -1,6 +1,5 @@
-import { Component, ComponentFactoryResolver, Inject, Input, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, Inject, Input, OnInit, Output, ViewContainerRef } from '@angular/core';
 import { Card } from 'src/app/schema/card';
-import { CardDetailComponent } from 'src/app/schema/card-detail-component';
 import { CardType } from 'src/app/schema/card-type';
 import { CARDS } from 'src/app/schema/cards-token';
 
@@ -11,8 +10,9 @@ import { CARDS } from 'src/app/schema/cards-token';
 })
 export class CardDetailContentComponent implements OnInit {
 
-  @Input()
-  card!: Card;
+  @Input() card!: Card;
+
+  @Output() title = new EventEmitter<string>();
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -39,6 +39,8 @@ export class CardDetailContentComponent implements OnInit {
     const componentRef = this.viewContainerRef.createComponent(componentFactory);
 
     componentRef.instance.card = card;
+
+    if (componentRef.instance.title) componentRef.instance.title.subscribe(this.title);
 
   }
 
