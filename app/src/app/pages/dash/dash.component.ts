@@ -18,6 +18,8 @@ export class DashComponent implements OnInit {
   // pages: { cards: Card[]; }[] = [];
   cards: Card[] = [];
 
+  addOpen: boolean = false;
+
   constructor(
     private dashboardService: DashboardService,
     @Inject(CARDS) private cardTypes: CardType[],

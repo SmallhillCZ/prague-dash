@@ -2,9 +2,25 @@
   <ion-toolbar>
     <ion-title color="light"> PragueDash </ion-title>
     <ion-buttons slot="primary">
-      <ion-button routerLink="/dash/add" color="light">
+      <ion-button id="add-button" color="light">
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
+      <ion-popover trigger="add-button" [dismissOnSelect]="true">
+        <ng-template>
+          <ion-content>
+            <ion-list>
+              <ion-item routerLink="/dash/add-card" [button]="true" [detail]="false">
+                <ion-label>Přidat kartu</ion-label>
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-item>
+              <ion-item routerLink="/dash/add-card" [button]="true" [detail]="false">
+                <ion-label>Přidat stránku</ion-label>
+                <ion-icon name="reader-outline"></ion-icon>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
       <ion-button color="light" routerLink="/settings">
         <ion-icon name="settings-outline"></ion-icon>
       </ion-button>

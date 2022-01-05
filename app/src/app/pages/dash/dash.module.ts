@@ -13,6 +13,7 @@ import { DashCardAddComponent } from './views/dash-card-add/dash-card-add.compon
 import { DashCardDetailComponent } from './views/dash-card-detail/dash-card-detail.component';
 import { DashCardSelectionComponent } from './views/dash-card-selection/dash-card-selection.component';
 import { DashCardSettingsComponent } from './views/dash-card-settings/dash-card-settings.component';
+import { DashGroupAddComponent } from './views/dash-group-add/dash-group-add.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { DashCardSettingsComponent } from './views/dash-card-settings/dash-card-
     CardContentComponent,
     CardCustomSettingsComponent,
     CardDetailContentComponent,
-    CardSelectionContentComponent
+    CardSelectionContentComponent,
+    DashGroupAddComponent
   ],
   imports: [
     CommonModule,

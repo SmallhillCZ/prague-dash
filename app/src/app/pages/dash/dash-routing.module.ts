@@ -8,8 +8,8 @@ import { DashCardSettingsComponent } from './views/dash-card-settings/dash-card-
 
 const routes: Routes = [
   { path: 'dash', component: DashComponent },
-  { path: 'dash/add', component: DashCardAddComponent },
-  { path: 'dash/add/:id', component: DashCardSelectionComponent },
+  { path: 'dash/add-card', component: DashCardAddComponent },
+  { path: 'dash/add-card/:id', component: DashCardSelectionComponent },
 
   { path: 'card/:id', component: DashCardDetailComponent },
   { path: 'card/:id/settings', component: DashCardSettingsComponent },
