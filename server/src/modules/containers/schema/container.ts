@@ -11,6 +11,7 @@ export interface Container {
 export interface ContainerType {
   id: string;
   type: number;
+  last_mesurement: string;
   occupancy: number;
   cleaning_frequency: {
     duration: string,

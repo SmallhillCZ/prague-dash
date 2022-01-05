@@ -59,7 +59,6 @@ export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges 
       this.chart.options = this.parseOptions(this.options);
     }
 
-    console.log("Updating chart", this.chart.data, this.chart.options);
     this.chart.update();
   }
 
@@ -68,7 +67,7 @@ export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges 
       ...options,
       responsive: true,
       maintainAspectRatio: false,
-      locale: "cs",
+      locale: "cs-CZ",
     };
   }
 }

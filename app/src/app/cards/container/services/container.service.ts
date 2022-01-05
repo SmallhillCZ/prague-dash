@@ -30,8 +30,8 @@ export class ContainerService {
     return this.api.get<ContainerData[]>("containers", params);
   }
 
-  async getHistory(id: string, type: number) {
-    return this.api.get<ContainerHistoryData[]>(`containers/${id}/${type}/history`);
+  async getHistory(id: string, type: number, options: { since?: string; } = {}) {
+    return this.api.get<ContainerHistoryData[]>(`containers/${id}/${type}/history`, { since: options.since });
   }
 
 }

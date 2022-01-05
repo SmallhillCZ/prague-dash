@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ChartData, ChartOptions } from 'chart.js';
-import { Duration } from 'luxon';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChartData, ChartOptions, ScriptableLineSegmentContext } from 'chart.js';
+import { DateTime, Duration } from 'luxon';
 import { Language } from 'src/app/schema/language';
 import { ContainerCard } from '../../schema/container-card';
 import { ContainerDataType } from '../../schema/container-data';
@@ -12,7 +12,7 @@ import { ContainerService } from '../../services/container.service';
   templateUrl: './container-detail-card.component.html',
   styleUrls: ['./container-detail-card.component.scss']
 })
-export class ContainerDetailCardComponent implements OnInit {
+export class ContainerDetailCardComponent implements OnInit, OnChanges {
 
   @Input() card!: ContainerCard;
   @Input() type!: ContainerDataType;
@@ -23,20 +23,40 @@ export class ContainerDetailCardComponent implements OnInit {
 
   chartData: ChartData = { datasets: [{ data: [] }] };
   chartOptions: ChartOptions = {
+    elements: {
+      point: {
+        radius: 0
+      },
+      line: {
+        borderWidth: 2,
+      }
+    },
     scales: {
       horizontal: {
         axis: "x",
         type: 'time',
         time: {
-          unit: "hour"
+          unit: "day",
+          displayFormats: {
+            hour: 'HH',
+            day: "d. M.",
+            week: "d. M.",
+          },
+        },
+        ticks: {
+          minRotation: 45
         }
       },
       vertical: {
         axis: "y",
-        display: false
+        display: false,
+        max: 1
       }
     },
     plugins: {
+      tooltip: {
+        enabled: false
+      },
       legend: {
         display: false
       }
@@ -50,28 +70,50 @@ export class ContainerDetailCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["type"]) {
+      if (this.type.occupancy !== null) this.loadHistory();
+    }
+  }
+
   async loadHistory() {
-    const data = await this.containerService.getHistory(this.card.definition.id, this.type.type);
+    const since = DateTime.local().minus({ days: 7 }).toISODate();
+    const history = await this.containerService.getHistory(this.card.definition.id, this.type.type, { since });
+
+    const labels: string[] = [];
+    const data: number[] = [];
+
+    history.forEach((item, i) => {
+      if (i > 0 && history[i - 1].occupancy - item.occupancy > 0) {
+        labels.push(item.timestamp);
+        data.push(history[i - 1].occupancy);
+      }
+      labels.push(item.timestamp);
+      data.push(item.occupancy);
+    });
+
+    labels.push(DateTime.local().toISOTime());
+    data.push(this.type.occupancy);
+
     this.chartData = {
-      labels: data.map(item => item.timestamp),
+      labels,
       datasets: [
-        { data: data.map(item => item.occupancy) }
+        {
+          data,
+          fill: "origin",
+          // segment: {
+          //   backgroundColor: ctx => this.isUnknown(ctx, "transparent"),
+          //   borderDash: ctx => this.isUnknown(ctx, [6, 6]),
+          //   borderWidth: ctx => this.isUnknown(ctx, 2),
+          // }
+        }
       ]
     };
   }
 
-  async toggleDetail() {
-    if (this.open) {
-      this.open = false;
-    }
-    else {
-      if (this.chartData.datasets[0].data.length === 0) {
-        await this.loadHistory();
-      }
-      this.open = true;
-    }
+  private isUnknown<T>(ctx: ScriptableLineSegmentContext, value: T): T | undefined {
+    return ctx.p0.parsed.y - ctx.p1.parsed.y > 0.2 && (ctx.p1.parsed.x - ctx.p0.parsed.x) > 1000 * 60 * 60 * 6 ? value : undefined;
   }
-
 
   getContainerTypeTitle(type: ContainerDataType, lang: Language): string {
     return ContainerTypes[type.type].title[lang]!;
