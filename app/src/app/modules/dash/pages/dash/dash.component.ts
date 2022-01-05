@@ -1,7 +1,7 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { App } from '@capacitor/app';
-import { AlertController, NavController, Platform, ViewDidEnter, ViewDidLeave } from '@ionic/angular';
+import { AlertController, NavController, Platform, ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, Subscription } from 'rxjs';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
@@ -24,7 +24,7 @@ interface Page {
   templateUrl: './dash.component.html',
   styleUrls: ['./dash.component.scss']
 })
-export class DashComponent implements ViewDidEnter, ViewDidLeave {
+export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
 
   dashboard?: Dashboard;
 
@@ -50,6 +50,24 @@ export class DashComponent implements ViewDidEnter, ViewDidLeave {
     private platform: Platform
   ) { }
 
+  ngOnInit(): void {
+
+    const dash = this.dashboardService.dashboard.pipe(untilDestroyed(this));
+    const params = this.route.params.pipe(untilDestroyed(this));
+
+    dash.subscribe(dash => this.dashboard = dash);
+
+    combineLatest([dash, params])
+      .subscribe(([dash, params]) => {
+        if (!dash) return;
+
+        const i = params["page"] ? dash.pages.findIndex(item => item.id === params["page"]) : this.swiper?.activeIndex || 0;
+        this.currentPage = dash.pages[i];
+        window.setTimeout(() => this.swiper?.slideTo(i || 0), 500);
+
+      });
+  }
+
   ionViewDidEnter(): void {
 
     // Quit on back button when on dash and not first page
@@ -62,21 +80,9 @@ export class DashComponent implements ViewDidEnter, ViewDidLeave {
       }
     });
 
-    const dash = this.dashboardService.dashboard.pipe(untilDestroyed(this));
-    const params = this.route.params.pipe(untilDestroyed(this));
-
-    dash.subscribe(dash => this.dashboard = dash);
-
-    combineLatest([dash, params])
-      .subscribe(([dash, params]) => {
-        if (!dash) return;
-        const i = params["page"] ? dash.pages.findIndex(item => item.id === params["page"]) : 0;
-        this.currentPage = dash.pages[i];
-        window.setTimeout(() => this.swiper?.slideTo(i || 0), 500);
-      });
   }
 
-  ionViewDidLeave(): void {
+  ionViewWillLeave(): void {
     this.backButtonSubscription?.unsubscribe();
   }
 
