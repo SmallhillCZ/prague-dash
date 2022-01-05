@@ -1,9 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
 import { CardSelectComponent } from 'src/app/schema/card-select-component';
+import { Language } from 'src/app/schema/language';
 import { ContainerCardDefinition } from '../../schema/container-card';
-import { ContainerData } from '../../schema/container-data';
-import { ContainerTypeNames } from '../../schema/container-type';
+import { ContainerData, ContainerDataType } from '../../schema/container-data';
+import { ContainerTypes } from '../../schema/container-type';
 import { ContainerService } from '../../services/container.service';
 
 @Component({
@@ -15,11 +16,9 @@ export class CardContainerSelectComponent implements CardSelectComponent, OnInit
 
   containers: ContainerData[] = [];
 
-  typeNames = ContainerTypeNames;
-
   search: string = "";
 
-  lang = "cs" as "cs";
+  lang = Language.cs;
 
   @Output()
   select = new EventEmitter<ContainerCardDefinition>();
@@ -49,6 +48,10 @@ export class CardContainerSelectComponent implements CardSelectComponent, OnInit
 
   async onSelect(container: ContainerData) {
     this.select.emit({ id: container.id });
+  }
+
+  getContainerTypeTitle(type: ContainerDataType, lang: Language) {
+    return ContainerTypes[type.type].title[lang];
   }
 
 }

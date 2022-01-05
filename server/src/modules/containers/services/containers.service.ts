@@ -2,11 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ContextId } from '@nestjs/core';
 import { Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DateTime } from 'luxon';
 import { GolemioService } from 'src/shared/services/golemio.service';
 import { coordinatesToDistanceCompare } from 'src/utils/coordinates-to-distance-compare';
-import { LimitOnUpdateNotSupportedError, Repository } from 'typeorm';
+import { LimitOnUpdateNotSupportedError, MoreThan, Repository } from 'typeorm';
 import { ContainerLog } from '../entities/container-log.entity';
-import { Container } from '../schema/container';
+import { Container, ContainerType } from '../schema/container';
 import { ContainerResponse } from '../schema/container-response';
 
 
@@ -17,8 +18,8 @@ export interface GetContainersOptions {
 
 export interface GetHistoryOptions {
   id?: Container["id"],
-  type?: number,
-  since?: Date,
+  type: number,
+  since: Date,
   limit?: number;
 }
 
@@ -60,34 +61,31 @@ export class ContainersService {
   }
 
   getHistory(options: GetHistoryOptions) {
-    let query = this.containerLogRepository.createQueryBuilder();
+    let query = this.containerLogRepository.createQueryBuilder()
+      .select(["timestamp", "occupancy"])
+      .where({ type: options.type, id: options.id })
+      .andWhere("timestamp >= :since", { since: options.since });
 
-    if (options.id) query = query.andWhere({ id: options.id });
-
-    if (options.type) query = query.andWhere({ type: options.type });
-
-    if (options.since) query = query.andWhere("timestamp >= :value", options.since);
-
-    else return this.containerLogRepository.find();
+    return query.execute();
   }
 
   getLatestHistoryValues(options: { id?: Container["id"]; } = {}) {
 
     let latestTimestampsQuery = this.containerLogRepository.createQueryBuilder()
       .select("id")
-      .addSelect("type")
+      .addSelect("type_id")
       .addSelect("MAX(timestamp)", "timestamp")
-      .groupBy("id,type");
+      .groupBy("id,type_id");
 
     let query = this.containerLogRepository.createQueryBuilder("log")
-      .innerJoin(`(${latestTimestampsQuery.getQuery()})`, "latest", "log.id = latest.id AND log.type = latest.type AND log.timestamp = latest.timestamp");
+      .innerJoin(`(${latestTimestampsQuery.getQuery()})`, "latest", "log.id = latest.id AND log.type_id = latest.type_id AND log.timestamp = latest.timestamp");
 
     if (options.id) latestTimestampsQuery = latestTimestampsQuery.where({ "log.id": options.id });
 
     return query.getMany();
   }
 
-  @Interval(30 * 60 * 1000)
+  @Interval(15 * 60 * 1000)
   private async downloadContainers() {
 
     var timeStart = process.hrtime();
@@ -101,18 +99,29 @@ export class ContainersService {
 
     this.containers = response.features
       .filter(feature => !!feature.properties.name)
-      .map(feature => ({
-        "id": feature.properties.id,
-        "district": feature.properties.district,
-        "lon": feature.geometry.coordinates[0],
-        "lat": feature.geometry.coordinates[1],
-        "location": feature.properties.name,
-        "types": feature.properties.containers.map(container => ({
+      .map(feature => {
+
+        const container: Container = {
+          id: feature.properties.id,
+          district: feature.properties.district,
+          lon: feature.geometry.coordinates[0],
+          lat: feature.geometry.coordinates[1],
+          location: feature.properties.name,
+          accessibility: feature.properties.accessibility.id,
+          types: []
+        };
+
+        container.types = feature.properties.containers.map(container => ({
           id: container.container_id,
           type: container.trash_type.id || 0,
-          occupancy: container.last_measurement?.percent_calculated / 100
-        }))
-      }));
+          last_mesurement: container.last_measurement?.measured_at_utc,
+          occupancy: container.last_measurement?.percent_calculated / 100,
+          cleaning_frequency: container.cleaning_frequency,
+          container_type: container.container_type,
+        }));
+
+        return container;
+      });
 
     await this.saveLogs(this.containers);
 
@@ -122,8 +131,6 @@ export class ContainersService {
   }
 
   private async saveLogs(containers: Container[]) {
-
-    const timestamp = new Date();
 
     const newLogs: ContainerLog[] = [];
 
@@ -139,8 +146,8 @@ export class ContainersService {
         if (!type.id || !type.occupancy) continue;
 
         const newLog: ContainerLog = {
-          timestamp,
           id: container.id,
+          timestamp: DateTime.fromISO(type.last_mesurement).toJSDate(),
           type_id: type.id,
           type: type.type,
           occupancy: type.occupancy
@@ -148,8 +155,8 @@ export class ContainersService {
 
         const oldLog = oldLogs.find(item => item.id === newLog.id && item.type_id === newLog.type_id);
 
-        // skip if exists
-        if (oldLog && oldLog.occupancy === newLog.occupancy) {
+        // skip if exists and is the same
+        if (oldLog && oldLog.occupancy === newLog.occupancy && oldLog.timestamp.getTime() === newLog.timestamp.getTime()) {
           skipped++;
           continue;
         }
@@ -161,7 +168,7 @@ export class ContainersService {
 
     await this.containerLogRepository.save(newLogs);
 
-    this.logger.verbose(`Saved ${newLogs.length} updated values, skipped ${skipped} unchanged values.`);
+    this.logger.verbose(`Saved ${newLogs.length} new values, skipped ${skipped} values.`);
   }
 
 }

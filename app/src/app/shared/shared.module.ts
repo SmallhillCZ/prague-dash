@@ -1,24 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 import { BarChartComponent } from './components/bar-chart/bar-chart.component';
+import { ChartsjsChartComponent } from './components/chartsjs-chart/chartsjs-chart.component';
+import { CircleChartComponent } from './components/circle-chart/circle-chart.component';
 
 
 
 @NgModule({
   declarations: [
-    BarChartComponent
+    BarChartComponent,
+    CircleChartComponent,
+    ChartsjsChartComponent
   ],
   imports: [
     IonicModule.forRoot({}),
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   exports: [
     FormsModule,
     IonicModule,
-    BarChartComponent
+
+    BarChartComponent,
+    CircleChartComponent,
+    ChartsjsChartComponent
   ]
 })
 export class SharedModule { }

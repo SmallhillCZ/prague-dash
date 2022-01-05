@@ -4,7 +4,7 @@ import { Http, HttpOptions, HttpParams } from '@capacitor-community/http';
 import { environment } from 'src/environments/environment';
 
 export type ApiParams = {
-  [key: string]: string | string[] | number | number[];
+  [key: string]: string | string[] | number | number[] | undefined;
 };
 
 @Injectable({
