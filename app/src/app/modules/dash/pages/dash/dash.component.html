@@ -33,27 +33,43 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="dashboard && dashboard.pages.length === 1">
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event, dashboard.pages[0])">
-    <ion-refresher-content> </ion-refresher-content>
+<!-- <ion-content *ngIf="dashboard && dashboard.pages.length === 1">
+  <ion-refresher slot="fixed" [disabled]="!enableRefresh" (ionRefresh)="doRefresh($event, dashboard.pages[0])">
+    <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <app-dash-card *ngFor="let cardData of dashboard.pages[0]?.cards" [card]="cardData" (click)="openDetail(cardData)">
-  </app-dash-card>
-</ion-content>
+  <div class="page">
+    <div class="cards" (scroll)="onCardsScroll()">
+      <app-dash-card
+        *ngFor="let cardData of dashboard.pages[0]?.cards"
+        [card]="cardData"
+        (click)="openDetail(cardData)"
+      >
+      </app-dash-card>
+    </div>
+  </div>
+</ion-content> -->
 
-<ion-content *ngIf="dashboard && dashboard.pages.length > 1">
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event, currentPage!)">
-    <ion-refresher-content> </ion-refresher-content>
+<ion-content *ngIf="dashboard">
+  <ion-refresher slot="fixed" [disabled]="!enableRefresh" (ionRefresh)="doRefresh($event, currentPage!)">
+    <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <swiper [config]="swiperConfig" (swiper)="onSwiper($event)" (slideChange)="onSlideChange($any($event))">
+
+  <swiper [config]="swiperConfig" (swiper)="onSwiper($event)" (activeIndexChange)="onSlideChange()">
     <ng-template *ngFor="let page of dashboard.pages" swiperSlide>
       <div class="page">
-        <div class="title" data-swiper-parallax="70%" data-swiper-parallax-opacity="0">
+        <div
+          *ngIf="dashboard.pages.length > 1"
+          class="title"
+          data-swiper-parallax="70%"
+          data-swiper-parallax-opacity="0"
+        >
           {{ page.title || "Hlavní" }}
         </div>
 
-        <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" (click)="openDetail(cardData)">
-        </app-dash-card>
+        <div class="cards" (scroll)="onCardsScroll()">
+          <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" (click)="openDetail(cardData)">
+          </app-dash-card>
+        </div>
       </div>
     </ng-template>
   </swiper>

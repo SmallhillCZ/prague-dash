@@ -1,9 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Inject, NgZone, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { AlertController, NavController, Platform, ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
 import { CardType } from 'src/app/schema/card-type';
@@ -39,6 +40,8 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     navigation: false
   };
 
+  enableRefresh = false;
+
   backButtonSubscription?: Subscription;
 
   constructor(
@@ -47,25 +50,29 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     private navController: NavController,
     private alertController: AlertController,
     private route: ActivatedRoute,
-    private platform: Platform
+    private router: Router,
+    private platform: Platform,
+    private ngZone: NgZone
   ) { }
 
   ngOnInit(): void {
 
     const dash = this.dashboardService.dashboard.pipe(untilDestroyed(this));
-    const params = this.route.params.pipe(untilDestroyed(this));
 
     dash.subscribe(dash => this.dashboard = dash);
 
+    const params = this.route.queryParams.pipe(untilDestroyed(this));
+
     combineLatest([dash, params])
+      .pipe(filter((item): item is [Dashboard, Params] => !!item[0]))
       .subscribe(([dash, params]) => {
-        if (!dash) return;
 
-        const i = params["page"] ? dash.pages.findIndex(item => item.id === params["page"]) : this.swiper?.activeIndex || 0;
-        this.currentPage = dash.pages[i];
-        window.setTimeout(() => this.swiper?.slideTo(i || 0), 500);
-
+        const pageId = params["page"] || dash.pages[0]?.id;
+        if (pageId !== this.currentPage?.id) {
+          this.updatePage(pageId);
+        }
       });
+
   }
 
   ionViewDidEnter(): void {
@@ -88,9 +95,49 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
 
   onSwiper(swiper: Swiper) {
     this.swiper = swiper;
+    if (this.dashboard && this.currentPage) {
+      const i = this.dashboard.pages.findIndex(item => item.id === this.currentPage!.id);
+      if (i !== undefined) this.swiper.slideTo(i);
+    }
   }
-  onSlideChange(swiper: Swiper) {
-    this.currentPage = this.dashboard!.pages[swiper.activeIndex];
+
+  getCurrentCardsEl() {
+    return this.swiper?.slides[this.swiper.activeIndex]?.querySelector(".cards");
+  }
+
+  onSlideChange() {
+    if (!this.swiper || !this.dashboard) return;
+    const pageId = this.dashboard.pages[this.swiper.activeIndex].id;
+    this.updatePage(pageId);
+  }
+
+  updatePage(pageId: string) {
+    if (!this.dashboard) return;
+
+    const newIndex = this.dashboard.pages.findIndex(item => item.id === pageId);
+    const newPage = this.dashboard.pages[newIndex];
+    if (!newPage) throw new Error("Page doesnt exist: " + pageId);
+
+    this.ngZone.run(() => {
+
+      if (newPage && newPage.id !== this.currentPage?.id) {
+        this.currentPage = newPage;
+        this.enableRefresh = this.getCurrentCardsEl()?.scrollTop === 0;
+      }
+
+      if (this.route.snapshot.params["page"] !== newPage.id) {
+        this.router.navigate([], { queryParams: { page: pageId }, replaceUrl: true });
+      }
+
+      if (this.swiper && this.swiper.activeIndex !== newIndex) {
+        this.swiper.slideTo(newIndex);
+      }
+
+    });
+  }
+
+  onCardsScroll() {
+    this.enableRefresh = this.getCurrentCardsEl()?.scrollTop === 0;
   }
 
   doRefresh(event: any, page: DashboardPage) {
@@ -143,7 +190,8 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
 
   private async addPageConfirmed(data: { title: string; }) {
     const title = data.title || undefined;
-    return this.dashboardService.createPage(title);
+    const page = await this.dashboardService.createPage(title);
+    setTimeout(() => this.updatePage(page.id), 500);
   }
 
 

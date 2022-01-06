@@ -106,7 +106,9 @@ export class DashboardService {
 
     dash.pages.push(page);
 
-    return this.saveDashboard(dash);
+    await this.saveDashboard(dash);
+
+    return page;
   }
 
   async createCard(pageId: DashboardPage["id"], type: string, createData: CardCreateData) {
