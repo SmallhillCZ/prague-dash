@@ -2,8 +2,8 @@
   <ion-refresher-content></ion-refresher-content>
 </ion-refresher>
 
-<ion-list>
-  <ion-item *ngFor="let departure of departureBoard?.departures">
+<ion-list *ngIf="!loading && departureBoard">
+  <ion-item *ngFor="let departure of departureBoard.departures">
     <ion-avatar slot="start">
       <div class="circle" [ngStyle]="departure.route | routeStyle">
         <div class="text">{{ departure.route.short_name }}</div>
@@ -29,12 +29,14 @@
   </ion-item>
 </ion-list>
 
-<ion-list *ngIf="!departureBoard">
+<ion-list *ngIf="loading">
   <ion-item *ngFor="let item of loadingArray">
     <ion-avatar slot="start"><ion-skeleton-text></ion-skeleton-text></ion-avatar>
     <ion-title><ion-skeleton-text></ion-skeleton-text></ion-title>
   </ion-item>
 </ion-list>
+
+<p *ngIf="!loading && !departureBoard" class="ion-padding">Pro zastávku {{ name }} nebyly nalezeny žádné odjezdy.</p>
 
 <ion-infinite-scroll [disabled]="!departureBoard" (ionInfinite)="loadMore($event)">
   <ion-infinite-scroll-content> </ion-infinite-scroll-content>

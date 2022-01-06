@@ -27,8 +27,6 @@ export class StopsDownloadService {
 
     this.logger.verbose("Downloading new stops...");
 
-
-
     const stopIndex: { [name: string]: Stop; } = {};
     const stops: Stop[] = [];
     let offset = 0;
