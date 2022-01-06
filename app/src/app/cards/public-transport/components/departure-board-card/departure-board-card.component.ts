@@ -60,7 +60,6 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
     else {
       const stop = await this.stopsService.getClosestStop();
       this.name = stop.name;
-      console.log(stop);
     }
 
     const definition: LoadDeparturesOptions = {

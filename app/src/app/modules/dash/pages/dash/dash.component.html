@@ -54,7 +54,12 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <swiper [config]="swiperConfig" (swiper)="onSwiper($event)" (activeIndexChange)="onSlideChange()">
+  <swiper
+    [config]="swiperConfig"
+    (swiper)="swiper.next($event)"
+    (observerUpdate)="updateState(true)"
+    (activeIndexChange)="updateState()"
+  >
     <ng-template *ngFor="let page of dashboard.pages" swiperSlide>
       <div class="page">
         <div

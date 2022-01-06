@@ -1,9 +1,9 @@
-import { Component, Inject, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { App } from '@capacitor/app';
-import { AlertController, NavController, Platform, ViewDidEnter, ViewDidLeave, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
+import { AlertController, NavController, Platform, ViewDidEnter, ViewWillLeave } from '@ionic/angular';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { Card } from 'src/app/schema/card';
@@ -31,7 +31,7 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
 
   currentPage?: DashboardPage;
 
-  swiper?: Swiper;
+  swiper = new BehaviorSubject<Swiper | undefined>(undefined);
 
   swiperConfig: SwiperOptions = {
     parallax: true,
@@ -40,7 +40,7 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     navigation: false
   };
 
-  enableRefresh = false;
+  enableRefresh = true;
 
   backButtonSubscription?: Subscription;
 
@@ -52,7 +52,8 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     private route: ActivatedRoute,
     private router: Router,
     private platform: Platform,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -63,13 +64,14 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
 
     const params = this.route.queryParams.pipe(untilDestroyed(this));
 
-    combineLatest([dash, params])
-      .pipe(filter((item): item is [Dashboard, Params] => !!item[0]))
-      .subscribe(([dash, params]) => {
+    const swiper = this.swiper.pipe(filter(swiper => !!swiper));
 
+    combineLatest([dash, params, swiper])
+      .pipe(filter((item): item is [Dashboard, Params, Swiper] => !!item[0]))
+      .subscribe(([dash, params]) => {
         const pageId = params["page"] || dash.pages[0]?.id;
         if (pageId !== this.currentPage?.id) {
-          this.updatePage(pageId);
+          this.openPage(pageId, true);
         }
       });
 
@@ -93,44 +95,35 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     this.backButtonSubscription?.unsubscribe();
   }
 
-  onSwiper(swiper: Swiper) {
-    this.swiper = swiper;
-    if (this.dashboard && this.currentPage) {
-      const i = this.dashboard.pages.findIndex(item => item.id === this.currentPage!.id);
-      if (i !== undefined) this.swiper.slideTo(i);
+  getCurrentCardsEl() {
+    return this.swiper.value?.slides[this.swiper.value.activeIndex]?.querySelector(".cards");
+  }
+
+  openPage(pageId: string, immediate: boolean = false) {
+    if (!this.dashboard || !this.swiper.value) return;
+    const index = this.dashboard.pages.findIndex(item => item.id === pageId);
+
+    if (this.swiper.value.activeIndex !== index) {
+      this.swiper.value.slideTo(index, immediate ? 0 : undefined);
     }
   }
 
-  getCurrentCardsEl() {
-    return this.swiper?.slides[this.swiper.activeIndex]?.querySelector(".cards");
-  }
-
-  onSlideChange() {
-    if (!this.swiper || !this.dashboard) return;
-    const pageId = this.dashboard.pages[this.swiper.activeIndex].id;
-    this.updatePage(pageId);
-  }
-
-  updatePage(pageId: string) {
-    if (!this.dashboard) return;
-
-    const newIndex = this.dashboard.pages.findIndex(item => item.id === pageId);
-    const newPage = this.dashboard.pages[newIndex];
-    if (!newPage) throw new Error("Page doesnt exist: " + pageId);
+  updateState(test?: any) {
+    if (!this.dashboard || !this.swiper.value) return;
+    const index = this.swiper.value.activeIndex;
+    const page = this.dashboard.pages[index];
 
     this.ngZone.run(() => {
 
-      if (newPage && newPage.id !== this.currentPage?.id) {
-        this.currentPage = newPage;
-        this.enableRefresh = this.getCurrentCardsEl()?.scrollTop === 0;
+      if (page.id !== this.currentPage?.id) {
+        this.currentPage = page;
       }
 
-      if (this.route.snapshot.params["page"] !== newPage.id) {
-        this.router.navigate([], { queryParams: { page: pageId }, replaceUrl: true });
-      }
+      const cardsEl = this.getCurrentCardsEl();
+      if (cardsEl) this.enableRefresh = cardsEl.scrollTop === 0;
 
-      if (this.swiper && this.swiper.activeIndex !== newIndex) {
-        this.swiper.slideTo(newIndex);
+      if (this.route.snapshot.params["page"] !== page.id) {
+        this.router.navigate([], { queryParams: { page: page.id }, replaceUrl: true });
       }
 
     });
@@ -165,7 +158,7 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
   async addPage() {
     const alert = await this.alertController.create({
       header: 'Nová stránka',
-      message: 'Vytvoří novou stránku pro vaše karty napravo od stávajících. Pro její zobrazení přejeďte prstem zprava doleva.',
+      message: 'Vytvoří novou stránku pro vaše karty.',
       inputs: [
         {
           name: 'title',
@@ -180,7 +173,11 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
           cssClass: 'secondary',
         }, {
           text: 'Vytvořit',
-          handler: (data: { title: string; }) => this.addPageConfirmed(data)
+          handler: (data: { title: string; }) => {
+            if (!data.title) return false;
+            this.addPageConfirmed(data);
+            return true;
+          }
         }
       ]
     });
@@ -191,7 +188,7 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
   private async addPageConfirmed(data: { title: string; }) {
     const title = data.title || undefined;
     const page = await this.dashboardService.createPage(title);
-    setTimeout(() => this.updatePage(page.id), 500);
+    setTimeout(() => this.openPage(page.id), 500); // wait for DOM update (could be better...)
   }
 
 
