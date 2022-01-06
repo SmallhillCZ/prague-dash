@@ -14,11 +14,6 @@ import SwiperCore, { Parallax, Swiper, SwiperOptions } from 'swiper';
 
 SwiperCore.use([Parallax]);
 
-interface Page {
-  page: DashboardPage;
-  cards: Card[];
-}
-
 @UntilDestroy()
 @Component({
   selector: 'app-dash',
@@ -53,7 +48,6 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     private router: Router,
     private platform: Platform,
     private ngZone: NgZone,
-    private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -108,7 +102,7 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     }
   }
 
-  updateState(test?: any) {
+  updateState() {
     if (!this.dashboard || !this.swiper.value) return;
     const index = this.swiper.value.activeIndex;
     const page = this.dashboard.pages[index];

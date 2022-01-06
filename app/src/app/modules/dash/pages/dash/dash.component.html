@@ -57,7 +57,7 @@
   <swiper
     [config]="swiperConfig"
     (swiper)="swiper.next($event)"
-    (observerUpdate)="updateState(true)"
+    (observerUpdate)="updateState()"
     (activeIndexChange)="updateState()"
   >
     <ng-template *ngFor="let page of dashboard.pages" swiperSlide>
