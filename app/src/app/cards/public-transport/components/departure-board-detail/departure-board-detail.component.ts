@@ -60,7 +60,7 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
 
     this.loading = false;
 
-    if (!this.card.definition.name) this.title.emit(this.departureBoard.stops[0].stop_name);
+    if (!this.card.definition.name) this.title.emit(this.name);
 
     if (refreshEvent) refreshEvent.target.complete();
   }
