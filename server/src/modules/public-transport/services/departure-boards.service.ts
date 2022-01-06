@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { createCipheriv } from 'crypto';
 import { GolemioService } from 'src/shared/services/golemio.service';
 import { DepartureBoardResponse } from '../schema/departure-board-response';
 
@@ -31,8 +32,13 @@ export class DepartureBoardsService {
       offset: options.offset
     };
 
-    return this.golemio.get<DepartureBoardResponse[]>("pid/departureboards", params)
-      .then(res => res.data);
+    try {
+      return await this.golemio.get<DepartureBoardResponse[]>("pid/departureboards", params).then(res => res.data);
+    }
+    catch (err: any) {
+      if (err.response.status === 404) return undefined;
+      throw err;
+    }
   }
 
 

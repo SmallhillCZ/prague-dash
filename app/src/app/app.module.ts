@@ -18,7 +18,6 @@ import '@angular/common/locales/global/cs';
     CoreModule,
     SharedModule,
     BrowserModule,
-    HttpClientModule,
     AppRoutingModule
   ],
   providers: [

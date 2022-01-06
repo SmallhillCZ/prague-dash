@@ -31,7 +31,7 @@ export class StopsController {
 
   @Get("/closest")
   async getClosestStop(@Query() coordinates: { lat: string, lon: string; }) {
-    const stop = await this.getStops({ ...coordinates, limit: "1" });
+    const stop = await this.getStops({ ...coordinates, limit: "1" }).then(stops => stops[0]);
     if (!stop) throw new NotFoundException();
     return stop;
   }

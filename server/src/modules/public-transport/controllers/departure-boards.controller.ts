@@ -35,7 +35,10 @@ export class DepartureBoardsController {
       offset: query.offset ? Number(query.offset) : undefined,
     };
 
-    return this.departureBoardsService.getDepartureBoard(options);
+    const board = await this.departureBoardsService.getDepartureBoard(options);
+    if (!board) throw new NotFoundException();
+
+    return board;
   }
 
   /**
@@ -50,7 +53,6 @@ export class DepartureBoardsController {
     };
 
     const closestStop = await this.stopsService.getStops({ coordinates, limit: 1 }).then(stops => stops[0]);
-
     if (!closestStop) throw new NotFoundException();
 
     return this.getDepartureBoard({

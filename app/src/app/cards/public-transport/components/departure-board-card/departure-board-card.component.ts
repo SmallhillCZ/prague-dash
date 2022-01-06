@@ -6,10 +6,12 @@ import { take } from 'rxjs/operators';
 import { ScreenReaderService } from 'src/app/core/services/screen-reader.service';
 import { SettingsService } from 'src/app/core/services/settings.service';
 import { CardComponent } from 'src/app/schema/card-component';
-import { DepartureBoardCard } from '../../schema/departure-board-card';
+import { DepartureBoardCard, DepartureBoardCardDefinition } from '../../schema/departure-board-card';
 import { DepartureBoardData } from '../../schema/departure-board-data';
 import { RouteTypes } from '../../schema/route-type';
-import { DepartureBoardsService } from '../../services/departure-boards.service';
+import { StopData } from '../../schema/stop-data';
+import { DepartureBoardsService, LoadDeparturesOptions } from '../../services/departure-boards.service';
+import { StopsService } from '../../services/stops.service';
 
 @UntilDestroy()
 @Component({
@@ -21,14 +23,18 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
   departureBoard?: DepartureBoardData;
 
+  loading: boolean = false;
   loadingDepartures?: any[];
 
   now = DateTime.local();
 
+  name?: string;
+
   constructor(
     private departureBoardsService: DepartureBoardsService,
     private screenReaderService: ScreenReaderService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private stopsService: StopsService
   ) { }
 
   @Input()
@@ -46,19 +52,44 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
   private async loadDepartures() {
 
-    this.departureBoard = await this.departureBoardsService.loadDepartures(this.card.definition);
+    this.loading = true;
+
+    if (this.card.definition.name !== null) {
+      this.name = this.card.definition.name;
+    }
+    else {
+      const stop = await this.stopsService.getClosestStop();
+      this.name = stop.name;
+      console.log(stop);
+    }
+
+    const definition: LoadDeparturesOptions = {
+      ...this.card.definition,
+      name: this.name
+    };
+
+    this.departureBoard = await this.departureBoardsService.loadDepartures(definition)
+      .catch(err => undefined);
 
     const isScreenReaderEnabled = await this.settingsService.getSettings().then(settings => settings.screenReaderEnabled);
 
     if (isScreenReaderEnabled) {
       this.screenReaderSpeak();
     }
+
+    this.loading = false;
   }
 
   async screenReaderSpeak() {
-    this.screenReaderService.speak(`Odjezdy ze zastávky ${this.departureBoard?.stops[0].stop_name}: `);
 
-    this.departureBoard?.departures.forEach(departure => {
+    if (!this.departureBoard) {
+      this.screenReaderService.speak(`Pro zastávku ${this.name} nebyly nalezeny žádné odjezdy.`);
+      return;
+    }
+
+    this.screenReaderService.speak(`Odjezdy ze zastávky ${this.departureBoard.stops[0].stop_name}: `);
+
+    this.departureBoard.departures.forEach(departure => {
       const minutes = Math.floor(Math.abs(DateTime.fromISO(departure.departure_timestamp.predicted).diffNow("minutes").minutes));
 
       let minutesString = "";
