@@ -6,6 +6,7 @@ export interface GetStopsQuery {
   lat?: string,
   lon?: string,
   offset?: string;
+  limit?: string;
 }
 
 @Controller('stops')
@@ -21,10 +22,18 @@ export class StopsController {
     const options = {
       name: query.q,
       offset: query.offset ? Number(query.offset) : undefined,
+      limit: query.limit ? Number(query.limit) : undefined,
       coordinates: (!!query.lat && !!query.lon) ? { lat: Number(query.lat), lon: Number(query.lon) } : undefined,
     };
 
     return this.stopsService.getStops(options);
+  }
+
+  @Get("/closest")
+  async getClosestStop(@Query() coordinates: { lat: string, lon: string; }) {
+    const stop = await this.getStops({ ...coordinates, limit: "1" });
+    if (!stop) throw new NotFoundException();
+    return stop;
   }
 
   @Get("/:name")

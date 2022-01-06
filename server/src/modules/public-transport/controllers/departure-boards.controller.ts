@@ -1,4 +1,5 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Query } from '@nestjs/common';
+import { DepartureBoardResponse } from '../schema/departure-board-response';
 import { DepartureBoardsService, GetDepartureBoardOptions } from '../services/departure-boards.service';
 import { StopsService } from '../services/stops.service';
 
@@ -25,7 +26,7 @@ export class DepartureBoardsController {
   ) { };
 
   @Get("/")
-  async getDepartureBoard(@Query() query?: GetDepartureBoardsQuery) {
+  async getDepartureBoard(@Query() query?: GetDepartureBoardsQuery): Promise<DepartureBoardResponse[]> {
 
     const options: GetDepartureBoardOptions = {
       name: query.name,
@@ -37,23 +38,26 @@ export class DepartureBoardsController {
     return this.departureBoardsService.getDepartureBoard(options);
   }
 
+  /**
+   * @deprecated
+   */
   @Get("/closest")
-  async getClosestDepartureBoard(@Query() query?: GetClosestDepartureBoardsQuery) {
+  async getClosestDepartureBoard(@Query() query?: GetClosestDepartureBoardsQuery): Promise<DepartureBoardResponse[]> {
 
-    const stopOptions = {
+    const coordinates = {
       lat: Number(query.lat),
       lon: Number(query.lon),
     };
 
-    const closestStop = await this.stopsService.getClosestStop(stopOptions);
+    const closestStop = await this.stopsService.getStops({ coordinates, limit: 1 }).then(stops => stops[0]);
 
-    const departureBoardOptions = {
+    if (!closestStop) throw new NotFoundException();
+
+    return this.getDepartureBoard({
       name: closestStop.name,
-      limit: query.limit ? Number(query.limit) : undefined,
-      offset: query.offset ? Number(query.offset) : undefined,
-    };
-
-    return this.departureBoardsService.getDepartureBoard(departureBoardOptions);
+      limit: query.limit,
+      offset: query.offset
+    });
   }
 
 }
