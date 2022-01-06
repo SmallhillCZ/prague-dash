@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { coordinatesToDistanceSql } from 'src/utils/coordinates-to-distance-sql';
-import { Like, Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { Stop } from '../entities/stop.entity';
 
 export interface GetStopsOptions {
@@ -24,7 +24,7 @@ export class StopsService {
       .leftJoinAndSelect("stops.platforms", "platforms");
 
     if (options.name) {
-      query = query.andWhere({ "name": Like(`%${options.name}%`) });
+      query = query.andWhere({ "name": ILike(`%${options.name}%`) });
     }
 
     if (options.id) {
@@ -50,13 +50,6 @@ export class StopsService {
 
   async getStop(options: { name: string; }) {
     return this.stopsRepository.findOne({ name: options.name, }, { relations: ["platforms"] });
-  }
-
-  async getClosestStop(options: { lat: number, lon: number; }) {
-    return this.stopsRepository.createQueryBuilder("stops")
-      .leftJoinAndSelect("stops.platforms", "platforms")
-      .orderBy(`(platforms.lat - ${options.lat}) * (platforms.lat - ${options.lat}) + (platforms.lon - ${options.lon}) * (platforms.lon - ${options.lon})`)
-      .getOne();
   }
 
 }

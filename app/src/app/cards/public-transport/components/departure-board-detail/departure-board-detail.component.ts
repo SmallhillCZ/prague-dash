@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardDetailComponent } from 'src/app/schema/card-detail-component';
-import { DepartureBoardCard } from '../../schema/departure-board-card';
+import { DepartureBoardCard, DepartureBoardCardDefinition } from '../../schema/departure-board-card';
 import { DepartureBoardData } from '../../schema/departure-board-data';
-import { DepartureBoardsService } from '../../services/departure-boards.service';
+import { DepartureBoardsService, LoadDeparturesOptions } from '../../services/departure-boards.service';
+import { StopsService } from '../../services/stops.service';
 
 @Component({
   selector: 'app-departure-board-detail',
@@ -20,10 +21,15 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
 
   limit = 40;
 
+  loading: boolean = false;
+
   loadingArray = new Array(10).fill(null);
 
+  name?: string;
+
   constructor(
-    private departureBoardsService: DepartureBoardsService
+    private departureBoardsService: DepartureBoardsService,
+    private stopsService: StopsService
   ) { }
 
   ngOnInit(): void {
@@ -32,12 +38,27 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
 
   async loadDepartures(refreshEvent?: any) {
 
-    const definition = {
+    this.loading = true;
+
+    if (this.card.definition.name !== null) {
+      this.name = this.card.definition.name;
+    }
+    else {
+      const stop = await this.stopsService.getClosestStop();
+      this.name = stop.name;
+      console.log(stop);
+    }
+
+    const definition: LoadDeparturesOptions = {
       ...this.card.definition,
+      name: this.name,
       limit: 20,
     };
 
-    this.departureBoard = await this.departureBoardsService.loadDepartures(definition);
+    this.departureBoard = await this.departureBoardsService.loadDepartures(definition)
+      .catch(err => undefined);
+
+    this.loading = false;
 
     if (!this.card.definition.name) this.title.emit(this.departureBoard.stops[0].stop_name);
 
@@ -45,19 +66,27 @@ export class DepartureBoardDetailComponent implements CardDetailComponent, OnIni
   }
 
   async loadMore(event: any) {
-    const definition = {
+    if (!this.departureBoard) return;
+
+    const definition: LoadDeparturesOptions = {
       ...this.card.definition,
+      name: this.name!,
       limit: 20,
       offset: this.departureBoard?.departures.length
     };
 
-    const departures = await this.departureBoardsService.loadDepartures(definition).then(departureBoard => departureBoard.departures);
+    try {
+      const departures = await this.departureBoardsService.loadDepartures(definition).then(departureBoard => departureBoard.departures);
 
-    this.departureBoard?.departures.push(...departures);
+      this.departureBoard.departures.push(...departures);
+    }
+    catch (err) {
+      // pass
+    }
 
     event.target?.complete();
 
-    if (departures.length == 1000) {
+    if (this.departureBoard.departures.length >= 1000) {
       event.target.disabled = true;
     }
   }

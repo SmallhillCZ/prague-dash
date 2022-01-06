@@ -1,13 +1,13 @@
 <ion-card-header>
   <ion-card-subtitle>
     <ion-label>
-      🚏 {{departureBoard?.stops?.[0]?.stop_name || "Načítám..."}}
+      🚏 {{ name || "Načítám..." }}
       <ion-icon *ngIf="!card.definition.name" name="locate"></ion-icon>
     </ion-label>
   </ion-card-subtitle>
 </ion-card-header>
 <ion-card-content>
-  <table *ngIf="departureBoard" class="card-table">
+  <table *ngIf="!loading && departureBoard" class="card-table">
     <tr *ngFor="let departure of departureBoard.departures" [class.at-stop]="departure.trip.is_at_stop">
       <td class="route">
         <app-route-badge [route]="departure.route"></app-route-badge>
@@ -30,7 +30,9 @@
     </tr>
   </table>
 
-  <table *ngIf="!departureBoard" class="card-table">
+  <p *ngIf="!loading && !departureBoard">Pro zastávku {{ name }} nebyly nalezeny žádné odjezdy.</p>
+
+  <table *ngIf="loading" class="card-table">
     <tr *ngFor="let departure of loadingDepartures">
       <td class="route"><ion-badge color="light">&nbsp;</ion-badge></td>
       <td class="headsign"><ion-skeleton-text></ion-skeleton-text></td>

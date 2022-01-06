@@ -20,7 +20,6 @@ import { SharedModule } from './shared/shared.module';
     CoreModule,
     SharedModule,
     BrowserModule,
-    HttpClientModule,
     AppRoutingModule
   ],
   providers: [
