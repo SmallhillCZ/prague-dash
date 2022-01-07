@@ -1,18 +1,43 @@
 <script>
   data = {
-    cards: [
-      { id: "2", type: "container", color: "white", definition: { id: "c422a869-b451-5c6e-8901-b0456dc5e6ed" } },
+    pages: [
+      {
+        id: "0",
+        cards: [
+          { id: "2", type: "container", color: "white", definition: { id: "c422a869-b451-5c6e-8901-b0456dc5e6ed" } },
+          {
+            id: "1",
+            type: "departure-board",
+            color: "white",
+            definition: {
+              name: "Lipanská",
+              limit: 5,
+              allPlatforms: true,
+              timeDisplay: "remaining",
+              platforms: { U339Z1P: true, U339Z2P: true },
+            },
+          },
+        ],
+        title: "Doma",
+      },
       {
         id: "1",
-        type: "departure-board",
-        color: "white",
-        definition: {
-          name: "Lipanská",
-          limit: 5,
-          allPlatforms: true,
-          timeDisplay: "remaining",
-          platforms: { U339Z1P: true, U339Z2P: true },
-        },
+        title: "Práce",
+        cards: [
+          {
+            id: "0",
+            type: "departure-board",
+            color: "white",
+            title: "Křižíkova",
+            definition: {
+              name: "Křižíkova",
+              limit: 5,
+              allPlatforms: true,
+              timeDisplay: "remaining",
+              platforms: { U758Z102P: true, U758Z101P: true, U758Z1P: true, U758Z2P: true },
+            },
+          },
+        ],
       },
     ],
   };
