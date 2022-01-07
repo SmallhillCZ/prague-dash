@@ -1,3 +1,11 @@
+:host {
+  display: block;
+}
+
+ion-card {
+  margin: 0;
+}
+
 @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
   ion-card {
     -webkit-backdrop-filter: blur(10px);

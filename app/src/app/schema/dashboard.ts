@@ -1,7 +1,12 @@
 import { Card } from "./card";
 
-export class Dashboard {
+export interface Dashboard {
+  pages: [DashboardPage, ...DashboardPage[]];
+}
 
-  cards: Card[] = [];
 
+export interface DashboardPage {
+  id: string;
+  cards: Card[];
+  title?: string;
 }

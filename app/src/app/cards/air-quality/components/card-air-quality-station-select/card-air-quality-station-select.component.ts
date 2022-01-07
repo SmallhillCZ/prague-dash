@@ -1,7 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
+import { CardCreateData } from 'src/app/schema/card-create-data';
 import { CardSelectComponent } from 'src/app/schema/card-select-component';
-import { AirQualityStationCardDefinition } from '../../schema/air-quality-station-card';
+import { AirQualityStationCard, AirQualityStationCardDefinition } from '../../schema/air-quality-station-card';
 import { AirQualityStationData } from '../../schema/air-quality-station-data';
 import { AirQualityService } from '../../services/air-quality.service';
 
@@ -10,7 +11,7 @@ import { AirQualityService } from '../../services/air-quality.service';
   templateUrl: './card-air-quality-station-select.component.html',
   styleUrls: ['./card-air-quality-station-select.component.scss']
 })
-export class CardAirQualityStationSelectComponent implements CardSelectComponent, OnInit {
+export class CardAirQualityStationSelectComponent implements CardSelectComponent<AirQualityStationCard>, OnInit {
 
   stations: AirQualityStationData[] = [];
 
@@ -19,7 +20,7 @@ export class CardAirQualityStationSelectComponent implements CardSelectComponent
   lang = "cs" as "cs";
 
   @Output()
-  select = new EventEmitter<AirQualityStationCardDefinition>();
+  select = new EventEmitter<CardCreateData<AirQualityStationCard>>();
 
   constructor(
     private airQualityService: AirQualityService,
@@ -45,7 +46,7 @@ export class CardAirQualityStationSelectComponent implements CardSelectComponent
   }
 
   async onSelect(station: AirQualityStationData) {
-    this.select.emit({ id: station.properties.id });
+    this.select.emit({ definition: { id: station.properties.id }, title: station.properties.name });
   }
 
 }

@@ -8,11 +8,13 @@ import { CardDetailContentComponent } from './components/card-detail-content/car
 import { CardSelectionContentComponent } from './components/card-selection-content/card-selection-content.component';
 import { DashCardComponent } from './components/dash-card/dash-card.component';
 import { DashRoutingModule } from './dash-routing.module';
-import { DashComponent } from './dash.component';
-import { DashCardAddComponent } from './views/dash-card-add/dash-card-add.component';
-import { DashCardDetailComponent } from './views/dash-card-detail/dash-card-detail.component';
-import { DashCardSelectionComponent } from './views/dash-card-selection/dash-card-selection.component';
-import { DashCardSettingsComponent } from './views/dash-card-settings/dash-card-settings.component';
+import { DashComponent } from './pages/dash/dash.component';
+import { DashCardAddComponent } from './pages/dash-card-add/dash-card-add.component';
+import { DashCardDetailComponent } from './pages/dash-card-detail/dash-card-detail.component';
+import { DashCardSelectionComponent } from './pages/dash-card-selection/dash-card-selection.component';
+import { DashCardSettingsComponent } from './pages/dash-card-settings/dash-card-settings.component';
+import { DashEditComponent } from './pages/dash-edit/dash-edit.component';
+import { DashEditPageComponent } from './pages/dash-edit-page/dash-edit-page.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { DashCardSettingsComponent } from './views/dash-card-settings/dash-card-
     CardContentComponent,
     CardCustomSettingsComponent,
     CardDetailContentComponent,
-    CardSelectionContentComponent
+    CardSelectionContentComponent,
+    DashEditComponent,
+    DashEditPageComponent,
   ],
   imports: [
     CommonModule,

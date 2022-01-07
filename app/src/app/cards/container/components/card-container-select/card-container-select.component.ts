@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
+import { CardCreateData } from 'src/app/schema/card-create-data';
 import { CardSelectComponent } from 'src/app/schema/card-select-component';
 import { Language } from 'src/app/schema/language';
-import { ContainerCardDefinition } from '../../schema/container-card';
+import { ContainerCard, ContainerCardDefinition } from '../../schema/container-card';
 import { ContainerData, ContainerDataType } from '../../schema/container-data';
 import { ContainerTypes } from '../../schema/container-type';
 import { ContainerService } from '../../services/container.service';
@@ -12,7 +13,7 @@ import { ContainerService } from '../../services/container.service';
   templateUrl: './card-container-select.component.html',
   styleUrls: ['./card-container-select.component.scss']
 })
-export class CardContainerSelectComponent implements CardSelectComponent, OnInit {
+export class CardContainerSelectComponent implements CardSelectComponent<ContainerCard>, OnInit {
 
   containers: ContainerData[] = [];
 
@@ -21,7 +22,7 @@ export class CardContainerSelectComponent implements CardSelectComponent, OnInit
   lang = Language.cs;
 
   @Output()
-  select = new EventEmitter<ContainerCardDefinition>();
+  select = new EventEmitter<CardCreateData<ContainerCard>>();
 
   constructor(
     private containerService: ContainerService,
@@ -47,7 +48,7 @@ export class CardContainerSelectComponent implements CardSelectComponent, OnInit
   }
 
   async onSelect(container: ContainerData) {
-    this.select.emit({ id: container.id });
+    this.select.emit({ definition: { id: container.id }, title: container.location });
   }
 
   getContainerTypeTitle(type: ContainerDataType, lang: Language) {

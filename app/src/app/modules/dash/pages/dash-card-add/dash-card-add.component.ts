@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { CardType } from 'src/app/schema/card-type';
@@ -14,19 +15,22 @@ export class DashCardAddComponent implements OnInit {
   constructor(
     private navController: NavController,
     private dashboard: DashboardService,
-    @Inject(CARDS) public cards: CardType[]
+    @Inject(CARDS) public cards: CardType[],
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
   }
 
   onSelect(cardType: CardType) {
+    const page = this.route.snapshot.params["page"];
+
     if (cardType.selectComponent) {
-      this.navController.navigateForward("/dash/add/" + cardType.type);
+      this.navController.navigateForward(`/page/${page}/add/${cardType.type}`);
     }
     else {
-      this.dashboard.createCard(cardType.type, cardType.defaultDefinition || {});
-      this.navController.navigateForward("/");
+      this.dashboard.createCard(page, cardType.type, { definition: cardType.defaultDefinition || {}, title: cardType.title.cs });
+      this.navController.navigateForward("/dash", { queryParams: { page } });
     }
   }
 

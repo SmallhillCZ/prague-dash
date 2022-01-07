@@ -16,8 +16,6 @@ import { ContainerService } from '../../services/container.service';
 })
 export class CardContainerDetailComponent implements CardDetailComponent, OnInit {
 
-  @Output() title = new EventEmitter<string>();
-
   types?: ContainerDataType[];
 
   lang = Language.cs;
@@ -34,7 +32,6 @@ export class CardContainerDetailComponent implements CardDetailComponent, OnInit
 
   async loadData(card: ContainerCard) {
     const data = await this.containerService.getContainer(card.definition.id);
-    this.title.next(`♻️ ${data.location}`);
 
     this.types = data.types;
 
