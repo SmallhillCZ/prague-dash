@@ -32,7 +32,7 @@ export class DepartureBoardsService {
     // }
     const params = {
       name: options.name,
-      id: options.allPlatforms ? Object.entries(options.platforms).filter(entry => !!entry[1]).map(entry => entry[0]) : undefined,
+      id: options.allPlatforms ? undefined : Object.entries(options.platforms).filter(entry => !!entry[1]).map(entry => entry[0]),
       limit: options.limit,
       offset: options.offset,
     };
