@@ -1,6 +1,6 @@
 {
   "name": "praguedash-app",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "scripts": {
     "build": "ng build",
     "build:docs": "ng build --configuration=demo",
