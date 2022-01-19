@@ -80,7 +80,6 @@
             },
             "demo": {
               "baseHref": "/demo/",
-              "deployUrl": "/demo/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
