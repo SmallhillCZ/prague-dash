@@ -13,6 +13,8 @@ export interface CardType<C extends Card = Card> {
   selectComponent?: new (...args: any[]) => CardSelectComponent<C>;
   settingsComponent?: new (...args: any[]) => CardSettingsComponent;
 
+  selectUrl?: string;
+
   defaultDefinition?: any;
 
   title: LanguageValue<string>;

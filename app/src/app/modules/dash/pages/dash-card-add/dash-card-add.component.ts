@@ -12,6 +12,8 @@ import { CARDS } from 'src/app/schema/cards-token';
 })
 export class DashCardAddComponent implements OnInit {
 
+  page?: number;
+
   constructor(
     private navController: NavController,
     private dashboard: DashboardService,
@@ -20,6 +22,9 @@ export class DashCardAddComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.page = params["page"];
+    });
   }
 
   onSelect(cardType: CardType) {

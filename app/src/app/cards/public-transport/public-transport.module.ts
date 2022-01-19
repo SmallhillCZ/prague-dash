@@ -12,6 +12,7 @@ import { DepartureDelayColorPipe } from './pipes/departure-delay-color.pipe';
 import { DepartureDelayPipe } from './pipes/departure-delay.pipe';
 import { DepartureTimePipe } from './pipes/departure-time.pipe';
 import { RouteStylePipe } from './pipes/route-style.pipe';
+import { PublicTransportRoutingModule } from './public-transport-routing.module';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { RouteStylePipe } from './pipes/route-style.pipe';
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    PublicTransportRoutingModule
   ],
   providers: [
     DatePipe,

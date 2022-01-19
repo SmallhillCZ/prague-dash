@@ -3,7 +3,7 @@ import { AirQualityModule } from './air-quality/air-quality.module';
 import { AstronomicalModule } from './astronomical/astronomical.module';
 import { ContainerModule } from './container/container.module';
 import { PublicTransportModule } from './public-transport/public-transport.module';
-1;
+
 @NgModule({
   declarations: [],
   imports: [

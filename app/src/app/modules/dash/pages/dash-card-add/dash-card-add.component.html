@@ -9,7 +9,12 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let card of cards" (click)="onSelect(card)">
+    <ion-item
+      *ngFor="let card of cards"
+      [routerLink]="card.selectUrl || '/'"
+      [queryParams]="{ page: page }"
+      [detail]="true"
+    >
       <ion-label>{{ card.title.cs }}</ion-label>
     </ion-item>
   </ion-list>

@@ -17,5 +17,7 @@ export const DepartureBoardsCardType: CardType<DepartureBoardCard> = {
   component: DepartureBoardCardComponent,
   selectComponent: DepartureBoardSelectComponent,
   settingsComponent: DepartureBoardSettingsComponent,
-  detailComponent: DepartureBoardDetailComponent
+  detailComponent: DepartureBoardDetailComponent,
+
+  selectUrl: "/public-transport/depature-boards/select"
 };
