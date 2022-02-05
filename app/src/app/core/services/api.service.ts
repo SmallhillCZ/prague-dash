@@ -42,6 +42,8 @@ export class ApiService {
       throw new ApiError(res);
     }
 
+    console.debug(`Receiving HTTP response`, res);
+
     return res.data as T;
   }
 
