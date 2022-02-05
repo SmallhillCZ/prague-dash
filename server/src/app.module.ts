@@ -30,7 +30,7 @@ else {
 
     TypeOrmModule.forRoot(),
 
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, }),
 
     SharedModule,
 
