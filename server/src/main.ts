@@ -1,18 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { NestApplicationOptions } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  const options: NestApplicationOptions = {
+    logger: process.env["NODE_ENV"] === "development" ? ['log', 'debug', 'error', 'verbose', 'warn'] : ['error', 'warn', 'log'],
+  };
+
+  const app = await NestFactory.create(AppModule, options);
 
   const configService = app.get(ConfigService);
 
-  if (configService.get("CORS_ENABLE")) app.enableCors({
+  if (process.env["NODE_ENV"] === "development") app.enableCors({
     origin: [
-      "http://localhost",
-      "http://localhost:4000",
-      "http://localhost:4200",
-      "https://praguedash.cz"
+      "http://localhost:4200"
     ]
   });
 
