@@ -9,6 +9,8 @@ import { CircleChartComponent } from "./components/circle-chart/circle-chart.com
 import { CardComponent } from "./components/card/card.component";
 import { CardContentComponent } from "./components/card-content/card-content.component";
 import { CardTitleComponent } from "./components/card-title/card-title.component";
+import { MapComponent } from "./components/map/map.component";
+import { MapMarkerComponent } from "./components/map-marker/map-marker.component";
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { CardTitleComponent } from "./components/card-title/card-title.component
     ChartsjsChartComponent,
     CardContentComponent,
     CardTitleComponent,
+    MapComponent,
+    MapMarkerComponent,
   ],
   imports: [IonicModule.forRoot({}), CommonModule, FormsModule, SwiperModule],
   exports: [
@@ -34,6 +38,8 @@ import { CardTitleComponent } from "./components/card-title/card-title.component
     CardComponent,
     CardContentComponent,
     CardTitleComponent,
+    MapComponent,
+    MapMarkerComponent,
   ],
 })
 export class SharedModule {}

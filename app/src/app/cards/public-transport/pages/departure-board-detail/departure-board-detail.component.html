@@ -18,7 +18,11 @@
   </ion-refresher>
 
   <ion-list *ngIf="!loading && departureBoard">
-    <ion-item *ngFor="let departure of departureBoard.departures">
+    <ion-item
+      *ngFor="let departure of departureBoard.departures"
+      [routerLink]="['/public-transport/vehicle-position', departure.trip.id]"
+      detail="true"
+    >
       <ion-avatar slot="start">
         <div class="circle" [ngStyle]="departure.route | routeStyle">
           <div class="text">{{ departure.route.short_name }}</div>

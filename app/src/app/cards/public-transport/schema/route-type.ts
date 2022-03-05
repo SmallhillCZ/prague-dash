@@ -13,9 +13,28 @@ export enum RouteType {
   "Monorail" = 12,
 }
 
-export const RouteTypes: { [id in RouteType]?: { name: LanguageValue<string>; } } = {
+interface RouteTypeData {
+  name: LanguageValue<string>;
+  name_short: LanguageValue<string>;
+  icon: string;
+}
 
-  [RouteType.Tram]: { name: { cs: "Tramvaj", en: "Tram" } },
-  [RouteType.Subway]: { name: { cs: "Metro", en: "Subway" } },
-  [RouteType.Bus]: { name: { cs: "Autobus", en: "Bus" } },
+export const RouteTypes: { [id in RouteType]?: RouteTypeData } = {
+  [RouteType.Tram]: {
+    name: { cs: "Tramvaj", en: "Tram" },
+    name_short: { cs: "Tram", en: "Tram" },
+    icon: "🚋",
+  },
+
+  [RouteType.Subway]: {
+    name: { cs: "Metro", en: "Subway" },
+    name_short: { cs: "Metro", en: "Subway" },
+    icon: "🚃",
+  },
+
+  [RouteType.Bus]: {
+    name: { cs: "Autobus", en: "Bus" },
+    name_short: { cs: "Bus", en: "Bus" },
+    icon: "🚌",
+  },
 };
