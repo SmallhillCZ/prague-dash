@@ -7,10 +7,9 @@ export const AirQualityStationCardType: CardType<AirQualityStationCard> = {
   type: "air-quality-station",
 
   component: CardAirQualityStationComponent,
-  selectComponent: CardAirQualityStationSelectComponent,
 
   title: {
-    "cs": "Kvalita vzduchu",
-    "en": "Air Quality"
+    cs: "Kvalita vzduchu",
+    en: "Air Quality",
   },
 };

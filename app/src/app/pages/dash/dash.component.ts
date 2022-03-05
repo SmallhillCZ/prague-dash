@@ -1,27 +1,26 @@
-import { ChangeDetectorRef, Component, Inject, NgZone, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { App } from '@capacitor/app';
-import { AlertController, NavController, Platform, ViewDidEnter, ViewWillLeave } from '@ionic/angular';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { DashboardService } from 'src/app/core/services/dashboard.service';
-import { Card } from 'src/app/schema/card';
-import { CardType } from 'src/app/schema/card-type';
-import { CARDS } from 'src/app/schema/cards-token';
-import { Dashboard, DashboardPage } from 'src/app/schema/dashboard';
-import SwiperCore, { Parallax, Swiper, SwiperOptions } from 'swiper';
+import { ChangeDetectorRef, Component, Inject, NgZone, OnInit } from "@angular/core";
+import { ActivatedRoute, Params, Router } from "@angular/router";
+import { App } from "@capacitor/app";
+import { AlertController, NavController, Platform, ViewDidEnter, ViewWillLeave } from "@ionic/angular";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
+import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
+import { filter } from "rxjs/operators";
+import { DashboardService } from "src/app/services/dashboard.service";
+import { Card } from "src/app/schema/card";
+import { CardType } from "src/app/schema/card-type";
+import { CARDS } from "src/app/schema/cards-token";
+import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
+import SwiperCore, { Parallax, Swiper, SwiperOptions } from "swiper";
 
 SwiperCore.use([Parallax]);
 
 @UntilDestroy()
 @Component({
-  selector: 'app-dash',
-  templateUrl: './dash.component.html',
-  styleUrls: ['./dash.component.scss']
+  selector: "app-dash",
+  templateUrl: "./dash.component.html",
+  styleUrls: ["./dash.component.scss"],
 })
 export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
-
   dashboard?: Dashboard;
 
   currentPage?: DashboardPage;
@@ -32,7 +31,7 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     parallax: true,
     slidesPerView: 1,
     spaceBetween: 0,
-    navigation: false
+    navigation: false,
   };
 
   enableRefresh = true;
@@ -47,18 +46,17 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     private route: ActivatedRoute,
     private router: Router,
     private platform: Platform,
-    private ngZone: NgZone,
-  ) { }
+    private ngZone: NgZone
+  ) {}
 
   ngOnInit(): void {
-
     const dash = this.dashboardService.dashboard.pipe(untilDestroyed(this));
 
-    dash.subscribe(dash => this.dashboard = dash);
+    dash.subscribe((dash) => (this.dashboard = dash));
 
     const params = this.route.queryParams.pipe(untilDestroyed(this));
 
-    const swiper = this.swiper.pipe(filter(swiper => !!swiper));
+    const swiper = this.swiper.pipe(filter((swiper) => !!swiper));
 
     combineLatest([dash, params, swiper])
       .pipe(filter((item): item is [Dashboard, Params, Swiper] => !!item[0]))
@@ -68,21 +66,17 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
           this.openPage(pageId, true);
         }
       });
-
   }
 
   ionViewDidEnter(): void {
-
     // Quit on back button when on dash and not first page
     this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(-1, async () => {
       if (this.route.snapshot.params["page"]) {
         this.navController.navigateRoot("/");
-      }
-      else {
+      } else {
         App.exitApp();
       }
     });
-
   }
 
   ionViewWillLeave(): void {
@@ -95,7 +89,7 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
 
   openPage(pageId: string, immediate: boolean = false) {
     if (!this.dashboard || !this.swiper.value) return;
-    const index = this.dashboard.pages.findIndex(item => item.id === pageId);
+    const index = this.dashboard.pages.findIndex((item) => item.id === pageId);
 
     if (this.swiper.value.activeIndex !== index) {
       this.swiper.value.slideTo(index, immediate ? 0 : undefined);
@@ -108,7 +102,6 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     const page = this.dashboard.pages[index];
 
     this.ngZone.run(() => {
-
       if (page.id !== this.currentPage?.id) {
         this.currentPage = page;
       }
@@ -119,7 +112,6 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
       if (this.route.snapshot.params["page"] !== page.id) {
         this.router.navigate([], { queryParams: { page: page.id }, replaceUrl: true });
       }
-
     });
   }
 
@@ -128,7 +120,6 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
   }
 
   doRefresh(event: any, page: DashboardPage) {
-
     page.cards = JSON.parse(JSON.stringify(page.cards));
 
     setTimeout(() => {
@@ -136,55 +127,40 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     }, 500);
   }
 
-  openDetail(card: Card) {
-    const type = this.cardTypes.find(item => item.type === card.type);
-
-    if (!type) return;
-
-    if (type.detailComponent) {
-      this.navController.navigateForward('/card/' + card.id);
-    }
-    else {
-      this.navController.navigateForward('/card/' + card.id + '/settings');
-    }
-  }
-
   async addPage() {
     const alert = await this.alertController.create({
-      header: 'Nová stránka',
-      message: 'Vytvoří novou stránku pro vaše karty.',
+      header: "Nová stránka",
+      message: "Vytvoří novou stránku pro vaše karty.",
       inputs: [
         {
-          name: 'title',
-          type: 'text',
-          placeholder: 'Název stránky'
+          name: "title",
+          type: "text",
+          placeholder: "Název stránky",
         },
       ],
       buttons: [
         {
-          text: 'Zrušit',
-          role: 'cancel',
-          cssClass: 'secondary',
-        }, {
-          text: 'Vytvořit',
-          handler: (data: { title: string; }) => {
+          text: "Zrušit",
+          role: "cancel",
+          cssClass: "secondary",
+        },
+        {
+          text: "Vytvořit",
+          handler: (data: { title: string }) => {
             if (!data.title) return false;
             this.addPageConfirmed(data);
             return true;
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
   }
 
-  private async addPageConfirmed(data: { title: string; }) {
+  private async addPageConfirmed(data: { title: string }) {
     const title = data.title || undefined;
     const page = await this.dashboardService.createPage(title);
     setTimeout(() => this.openPage(page.id), 500); // wait for DOM update (could be better...)
   }
-
-
-
-};
+}

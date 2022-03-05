@@ -1,9 +1,9 @@
-import { StorageService } from "../core/services/storage.service";
-import { DashboardPage } from "../schema/dashboard";
+import { StorageService } from "src/app/services/storage.service";
+import { DashboardPage } from "src/app/schema/dashboard";
 
 export function DashBoardMigrations(storage: StorageService) {
   return async () => {
-    const dash = await storage.get("dashboard") as any;
+    const dash = (await storage.get("dashboard")) as any;
 
     if (!dash) return;
 

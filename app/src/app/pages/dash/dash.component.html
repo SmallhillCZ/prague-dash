@@ -72,8 +72,7 @@
         </div>
 
         <div class="cards" (scroll)="onCardsScroll()">
-          <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData" (click)="openDetail(cardData)">
-          </app-dash-card>
+          <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData"></app-dash-card>
         </div>
       </div>
     </ng-template>

@@ -1,28 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CardSettingsComponent } from 'src/app/schema/card-settings-component';
-import { SunCard, SunCardDefinition } from '../../schema/sun-card';
-import { SunValueNames, SunValues, SunValuesMeta } from '../../schema/sun-values';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { SunCard, SunCardDefinition } from "../../schema/sun-card";
+import { SunValueNames, SunValues, SunValuesMeta } from "../../schema/sun-values";
 
 @Component({
-  selector: 'app-sun-settings',
-  templateUrl: './sun-settings.component.html',
-  styleUrls: ['./sun-settings.component.scss']
+  selector: "app-sun-settings",
+  templateUrl: "./sun-settings.component.html",
+  styleUrls: ["./sun-settings.component.scss"],
 })
-export class SunSettingsComponent implements CardSettingsComponent<SunCard>, OnInit {
+export class SunSettingsComponent implements OnInit {
+  // TODO:
+  card!: SunCard;
+  change = new EventEmitter<SunCardDefinition>();
 
-  @Input() card!: SunCard;
-  @Output() change = new EventEmitter<SunCardDefinition>();
+  values: { name: SunValueNames; meta: SunValuesMeta; active: boolean }[] = [];
 
-  values: { name: SunValueNames, meta: SunValuesMeta, active: boolean; }[] = [];
-
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
-
     this.values = Object.entries(SunValues).map(([name, meta]) => ({
       name: name as SunValueNames,
       meta,
-      active: this.card.definition.showValues.indexOf(name as SunValueNames) !== -1
+      active: this.card.definition.showValues.indexOf(name as SunValueNames) !== -1,
     }));
 
     this.sortValues();
@@ -40,10 +38,10 @@ export class SunSettingsComponent implements CardSettingsComponent<SunCard>, OnI
   }
 
   private saveValues() {
-    const showValues = this.values.filter(item => item.active).map(item => item.name);
+    const showValues = this.values.filter((item) => item.active).map((item) => item.name);
     this.change.emit({
       ...this.card.definition,
-      showValues
+      showValues,
     });
   }
 

@@ -1,30 +1,24 @@
-import { NONE_TYPE } from '@angular/compiler';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ChartData, ChartOptions } from 'chart.js';
-import { Duration } from 'luxon';
-import { CardDetailComponent } from 'src/app/schema/card-detail-component';
-import { Language } from 'src/app/schema/language';
-import { ContainerCard } from '../../schema/container-card';
-import { ContainerDataType } from '../../schema/container-data';
-import { ContainerTypes } from '../../schema/container-type';
-import { ContainerService } from '../../services/container.service';
+import { Component, Input, OnInit } from "@angular/core";
+import { Language } from "src/app/schema/language";
+import { ContainerCard } from "../../schema/container-card";
+import { ContainerDataType } from "../../schema/container-data";
+import { ContainerTypes } from "../../schema/container-type";
+import { ContainerService } from "../../services/container.service";
 
 @Component({
-  selector: 'app-card-container-detail',
-  templateUrl: './card-container-detail.component.html',
-  styleUrls: ['./card-container-detail.component.scss']
+  selector: "app-card-container-detail",
+  templateUrl: "./card-container-detail.component.html",
+  styleUrls: ["./card-container-detail.component.scss"],
 })
-export class CardContainerDetailComponent implements CardDetailComponent, OnInit {
-
+export class CardContainerDetailComponent implements OnInit {
   types?: ContainerDataType[];
 
   lang = Language.cs;
 
-  constructor(
-    private containerService: ContainerService
-  ) { }
+  constructor(private containerService: ContainerService) {}
 
-  @Input() card!: ContainerCard;
+  // TODO: @Input()
+  card!: ContainerCard;
 
   ngOnInit(): void {
     this.loadData(this.card);
@@ -45,6 +39,4 @@ export class CardContainerDetailComponent implements CardDetailComponent, OnInit
   private getContainerTypeTitle(type: ContainerDataType, lang: Language): string {
     return ContainerTypes[type.type].title[lang]!;
   }
-
-
 }

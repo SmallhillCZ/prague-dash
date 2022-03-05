@@ -7,11 +7,8 @@ export const SunCardType: CardType<SunCard> = {
   type: "sunset",
 
   title: {
-    "cs": "Západ a východ slunce"
+    cs: "Západ a východ slunce",
   },
 
   component: SunCardComponent,
-  defaultDefinition: new SunCardDefinition(),
-
-  settingsComponent: SunSettingsComponent
 };

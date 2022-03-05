@@ -1,23 +1,22 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AlertController, ItemReorderCustomEvent, NavController } from '@ionic/angular';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest } from 'rxjs';
-import { DashboardService } from 'src/app/core/services/dashboard.service';
-import { SettingsService } from 'src/app/core/services/settings.service';
-import { Card } from 'src/app/schema/card';
-import { CardType } from 'src/app/schema/card-type';
-import { CARDS } from 'src/app/schema/cards-token';
-import { Dashboard, DashboardPage } from 'src/app/schema/dashboard';
+import { Component, Inject, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { AlertController, ItemReorderCustomEvent, NavController } from "@ionic/angular";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
+import { combineLatest } from "rxjs";
+import { DashboardService } from "src/app/services/dashboard.service";
+import { SettingsService } from "src/app/services/settings.service";
+import { Card } from "src/app/schema/card";
+import { CardType } from "src/app/schema/card-type";
+import { CARDS } from "src/app/schema/cards-token";
+import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
 
 @UntilDestroy()
 @Component({
-  selector: 'app-dash-edit-page',
-  templateUrl: './dash-edit-page.component.html',
-  styleUrls: ['./dash-edit-page.component.scss']
+  selector: "app-dash-edit-page",
+  templateUrl: "./dash-edit-page.component.html",
+  styleUrls: ["./dash-edit-page.component.scss"],
 })
 export class DashEditPageComponent implements OnInit {
-
   dashboard?: Dashboard;
 
   page?: DashboardPage;
@@ -31,16 +30,15 @@ export class DashEditPageComponent implements OnInit {
     private alertController: AlertController,
     @Inject(CARDS) public cardTypes: CardType[],
     private settings: SettingsService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-
     const dash = this.dashboardService.dashboard.pipe(untilDestroyed(this));
     const params = this.route.params.pipe(untilDestroyed(this));
 
     combineLatest([dash, params]).subscribe(([dash, params]) => {
       this.dashboard = dash;
-      this.page = dash?.pages.find(item => item.id === params["page"]);
+      this.page = dash?.pages.find((item) => item.id === params["page"]);
     });
   }
 
@@ -69,8 +67,8 @@ export class DashEditPageComponent implements OnInit {
       message: "Pozor: smažete i všechny karty na stránce!",
       buttons: [
         { text: "Zrušit", role: "cancel" },
-        { text: "Smazat", handler: () => this.deletePageConfirmed() }
-      ]
+        { text: "Smazat", handler: () => this.deletePageConfirmed() },
+      ],
     });
 
     alert.present();
@@ -80,7 +78,10 @@ export class DashEditPageComponent implements OnInit {
     if (!this.dashboard) return;
     if (!this.page) return;
 
-    this.dashboard.pages.splice(this.dashboard.pages.findIndex(item => item.id === this.page!.id), 1);
+    this.dashboard.pages.splice(
+      this.dashboard.pages.findIndex((item) => item.id === this.page!.id),
+      1
+    );
 
     await this.save();
 
@@ -88,7 +89,7 @@ export class DashEditPageComponent implements OnInit {
   }
 
   getCardTypeTitle(card: Card): string | undefined {
-    const cardType = this.cardTypes.find(cardType => cardType.type === card.type);
+    const cardType = this.cardTypes.find((cardType) => cardType.type === card.type);
     return cardType?.title[this.settings.lang];
   }
 }

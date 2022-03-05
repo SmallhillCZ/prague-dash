@@ -1,32 +1,23 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { Card } from 'src/app/schema/card';
-import { CardSettingsComponent } from 'src/app/schema/card-settings-component';
-import { DepartureBoardCard, DepartureBoardCardDefinition } from '../../schema/departure-board-card';
-import { DepartureBoardData } from '../../schema/departure-board-data';
-import { StopData, StopPlatformData } from '../../schema/stop-data';
-import { DepartureBoardsService } from '../../services/departure-boards.service';
-import { StopsService } from '../../services/stops.service';
+import { Component, EventEmitter, OnChanges, OnInit } from "@angular/core";
+import { DepartureBoardCard, DepartureBoardCardDefinition } from "../../schema/departure-board-card";
+import { StopData, StopPlatformData } from "../../schema/stop-data";
+import { StopsService } from "../../services/stops.service";
 
 @Component({
-  selector: 'app-departure-board-settings',
-  templateUrl: './departure-board-settings.component.html',
-  styleUrls: ['./departure-board-settings.component.scss']
+  selector: "app-departure-board-settings",
+  templateUrl: "./departure-board-settings.component.html",
+  styleUrls: ["./departure-board-settings.component.scss"],
 })
-export class DepartureBoardSettingsComponent implements CardSettingsComponent, OnInit, OnChanges {
-
-  @Input()
+export class DepartureBoardSettingsComponent implements OnInit, OnChanges {
+  // TODO: call service to get card and save settings
   card!: DepartureBoardCard;
-
-  @Output()
   change = new EventEmitter<DepartureBoardCardDefinition>();
 
   definition!: DepartureBoardCardDefinition;
 
   stop?: StopData;
 
-  constructor(
-    private stopsService: StopsService
-  ) { }
+  constructor(private stopsService: StopsService) {}
 
   ngOnInit(): void {
     this.definition = Object.assign(new DepartureBoardCardDefinition(null), this.card.definition);
@@ -34,15 +25,12 @@ export class DepartureBoardSettingsComponent implements CardSettingsComponent, O
     this.loadDepartureBoard();
   }
 
-  ngOnChanges() {
-  }
+  ngOnChanges() {}
 
   async loadDepartureBoard() {
-
     if (this.definition.name) {
       this.stop = await this.stopsService.getStop({ name: this.definition.name });
     }
-
   }
 
   save() {
@@ -50,7 +38,6 @@ export class DepartureBoardSettingsComponent implements CardSettingsComponent, O
   }
 
   getPlatformDirections(platform: StopPlatformData) {
-    return platform.lines?.map(line => line.direction).join(", ") || "";
+    return platform.lines?.map((line) => line.direction).join(", ") || "";
   }
-
 }
