@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { NavController } from "@ionic/angular";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
-import { DepartureBoardData } from "../../schema/departure-board-data";
+import { DepartureBoardData, DepartureData } from "../../schema/departure-board-data";
+import { RouteTypes } from "../../schema/route-type";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
 
@@ -27,7 +29,8 @@ export class DepartureBoardDetailComponent implements OnInit {
     private dashboard: DashboardService,
     private departureBoardsService: DepartureBoardsService,
     private stopsService: StopsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private navController: NavController
   ) {}
 
   ngOnInit(): void {
@@ -89,5 +92,14 @@ export class DepartureBoardDetailComponent implements OnInit {
     if (this.departureBoard.departures.length >= 1000) {
       event.target.disabled = true;
     }
+  }
+
+  openDeparture(departure: DepartureData) {
+    if (this.hasPosition(departure))
+      this.navController.navigateForward("/public-transport/vehicle-position/" + departure.trip.id);
+  }
+
+  hasPosition(departure: DepartureData) {
+    return RouteTypes[departure.route.type]?.tracked;
   }
 }

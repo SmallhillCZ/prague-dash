@@ -20,8 +20,9 @@
   <ion-list *ngIf="!loading && departureBoard">
     <ion-item
       *ngFor="let departure of departureBoard.departures"
-      [routerLink]="['/public-transport/vehicle-position', departure.trip.id]"
-      detail="true"
+      (click)="openDeparture(departure)"
+      [button]="hasPosition(departure)"
+      [detail]="hasPosition(departure)"
     >
       <ion-avatar slot="start">
         <div class="circle" [ngStyle]="departure.route | routeStyle">
@@ -38,7 +39,7 @@
         </h2>
       </ion-label>
 
-      <ion-label class="time" slot="end">
+      <ion-label class="time" slot="end" [class.no-position]="!hasPosition(departure)">
         {{ departure | departureTime: card.definition }}
         <br />
         <ion-text class="delay" [color]="departure | departureDelayColor">
