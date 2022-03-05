@@ -1,37 +1,29 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from "@angular/core";
 
-import { SplashScreen } from '@capacitor/splash-screen';
-import { IonRouterOutlet, Platform, ViewDidEnter } from '@ionic/angular';
+import { SplashScreen } from "@capacitor/splash-screen";
+import { IonRouterOutlet, Platform, ViewDidEnter } from "@ionic/angular";
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  selector: "pd-root",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.scss"],
 })
 export class AppComponent implements ViewDidEnter {
-  title = 'prague-dash';
+  title = "prague-dash";
 
   @ViewChild(IonRouterOutlet, { static: true }) routerOutlet!: IonRouterOutlet;
 
-  constructor(
-    private platform: Platform,
-  ) {
-
+  constructor(private platform: Platform) {
     this.init();
   }
 
-  ionViewDidEnter() {
-
-  }
+  ionViewDidEnter() {}
 
   async init() {
-
     if (this.platform.is("android")) {
-      // StatusBar.setOverlaysWebView({ overlay: true });      
+      // StatusBar.setOverlaysWebView({ overlay: true });
       // TODO: make bg image under, but not header
     }
 
     await SplashScreen.hide();
   }
-
-
 }

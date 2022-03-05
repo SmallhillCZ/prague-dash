@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ page?.title || "Upravit stránku" }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="page?.cards">
+    <ion-item lines="none" class="title">
+      <ion-label><h1>Karty</h1></ion-label>
+      <ion-button *ngIf="!sortCards" slot="end" fill="clear" (click)="sortCards = !sortCards">Seřadit</ion-button>
+      <ion-button *ngIf="sortCards" slot="end" fill="clear" (click)="sortCards = !sortCards">Hotovo</ion-button>
+    </ion-item>
+
+    <ion-reorder-group [disabled]="!sortCards" (ionItemReorder)="onReorder($any($event))">
+      <ion-item *ngFor="let card of page!.cards">
+        <ion-label>
+          <h2>{{ card.title }}</h2>
+          <p>{{ getCardTypeTitle(card) }}</p>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button *ngIf="!sortCards" color="danger" (click)="deleteCard(card)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-buttons>
+      </ion-item>
+    </ion-reorder-group>
+  </ng-container>
+
+  <ng-container *ngIf="page">
+    <ion-item lines="none" class="title">
+      <ion-label><h1>Obecné</h1></ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Název</ion-label>
+      <ion-input [(ngModel)]="page.title" (ngModelChange)="save()"></ion-input>
+    </ion-item>
+
+    <ion-item lines="none" class="title">
+      <ion-label><h1>Smazat stránku</h1></ion-label>
+    </ion-item>
+
+    <div class="actions ion-padding">
+      <ion-button color="danger" (click)="deletePage()">Smazat stránku</ion-button>
+    </div>
+  </ng-container>
+</ion-content>
