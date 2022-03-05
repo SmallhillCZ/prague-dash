@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NavController } from "@ionic/angular";
-import { DashboardService } from "src/app/services/dashboard.service";
+import { CardCreateData } from "src/app/schema/card-create-data";
 import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
+import { DashboardPage } from "src/app/schema/dashboard";
+import { DashboardService } from "src/app/services/dashboard.service";
 
 @Component({
   selector: "app-dash-card-add",
@@ -11,18 +13,32 @@ import { CARDS } from "src/app/schema/cards-token";
   styleUrls: ["./dash-card-add.component.scss"],
 })
 export class DashCardAddComponent implements OnInit {
+  page?: DashboardPage;
+
   constructor(
+    @Inject(CARDS) public cardTypes: CardType[],
+    private route: ActivatedRoute,
     private navController: NavController,
-    private dashboard: DashboardService,
-    @Inject(CARDS) public cards: CardType[],
-    private route: ActivatedRoute
+    private dash: DashboardService
   ) {}
 
   ngOnInit(): void {}
 
-  onSelect(cardType: CardType) {
-    const page = this.route.snapshot.params["page"];
+  async addCard(cardType: CardType) {
+    const pageId = this.route.snapshot.params["page"];
 
-    // TODO: redirect to module select
+    if (cardType.createUrl) {
+      await this.navController.navigateForward(cardType.createUrl, { queryParams: { page: pageId } });
+    } else {
+      const cardData: CardCreateData = {
+        type: cardType.type,
+        title: cardType.title.cs,
+        definition: {},
+      };
+
+      await this.dash.createCard(cardData, pageId);
+
+      this.navController.navigateRoot("/dash", { queryParams: { page: pageId } });
+    }
   }
 }

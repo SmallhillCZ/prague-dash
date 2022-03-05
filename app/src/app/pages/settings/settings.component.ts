@@ -7,7 +7,7 @@ import packageJSON from "../../../../package.json";
 
 @UntilDestroy()
 @Component({
-  selector: "app-settings",
+  selector: "pd-settings",
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })

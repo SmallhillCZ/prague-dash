@@ -1,8 +1,7 @@
 import { CardType } from "src/app/schema/card-type";
 import { CardContainerComponent } from "./components/card-container/card-container.component";
-import { ContainerCard } from "./schema/container-card";
 
-export const ContainerCardType: CardType<ContainerCard> = {
+export const ContainerCardType: CardType = {
   type: "container",
 
   component: CardContainerComponent,
@@ -11,4 +10,6 @@ export const ContainerCardType: CardType<ContainerCard> = {
     cs: "Tříděný odpad",
     en: "Sorted Waste",
   },
+
+  createUrl: "/container/add",
 };

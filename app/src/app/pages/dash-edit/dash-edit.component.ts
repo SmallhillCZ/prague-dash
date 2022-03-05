@@ -6,7 +6,7 @@ import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
 
 @UntilDestroy()
 @Component({
-  selector: "app-dash-edit",
+  selector: "pd-dash-edit",
   templateUrl: "./dash-edit.component.html",
   styleUrls: ["./dash-edit.component.scss"],
 })

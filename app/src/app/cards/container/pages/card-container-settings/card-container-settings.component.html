@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button
+      [defaultHref]="card ? '/container/card/' + card.id + '/detail' : '/'"
+      slot="start"
+    ></ion-back-button>
+    <ion-title>Nastavení: {{ card?.title }} </ion-title>
+    <ion-buttons slot="end"> </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="card">
+  <ion-item>
+    <ion-label>
+      <h3>Všechny typy odpadu</h3>
+      <p>Zobrazí na kartě i neměřené typy odpadu</p>
+    </ion-label>
+    <ion-toggle [(ngModel)]="card.definition.showNotMetered" (ngModelChange)="save()" slot="end"></ion-toggle>
+  </ion-item>
+</ion-content>

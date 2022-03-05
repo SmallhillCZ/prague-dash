@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { Language } from "src/app/schema/language";
+import { DashboardService } from "src/app/services/dashboard.service";
 import { ContainerCard } from "../../schema/container-card";
 import { ContainerDataType } from "../../schema/container-data";
 import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
 @Component({
-  selector: "app-card-container-detail",
+  selector: "pd-card-container-detail",
   templateUrl: "./card-container-detail.component.html",
   styleUrls: ["./card-container-detail.component.scss"],
 })
@@ -15,13 +17,21 @@ export class CardContainerDetailComponent implements OnInit {
 
   lang = Language.cs;
 
-  constructor(private containerService: ContainerService) {}
+  constructor(
+    private dash: DashboardService,
+    private route: ActivatedRoute,
+    private containerService: ContainerService
+  ) {}
 
-  // TODO: @Input()
-  card!: ContainerCard;
+  card?: ContainerCard;
 
   ngOnInit(): void {
-    this.loadData(this.card);
+    this.route.params.subscribe((params) => this.loadCard(params["id"]));
+  }
+
+  async loadCard(id: string) {
+    this.card = await this.dash.getCard(id);
+    await this.loadData(this.card!);
   }
 
   async loadData(card: ContainerCard) {

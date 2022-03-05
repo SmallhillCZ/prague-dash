@@ -1,29 +1,22 @@
-import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Card } from 'src/app/schema/card';
-import { CardCreateData } from 'src/app/schema/card-create-data';
-import { CardType } from 'src/app/schema/card-type';
-import { CARDS } from 'src/app/schema/cards-token';
-import { Dashboard, DashboardPage } from 'src/app/schema/dashboard';
-import { Language } from 'src/app/schema/language';
-import { StorageService } from './storage.service';
+import { Inject, Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { Card } from "src/app/schema/card";
+import { CardCreateData } from "src/app/schema/card-create-data";
+import { CardType } from "src/app/schema/card-type";
+import { CARDS } from "src/app/schema/cards-token";
+import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
+import { Language } from "src/app/schema/language";
+import { StorageService } from "./storage.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class DashboardService {
-
-  lang = Language.cs;
-
   dashboard = new BehaviorSubject<Dashboard | undefined>(undefined);
 
-  constructor(
-    private storage: StorageService,
-    @Inject(CARDS) private cardTypes: CardType[],
-  ) {
-
+  constructor(private storage: StorageService, @Inject(CARDS) private cardTypes: CardType[]) {
     // load dashbaord
-    this.getDashboard().then(dash => {
+    this.getDashboard().then((dash) => {
       this.dashboard.next(dash);
     });
   }
@@ -33,7 +26,7 @@ export class DashboardService {
 
     if (!dash) {
       return {
-        pages: [{ id: "0", title: "Hlavní", cards: [] }]
+        pages: [{ id: "0", title: "Hlavní", cards: [] }],
       } as Dashboard;
     }
 
@@ -85,12 +78,9 @@ export class DashboardService {
     // const dash: Dashboard = {
     //   pages: pages.length > 0 ? pages as [DashboardPage, ...DashboardPage[]] : [{ id: 0, cards: [] }],
     // };
-
-
   }
 
   async saveDashboard(dash: Dashboard) {
-
     await this.storage.set("dashboard", dash);
 
     this.dashboard.next(await this.getDashboard());
@@ -100,7 +90,7 @@ export class DashboardService {
     const dash = await this.getDashboard();
 
     let id = 0;
-    while (dash.pages.some(item => item.id === String(id))) id++;
+    while (dash.pages.some((item) => item.id === String(id))) id++;
 
     const page = { id: String(id), title, cards: [] };
 
@@ -111,43 +101,32 @@ export class DashboardService {
     return page;
   }
 
-  async createCard(pageId: DashboardPage["id"], type: string, createData: CardCreateData) {
+  async createCard<T extends Card = Card>(createData: CardCreateData<T>, pageId?: string) {
+    const dashboard = await this.getDashboard();
 
-    const dash = await this.getDashboard();
-    const page = dash.pages.find(item => item.id === pageId);
-
-    if (!page) throw new Error(`Page ${pageId} not found!`);
+    const page = dashboard.pages.find((item) => item.id === pageId) || dashboard.pages[0];
 
     let id = 0;
-    while (dash.pages.some(page => page.cards.some(item => item.id === String(id)))) id++;
+    while (dashboard.pages.some((page) => page.cards.some((item) => item.id === String(id)))) id++;
 
-    const card: Card = {
-      id: String(id),
-      type,
-      color: "white",
-      title: createData.title,
-      definition: createData.definition
-    };
+    page.cards.push({ id: String(id), ...createData });
 
-    page.cards.push(card);
-
-    return this.saveDashboard(dash);
+    return this.saveDashboard(dashboard);
   }
 
-  async updateCard(card: Card) {
+  async saveCard(card: Card) {
     card = JSON.parse(JSON.stringify(card));
 
     const dash = await this.getDashboard();
 
-    const page = dash.pages.find(page => page.cards.some(item => item.id === card.id));
+    const page = dash.pages.find((page) => page.cards.some((item) => item.id === card.id));
     if (!page) throw new Error(`Page for card ${card.id} not found!`);
 
-    const i = page.cards.findIndex(item => item.id === card.id);
+    const i = page.cards.findIndex((item) => item.id === card.id);
 
     if (i === -1) {
       page.cards.push(card);
-    }
-    else {
+    } else {
       page.cards.splice(i, 1, card);
     }
 
@@ -157,10 +136,10 @@ export class DashboardService {
   async removeCard(id: string) {
     const dash = await this.getDashboard();
 
-    const page = dash.pages.find(page => page.cards.some(item => item.id === id));
+    const page = dash.pages.find((page) => page.cards.some((item) => item.id === id));
     if (!page) throw new Error(`Page for card ${id} not found!`);
 
-    const i = page.cards.findIndex(item => item.id === id);
+    const i = page.cards.findIndex((item) => item.id === id);
 
     page.cards.splice(i, 1);
 

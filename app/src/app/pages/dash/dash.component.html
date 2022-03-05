@@ -39,12 +39,12 @@
   </ion-refresher>
   <div class="page">
     <div class="cards" (scroll)="onCardsScroll()">
-      <app-dash-card
+      <pd-dash-card
         *ngFor="let cardData of dashboard.pages[0]?.cards"
         [card]="cardData"
         (click)="openDetail(cardData)"
       >
-      </app-dash-card>
+      </pd-dash-card>
     </div>
   </div>
 </ion-content> -->
@@ -72,7 +72,9 @@
         </div>
 
         <div class="cards" (scroll)="onCardsScroll()">
-          <app-dash-card *ngFor="let cardData of page.cards" [card]="cardData"></app-dash-card>
+          <div class="card" *ngFor="let cardData of page.cards">
+            <pd-dash-card [card]="cardData"></pd-dash-card>
+          </div>
         </div>
       </div>
     </ng-template>

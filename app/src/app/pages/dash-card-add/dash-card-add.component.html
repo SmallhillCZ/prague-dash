@@ -9,8 +9,8 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let card of cards" (click)="onSelect(card)">
-      <ion-label>{{ card.title.cs }}</ion-label>
+    <ion-item *ngFor="let cardType of cardTypes" (click)="addCard(cardType)">
+      <ion-label>{{ cardType.title.cs }}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

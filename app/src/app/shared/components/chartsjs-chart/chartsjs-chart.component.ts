@@ -1,17 +1,25 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { Chart, ChartConfiguration, ChartData, ChartOptions, ChartType, registerables } from 'chart.js';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from "@angular/core";
+import { Chart, ChartConfiguration, ChartData, ChartOptions, ChartType, registerables } from "chart.js";
 
 Chart.register(...registerables);
 
-import 'chartjs-adapter-luxon';
+import "chartjs-adapter-luxon";
 
 @Component({
-  selector: 'app-chartsjs-chart',
-  templateUrl: './chartsjs-chart.component.html',
-  styleUrls: ['./chartsjs-chart.component.scss']
+  selector: "pd-chartsjs-chart",
+  templateUrl: "./chartsjs-chart.component.html",
+  styleUrls: ["./chartsjs-chart.component.scss"],
 })
 export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges {
-
   @Input() height!: number | string;
   @Input() width!: number | string;
 
@@ -23,10 +31,9 @@ export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges 
 
   chart?: Chart;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.renderChart();
@@ -36,7 +43,7 @@ export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges 
     const config: ChartConfiguration = {
       type: this.type,
       data: this.data,
-      options: this.parseOptions(this.options)
+      options: this.parseOptions(this.options),
     };
 
     this.chart = new Chart(this.canvas.nativeElement, config);

@@ -16,7 +16,7 @@ SwiperCore.use([Parallax]);
 
 @UntilDestroy()
 @Component({
-  selector: "app-dash",
+  selector: "pd-dash",
   templateUrl: "./dash.component.html",
   styleUrls: ["./dash.component.scss"],
 })

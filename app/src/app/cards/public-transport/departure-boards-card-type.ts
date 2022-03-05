@@ -1,8 +1,7 @@
 import { CardType } from "src/app/schema/card-type";
 import { DepartureBoardCardComponent } from "./components/departure-board-card/departure-board-card.component";
-import { DepartureBoardCard } from "./schema/departure-board-card";
 
-export const DepartureBoardsCardType: CardType<DepartureBoardCard> = {
+export const DepartureBoardsCardType: CardType = {
   type: "departure-board",
 
   title: {
@@ -11,4 +10,6 @@ export const DepartureBoardsCardType: CardType<DepartureBoardCard> = {
   },
 
   component: DepartureBoardCardComponent,
+
+  createUrl: "/public-transport/departure-boards/select",
 };

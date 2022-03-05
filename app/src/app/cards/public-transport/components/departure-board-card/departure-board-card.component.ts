@@ -15,7 +15,7 @@ import { StopsService } from "../../services/stops.service";
 
 @UntilDestroy()
 @Component({
-  selector: "app-departure-board-card",
+  selector: "pd-departure-board-card",
   templateUrl: "./departure-board-card.component.html",
   styleUrls: ["./departure-board-card.component.scss"],
 })

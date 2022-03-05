@@ -51,9 +51,8 @@ export class DashEditPageComponent implements OnInit {
     event.detail.complete(true);
   }
 
-  onCardClick(card: Card) {
-    if (this.sortCards) return;
-    this.navController.navigateForward(`/card/${card.id}/settings`);
+  async deleteCard(card: Card) {
+    await this.dashboardService.removeCard(card.id);
   }
 
   save() {
@@ -78,10 +77,9 @@ export class DashEditPageComponent implements OnInit {
     if (!this.dashboard) return;
     if (!this.page) return;
 
-    this.dashboard.pages.splice(
-      this.dashboard.pages.findIndex((item) => item.id === this.page!.id),
-      1
-    );
+    const pageIndex = this.dashboard.pages.findIndex((item) => item.id === this.page!.id);
+
+    this.dashboard.pages.splice(pageIndex, 1);
 
     await this.save();
 

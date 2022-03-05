@@ -1,26 +1,32 @@
 import { Component, EventEmitter, OnChanges, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { DashboardService } from "src/app/services/dashboard.service";
 import { DepartureBoardCard, DepartureBoardCardDefinition } from "../../schema/departure-board-card";
 import { StopData, StopPlatformData } from "../../schema/stop-data";
 import { StopsService } from "../../services/stops.service";
 
 @Component({
-  selector: "app-departure-board-settings",
+  selector: "pd-departure-board-settings",
   templateUrl: "./departure-board-settings.component.html",
   styleUrls: ["./departure-board-settings.component.scss"],
 })
 export class DepartureBoardSettingsComponent implements OnInit, OnChanges {
-  // TODO: call service to get card and save settings
-  card!: DepartureBoardCard;
-  change = new EventEmitter<DepartureBoardCardDefinition>();
+  card?: DepartureBoardCard;
 
   definition!: DepartureBoardCardDefinition;
 
   stop?: StopData;
 
-  constructor(private stopsService: StopsService) {}
+  constructor(private dash: DashboardService, private stopsService: StopsService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.definition = Object.assign(new DepartureBoardCardDefinition(null), this.card.definition);
+    this.route.params.subscribe((params) => this.loadCard(params["id"]));
+  }
+
+  async loadCard(id: string) {
+    this.card = await this.dash.getCard(id);
+
+    this.definition = Object.assign(new DepartureBoardCardDefinition(null), this.card!.definition);
 
     this.loadDepartureBoard();
   }
@@ -34,7 +40,8 @@ export class DepartureBoardSettingsComponent implements OnInit, OnChanges {
   }
 
   save() {
-    this.change.emit(this.definition);
+    if (!this.card) return;
+    this.dash.saveCard({ ...this.card, definition: this.definition });
   }
 
   getPlatformDirections(platform: StopPlatformData) {

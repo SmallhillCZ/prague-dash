@@ -1,17 +1,18 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { DashboardService } from "src/app/services/dashboard.service";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
 import { DepartureBoardData } from "../../schema/departure-board-data";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
 
 @Component({
-  selector: "app-departure-board-detail",
+  selector: "pd-departure-board-detail",
   templateUrl: "./departure-board-detail.component.html",
   styleUrls: ["./departure-board-detail.component.scss"],
 })
 export class DepartureBoardDetailComponent implements OnInit {
-  // TODO: call servie to get card
-  card!: DepartureBoardCard;
+  card?: DepartureBoardCard;
   departureBoard?: DepartureBoardData;
 
   limit = 40;
@@ -22,13 +23,25 @@ export class DepartureBoardDetailComponent implements OnInit {
 
   name?: string;
 
-  constructor(private departureBoardsService: DepartureBoardsService, private stopsService: StopsService) {}
+  constructor(
+    private dashboard: DashboardService,
+    private departureBoardsService: DepartureBoardsService,
+    private stopsService: StopsService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.loadDepartures();
+    this.route.params.subscribe((params) => this.loadCard(params["id"]));
+  }
+
+  async loadCard(id: string) {
+    this.card = await this.dashboard.getCard(id);
+    await this.loadDepartures();
   }
 
   async loadDepartures(refreshEvent?: any) {
+    if (!this.card) return;
+
     this.loading = true;
 
     if (this.card.definition.name !== null) {
@@ -36,7 +49,6 @@ export class DepartureBoardDetailComponent implements OnInit {
     } else {
       const stop = await this.stopsService.getClosestStop();
       this.name = stop.name;
-      console.log(stop);
     }
 
     const definition: LoadDeparturesOptions = {
@@ -53,7 +65,7 @@ export class DepartureBoardDetailComponent implements OnInit {
   }
 
   async loadMore(event: any) {
-    if (!this.departureBoard) return;
+    if (!this.departureBoard || !this.card) return;
 
     const definition: LoadDeparturesOptions = {
       ...this.card.definition,

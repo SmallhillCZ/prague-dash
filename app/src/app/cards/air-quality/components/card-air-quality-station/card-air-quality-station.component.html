@@ -1,34 +1,32 @@
-<ion-card-header>
-  <ion-card-subtitle>
-    <ion-label>💨 {{ name }}</ion-label>
-  </ion-card-subtitle>
-</ion-card-header>
-<ion-card-content>
-  <table *ngIf="components" class="card-table">
-    <tr *ngFor="let component of components">
-      <td class="name">{{ component.typeInfo?.name || component.type }}</td>
-      <td class="value">
-        <ion-text
-          *ngIf="
-            component.typeInfo?.limit && component.averaged_time.value > component.typeInfo!.limit!;
-            else valueNotLimit
-          "
-          color="danger"
-          >{{ component.averaged_time.value }} µg/m³</ion-text
-        >
-        <ng-template #valueNotLimit>
-          <ion-text>{{ component.averaged_time.value }} µg/m³</ion-text>
-        </ng-template>
-      </td>
-      <td class="timespan">(Ø {{ component.averaged_time.averaged_hours }} h)</td>
-    </tr>
-  </table>
+<pd-card>
+  <pd-card-title>💨 {{ name }}</pd-card-title>
+  <pd-card-content>
+    <table *ngIf="components" class="card-table">
+      <tr *ngFor="let component of components">
+        <td class="name">{{ component.typeInfo?.name || component.type }}</td>
+        <td class="value">
+          <ion-text
+            *ngIf="
+              component.typeInfo?.limit && component.averaged_time.value > component.typeInfo!.limit!;
+              else valueNotLimit
+            "
+            color="danger"
+            >{{ component.averaged_time.value }} µg/m³</ion-text
+          >
+          <ng-template #valueNotLimit>
+            <ion-text>{{ component.averaged_time.value }} µg/m³</ion-text>
+          </ng-template>
+        </td>
+        <td class="timespan">(Ø {{ component.averaged_time.averaged_hours }} h)</td>
+      </tr>
+    </table>
 
-  <table *ngIf="!components" class="card-table">
-    <tr *ngFor="let item of loading">
-      <td class="name"><ion-skeleton-text></ion-skeleton-text></td>
-      <td class="value"><ion-skeleton-text></ion-skeleton-text></td>
-      <td class="timespan"><ion-skeleton-text></ion-skeleton-text></td>
-    </tr>
-  </table>
-</ion-card-content>
+    <table *ngIf="!components" class="card-table">
+      <tr *ngFor="let item of loading">
+        <td class="name"><ion-skeleton-text></ion-skeleton-text></td>
+        <td class="value"><ion-skeleton-text></ion-skeleton-text></td>
+        <td class="timespan"><ion-skeleton-text></ion-skeleton-text></td>
+      </tr>
+    </table>
+  </pd-card-content>
+</pd-card>

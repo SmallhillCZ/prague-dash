@@ -16,12 +16,17 @@
     </ion-item>
 
     <ion-reorder-group [disabled]="!sortCards" (ionItemReorder)="onReorder($any($event))">
-      <ion-item *ngFor="let card of page!.cards" [detail]="!sortCards" (click)="onCardClick(card)">
+      <ion-item *ngFor="let card of page!.cards">
         <ion-label>
           <h2>{{ card.title }}</h2>
           <p>{{ getCardTypeTitle(card) }}</p>
         </ion-label>
-        <ion-reorder slot="end"></ion-reorder>
+        <ion-buttons slot="end">
+          <ion-button *ngIf="!sortCards" color="danger" (click)="deleteCard(card)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-buttons>
       </ion-item>
     </ion-reorder-group>
   </ng-container>

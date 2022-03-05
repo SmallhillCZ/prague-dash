@@ -1,0 +1,13 @@
+<ion-card mode="ios" [ngClass]="classes">
+  <ion-card-header>
+    <ion-card-subtitle>
+      <ion-label>
+        <ng-content select="pd-card-title *"></ng-content>
+      </ion-label>
+    </ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ng-content select="pd-card-content *"></ng-content>
+  </ion-card-content>
+</ion-card>

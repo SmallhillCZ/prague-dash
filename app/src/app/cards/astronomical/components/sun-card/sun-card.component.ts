@@ -1,25 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Geolocation } from '@capacitor/geolocation';
-import { DateTime } from 'luxon';
-import { CardComponent } from 'src/app/schema/card-component';
+import { Component, Input, OnInit } from "@angular/core";
+import { Geolocation } from "@capacitor/geolocation";
+import { DateTime } from "luxon";
+import { CardComponent } from "src/app/schema/card-component";
 import * as SunCalc from "suncalc";
-import { SunCard } from '../../schema/sun-card';
-import { SunValuesData } from '../../schema/sun-values-data';
+import { SunCard } from "../../schema/sun-card";
+import { SunValuesData } from "../../schema/sun-values-data";
 
 @Component({
-  selector: 'app-sun-card',
-  templateUrl: './sun-card.component.html',
-  styleUrls: ['./sun-card.component.scss']
+  selector: "pd-sun-card",
+  templateUrl: "./sun-card.component.html",
+  styleUrls: ["./sun-card.component.scss"],
 })
 export class SunCardComponent implements CardComponent, OnInit {
-
   @Input() card!: SunCard;
 
   times?: SunCalc.GetTimesResult;
 
   wasSun?: boolean;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.getSunTimes();
@@ -35,14 +34,15 @@ export class SunCardComponent implements CardComponent, OnInit {
     const timesNext = SunCalc.getTimes(tomorrow, position.coords.latitude, position.coords.longitude);
 
     this.times = this.mergeTimes(times, timesNext);
-
   }
 
   private mergeTimes(times: SunCalc.GetTimesResult, ...mergeTimes: SunCalc.GetTimesResult[]): SunCalc.GetTimesResult {
     const now = new Date();
 
-    mergeTimes.forEach(mergeTimesItem => {
-      const values = (<[keyof SunCalc.GetTimesResult, SunCalc.GetTimesResult[keyof SunCalc.GetTimesResult]][]>Object.entries(mergeTimesItem));
+    mergeTimes.forEach((mergeTimesItem) => {
+      const values = <[keyof SunCalc.GetTimesResult, SunCalc.GetTimesResult[keyof SunCalc.GetTimesResult]][]>(
+        Object.entries(mergeTimesItem)
+      );
 
       values.forEach(([key, value]) => {
         if (times[key] < now) times[key] = value;
@@ -51,5 +51,4 @@ export class SunCardComponent implements CardComponent, OnInit {
 
     return times;
   }
-
 }

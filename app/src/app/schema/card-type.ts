@@ -1,13 +1,13 @@
-import { Card } from "./card";
+import { UrlTree } from "@angular/router";
 import { CardComponent } from "./card-component";
 import { LanguageValue } from "./language";
 
-export interface CardType<C extends Card = Card> {
-  type: C["type"];
+export interface CardType {
+  type: string;
+
+  title: LanguageValue<string>;
 
   component: new (...args: any[]) => CardComponent;
 
-  defaultDefinition?: any;
-
-  title: LanguageValue<string>;
+  createUrl?: string;
 }
