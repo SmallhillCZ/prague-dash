@@ -136,8 +136,6 @@ export class MapComponent implements OnInit, AfterViewInit, AfterContentInit {
       const iconEl = el.querySelector("div")!;
 
       iconEl.style["transform"] = this.getBearingTransform(markerEl.bearing);
-
-      console.log(iconEl);
     }
   }
 
