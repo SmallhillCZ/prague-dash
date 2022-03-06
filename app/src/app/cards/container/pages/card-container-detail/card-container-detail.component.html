@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button defaultHref="/" slot="start"></ion-back-button>
+    <ion-title>{{ card?.title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="card" routerLink="../settings"><ion-icon name="settings-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="card">
+  <pd-container-detail-card *ngFor="let type of types" [card]="card" [type]="type"></pd-container-detail-card>
+</ion-content>

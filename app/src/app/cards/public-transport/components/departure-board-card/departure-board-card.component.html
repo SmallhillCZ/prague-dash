@@ -1,43 +1,44 @@
-<ion-card-header>
-  <ion-card-subtitle>
-    <ion-label>
-      🚏 {{ name || "Načítám..." }}
-      <ion-icon *ngIf="!card.definition.name" name="locate"></ion-icon>
-    </ion-label>
-  </ion-card-subtitle>
-</ion-card-header>
-<ion-card-content>
-  <table *ngIf="!loading && departureBoard" class="card-table">
-    <tr *ngFor="let departure of departureBoard.departures" [class.at-stop]="departure.trip.is_at_stop">
-      <td class="route">
-        <app-route-badge [route]="departure.route"></app-route-badge>
-      </td>
+<pd-card [routerLink]="['/public-transport/departure-boards/card', card.id, 'detail']">
+  <pd-card-title>
+    🚏 {{ name || "Načítám..." }}
+    <ion-icon *ngIf="!card.definition.name" name="locate"></ion-icon>
+  </pd-card-title>
 
-      <td class="headsign">
-        {{ departure.trip.headsign }}
-        <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible"
-          >&nbsp;♿</ng-container
-        >
-      </td>
+  <pd-card-content>
+    <table *ngIf="!loading && departureBoard" class="card-table">
+      <tr *ngFor="let departure of departureBoard.departures" [class.at-stop]="departure.trip.is_at_stop">
+        <td class="route">
+          <pd-route-badge [route]="departure.route"></pd-route-badge>
+        </td>
 
-      <td class="departure">
-        {{ departure | departureTime: card.definition }}
-      </td>
+        <td class="headsign">
+          {{ departure.trip.headsign }}
+          <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible"
+            >&nbsp;♿</ng-container
+          >
+        </td>
 
-      <td class="delay">
-        <ion-text [color]="departure | departureDelayColor">{{ departure | departureDelay: card.definition }}</ion-text>
-      </td>
-    </tr>
-  </table>
+        <td class="departure">
+          {{ departure | departureTime: card.definition }}
+        </td>
 
-  <p *ngIf="!loading && !departureBoard">Pro zastávku {{ name }} nebyly nalezeny žádné odjezdy.</p>
+        <td class="delay">
+          <ion-text [color]="departure | departureDelayColor">{{
+            departure | departureDelay: card.definition
+          }}</ion-text>
+        </td>
+      </tr>
+    </table>
 
-  <table *ngIf="loading" class="card-table">
-    <tr *ngFor="let departure of loadingDepartures">
-      <td class="route"><ion-badge color="light">&nbsp;</ion-badge></td>
-      <td class="headsign"><ion-skeleton-text></ion-skeleton-text></td>
-      <td class="departure"><ion-skeleton-text></ion-skeleton-text></td>
-      <td class="delay"><ion-skeleton-text></ion-skeleton-text></td>
-    </tr>
-  </table>
-</ion-card-content>
+    <p *ngIf="!loading && !departureBoard">Pro zastávku {{ name }} nebyly nalezeny žádné odjezdy.</p>
+
+    <table *ngIf="loading" class="card-table">
+      <tr *ngFor="let departure of loadingDepartures">
+        <td class="route"><ion-badge color="light">&nbsp;</ion-badge></td>
+        <td class="headsign"><ion-skeleton-text></ion-skeleton-text></td>
+        <td class="departure"><ion-skeleton-text></ion-skeleton-text></td>
+        <td class="delay"><ion-skeleton-text></ion-skeleton-text></td>
+      </tr>
+    </table>
+  </pd-card-content>
+</pd-card>
