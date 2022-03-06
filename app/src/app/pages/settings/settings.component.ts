@@ -3,7 +3,7 @@ import { NgForm } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { SettingsService } from "src/app/services/settings.service";
 import { AppSettings } from "src/app/schema/app-settings";
-import packageJSON from "../../../../package.json";
+import { App } from "@capacitor/app";
 
 @UntilDestroy()
 @Component({
@@ -14,7 +14,7 @@ import packageJSON from "../../../../package.json";
 export class SettingsComponent implements AfterViewInit {
   settings?: AppSettings;
 
-  appVersion = packageJSON.version;
+  appVersion?: string;
 
   @ViewChild("form") form!: NgForm;
 
@@ -28,5 +28,9 @@ export class SettingsComponent implements AfterViewInit {
 
   async loadSettings() {
     this.settings = await this.settingsService.getSettings();
+  }
+
+  async loadVersion() {
+    this.appVersion = await App.getInfo().then((info) => info.version);
   }
 }
