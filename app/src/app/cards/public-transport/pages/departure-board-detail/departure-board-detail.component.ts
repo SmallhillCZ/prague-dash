@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Params } from "@angular/router";
 import { NavController } from "@ionic/angular";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
@@ -95,8 +95,10 @@ export class DepartureBoardDetailComponent implements OnInit {
   }
 
   openDeparture(departure: DepartureData) {
-    if (this.hasPosition(departure))
-      this.navController.navigateForward("/public-transport/vehicle-position/" + departure.trip.id);
+    if (this.hasPosition(departure)) {
+      const queryParams: Params = { platform: departure.stop.id };
+      this.navController.navigateForward("/public-transport/vehicle-position/" + departure.trip.id, { queryParams });
+    }
   }
 
   hasPosition(departure: DepartureData) {

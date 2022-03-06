@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { Subject } from "rxjs";
 
+export type MapMarkerIconDirection = number | "left" | "right";
 @Component({
   selector: "pd-map-marker",
   templateUrl: "./map-marker.component.html",
@@ -10,6 +11,7 @@ export class MapMarkerComponent implements OnInit, OnChanges {
   @Input() coords!: [number, number];
   @Input() pointer: boolean = false;
   @Input() icon?: string;
+  @Input() iconDirection?: MapMarkerIconDirection;
   @Input() bearing?: number;
 
   changes = new Subject<SimpleChanges>();

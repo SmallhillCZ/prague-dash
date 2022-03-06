@@ -1,25 +1,44 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-back-button slot="start" defaultHref="/"></ion-back-button>
-    <ion-title *ngIf="vehiclePosition">
-      {{ getRouteType(vehiclePosition.properties.trip.gtfs.route_type) }}
-      {{ vehiclePosition.properties.trip.gtfs.route_short_name }}
-      ➡️ {{ vehiclePosition.properties.trip.gtfs.trip_headsign }}
-    </ion-title>
-    <ion-title *ngIf="!vehiclePosition"> Načítám... </ion-title>
+    <ion-title>Poloha vozu</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
-  <pd-map *ngIf="gpsCoords" [center]="gpsCoords" [autoCenter]="true">
-    <!-- zastavka -->
-    <pd-map-marker [coords]="gpsCoords" icon="🧍"></pd-map-marker>
-    <!-- vozidlo -->
-    <pd-map-marker
-      *ngIf="vehiclePosition"
-      [coords]="vehiclePosition.geometry.coordinates"
-      [pointer]="true"
-      [icon]="getRouteIcon(vehiclePosition.properties.trip.gtfs.route_type)"
-      [bearing]="vehiclePosition.properties.last_position.bearing"
-    ></pd-map-marker>
-  </pd-map>
-</ion-content>
+<pd-map [autoCenter]="true" [poi]="false">
+  <!-- stop -->
+  <pd-map-marker *ngIf="targetPlatform" [coords]="[targetPlatform.lon, targetPlatform.lat]" icon="🚏"></pd-map-marker>
+
+  <!-- vehicle -->
+  <pd-map-marker
+    *ngIf="vehiclePosition"
+    [coords]="vehiclePosition.geometry.coordinates"
+    [pointer]="true"
+    [icon]="routeType?.icon"
+    [iconDirection]="routeType?.iconDirection"
+    [bearing]="vehiclePosition.properties.last_position.bearing"
+  ></pd-map-marker>
+</pd-map>
+
+<ion-footer *ngIf="vehiclePosition" class="ion-padding">
+  <h3>
+    {{ routeType?.icon }}
+    {{ vehiclePosition.properties.trip.gtfs.route_short_name }}
+    ➡️ {{ vehiclePosition.properties.trip.gtfs.trip_headsign }}
+  </h3>
+  <table>
+    <tr>
+      <th>Aktuální zastávka</th>
+      <th class="delay">Zpoždění</th>
+    </tr>
+    <tr>
+      <td>{{ lastPlatform?.stop?.name }}</td>
+      <td class="delay">{{ formatDelay(vehiclePosition.properties.last_position.delay.actual) }}</td>
+    </tr>
+    <tr>
+      <th>Příští zastávka</th>
+    </tr>
+    <tr>
+      <td>{{ nextPlatform?.stop?.name }}</td>
+    </tr>
+  </table>
+</ion-footer>

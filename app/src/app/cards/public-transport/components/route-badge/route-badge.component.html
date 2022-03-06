@@ -1,3 +1,6 @@
-<ion-badge [ngStyle]="route | routeStyle" [class.is_substitute_transport]="route.is_substitute_transport">
-  {{ route.short_name }}
+<ion-badge
+  [ngStyle]="departure | departureStyle"
+  [class.is_substitute_transport]="departure.route.is_substitute_transport"
+>
+  {{ departure.route.short_name }}
 </ion-badge>

@@ -1,13 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Geolocation } from "@capacitor/geolocation";
 import { AlertController } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { Subscription, timer } from "rxjs";
 import { ApiError } from "src/app/services/api.service";
+import { PlatformData } from "../../schema/platform-data";
 import { RouteType, RouteTypes } from "../../schema/route-type";
-import { TripData } from "../../schema/trip";
 import { VehiclePosition } from "../../schema/vehicle-position";
+import { StopsService } from "../../services/stops.service";
 import { VehiclePositionService } from "../../services/vehicle-position.service";
 
 @UntilDestroy()
@@ -18,13 +18,16 @@ import { VehiclePositionService } from "../../services/vehicle-position.service"
 })
 export class VehiclePositionComponent implements OnInit {
   vehiclePosition?: VehiclePosition;
+  routeType?: RouteType;
+  targetPlatform?: PlatformData;
+  lastPlatform?: PlatformData;
+  nextPlatform?: PlatformData;
 
-  gpsCoords?: [number, number];
-
-  timerSubscription?: Subscription;
+  private timerSubscription?: Subscription;
 
   constructor(
     private vehiclePositions: VehiclePositionService,
+    private stops: StopsService,
     private route: ActivatedRoute,
     private alertController: AlertController
   ) {}
@@ -38,7 +41,23 @@ export class VehiclePositionComponent implements OnInit {
   async updatePosition() {
     try {
       const tripId = this.route.snapshot.params["trip_id"];
+      const platformId = this.route.snapshot.queryParams["platform"];
+
       this.vehiclePosition = await this.vehiclePositions.getVehiclePosition(tripId);
+
+      this.routeType = RouteTypes[this.vehiclePosition.properties.trip.gtfs.route_type];
+
+      if (platformId) {
+        this.targetPlatform = await this.loadPlatform(platformId);
+      }
+
+      if (this.lastPlatform?.id !== this.vehiclePosition.properties.last_position.last_stop.id) {
+        this.lastPlatform = await this.loadPlatform(this.vehiclePosition.properties.last_position.last_stop.id);
+      }
+
+      if (this.nextPlatform?.id !== this.vehiclePosition.properties.last_position.next_stop.id) {
+        this.nextPlatform = await this.loadPlatform(this.vehiclePosition.properties.last_position.next_stop.id);
+      }
     } catch (err) {
       if (err instanceof ApiError && err.status === 404) {
         this.timerSubscription?.unsubscribe();
@@ -48,16 +67,14 @@ export class VehiclePositionComponent implements OnInit {
         alert.present();
       }
     }
-
-    const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true });
-    this.gpsCoords = [pos.coords.longitude, pos.coords.latitude];
   }
 
-  getRouteIcon(routeType: RouteType) {
-    return RouteTypes[routeType]?.icon || "❓";
+  async loadPlatform(id: string) {
+    return this.stops.getPlatform(id);
   }
 
-  getRouteType(routeType: RouteType) {
-    return RouteTypes[routeType]?.name_short.cs || "Vůz";
+  formatDelay(delay: number) {
+    if (Math.abs(delay) >= 60) return `${Math.round(delay / 60)} min`;
+    else return `${delay} s`;
   }
 }

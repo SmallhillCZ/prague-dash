@@ -1,5 +1,5 @@
 import { Feature, FeatureCollection } from "src/app/schema/golemio-api";
-import { RouteType } from "./route-type";
+import { RouteTypeID } from "./route-type";
 
 export type VehiclePosition = Feature<VehiclePositionProperties>;
 
@@ -34,7 +34,7 @@ export interface VehiclePositionProperties {
     gtfs: {
       route_id: string;
       route_short_name: string;
-      route_type: RouteType;
+      route_type: RouteTypeID;
       trip_headsign: string;
       trip_id: string;
       trip_short_name: unknown;
