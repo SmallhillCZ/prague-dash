@@ -1,19 +1,18 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ChartData, ChartOptions, ScriptableLineSegmentContext } from 'chart.js';
-import { DateTime, Duration } from 'luxon';
-import { Language } from 'src/app/schema/language';
-import { ContainerCard } from '../../schema/container-card';
-import { ContainerDataType } from '../../schema/container-data';
-import { ContainerTypes } from '../../schema/container-type';
-import { ContainerService } from '../../services/container.service';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { ChartData, ChartOptions, ScriptableLineSegmentContext } from "chart.js";
+import { DateTime, Duration } from "luxon";
+import { Language } from "src/app/schema/language";
+import { ContainerCard } from "../../schema/container-card";
+import { ContainerDataType } from "../../schema/container-data";
+import { ContainerTypes } from "../../schema/container-type";
+import { ContainerService } from "../../services/container.service";
 
 @Component({
-  selector: 'app-container-detail-card',
-  templateUrl: './container-detail-card.component.html',
-  styleUrls: ['./container-detail-card.component.scss']
+  selector: "pd-container-detail-card",
+  templateUrl: "./container-detail-card.component.html",
+  styleUrls: ["./container-detail-card.component.scss"],
 })
 export class ContainerDetailCardComponent implements OnInit, OnChanges {
-
   @Input() card!: ContainerCard;
   @Input() type!: ContainerDataType;
 
@@ -25,50 +24,47 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
   chartOptions: ChartOptions = {
     elements: {
       point: {
-        radius: 0
+        radius: 0,
       },
       line: {
         borderWidth: 2,
-      }
+      },
     },
     scales: {
       horizontal: {
         axis: "x",
-        type: 'time',
+        type: "time",
         time: {
           unit: "day",
           displayFormats: {
-            hour: 'HH',
+            hour: "HH",
             day: "d. M.",
             week: "d. M.",
           },
         },
         ticks: {
-          minRotation: 45
-        }
+          minRotation: 45,
+        },
       },
       vertical: {
         axis: "y",
         display: false,
-        max: 1
-      }
+        max: 1,
+      },
     },
     plugins: {
       tooltip: {
-        enabled: false
+        enabled: false,
       },
       legend: {
-        display: false
-      }
-    }
+        display: false,
+      },
+    },
   };
 
-  constructor(
-    private containerService: ContainerService
-  ) { }
+  constructor(private containerService: ContainerService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["type"]) {
@@ -106,13 +102,15 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
           //   borderDash: ctx => this.isUnknown(ctx, [6, 6]),
           //   borderWidth: ctx => this.isUnknown(ctx, 2),
           // }
-        }
-      ]
+        },
+      ],
     };
   }
 
   private isUnknown<T>(ctx: ScriptableLineSegmentContext, value: T): T | undefined {
-    return ctx.p0.parsed.y - ctx.p1.parsed.y > 0.2 && (ctx.p1.parsed.x - ctx.p0.parsed.x) > 1000 * 60 * 60 * 6 ? value : undefined;
+    return ctx.p0.parsed.y - ctx.p1.parsed.y > 0.2 && ctx.p1.parsed.x - ctx.p0.parsed.x > 1000 * 60 * 60 * 6
+      ? value
+      : undefined;
   }
 
   getContainerTypeTitle(type: ContainerDataType, lang: Language): string {
@@ -123,7 +121,10 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
     const duration = Duration.fromISO(cleaningFrequency.duration);
 
     const numbers = ["jednou", "dvakrát", "třikrát", "čtyřikrát", "pětkrát", "šestkrát", "sedmkrát", "osmkrát"];
-    let frequency = cleaningFrequency.frequency > numbers.length ? `${cleaningFrequency.frequency} krát` : numbers[cleaningFrequency.frequency - 1];
+    let frequency =
+      cleaningFrequency.frequency > numbers.length
+        ? `${cleaningFrequency.frequency} krát`
+        : numbers[cleaningFrequency.frequency - 1];
 
     const durationParts: string[] = [];
     if (duration.days === 1) durationParts.push(`den`);
@@ -140,5 +141,4 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
 
     return `${frequency} za ${durationParts.join(", ")}`;
   }
-
 }
