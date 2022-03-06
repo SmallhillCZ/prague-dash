@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { SettingsService } from "src/app/services/settings.service";
@@ -11,7 +11,7 @@ import { App } from "@capacitor/app";
   templateUrl: "./settings.component.html",
   styleUrls: ["./settings.component.scss"],
 })
-export class SettingsComponent implements AfterViewInit {
+export class SettingsComponent implements OnInit, AfterViewInit {
   settings?: AppSettings;
 
   appVersion?: string;
@@ -19,6 +19,10 @@ export class SettingsComponent implements AfterViewInit {
   @ViewChild("form") form!: NgForm;
 
   constructor(private settingsService: SettingsService) {}
+
+  ngOnInit(): void {
+    this.loadVersion();
+  }
 
   ngAfterViewInit(): void {
     this.loadSettings();

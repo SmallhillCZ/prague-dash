@@ -32,6 +32,6 @@
 
   <div class="footer">
     <p><a href="https://praguedash.cz/privacy">Ochrana osobních údajů</a></p>
-    <p>Verze {{ appVersion }}</p>
+    <p *ngIf="appVersion">Verze {{ appVersion }}</p>
   </div>
 </ion-content>
