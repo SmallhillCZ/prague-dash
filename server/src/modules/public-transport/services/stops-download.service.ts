@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GolemioService } from 'src/shared/services/golemio.service';
@@ -14,10 +15,10 @@ export class StopsDownloadService {
 
   constructor(
     @InjectRepository(Stop) private stopsRepository: Repository<Stop>,
-    private golemio: GolemioService
+    private golemio: GolemioService,
+    private config: ConfigService
   ) {
-
-    this.updateStops();
+    if (this.config.get("NODE_ENV") === "production") this.updateStops();
   }
 
   @Interval(24 * 60 * 60 * 1000)

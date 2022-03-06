@@ -55,8 +55,6 @@ export class CardContainerSelectComponent implements OnInit {
     };
     const pageId = this.route.snapshot.queryParams["page"];
 
-    console.log(pageId, this.route.snapshot.queryParams);
-
     await this.dash.createCard(cardData, pageId);
 
     this.navController.navigateRoot("/dash", { queryParams: { page: pageId } });

@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-back-button slot="start" defaultHref="/"></ion-back-button>
+    <ion-title *ngIf="vehiclePosition">
+      {{ getRouteType(vehiclePosition.properties.trip.gtfs.route_type) }}
+      {{ vehiclePosition.properties.trip.gtfs.route_short_name }}
+      ➡️ {{ vehiclePosition.properties.trip.gtfs.trip_headsign }}
+    </ion-title>
+    <ion-title *ngIf="!vehiclePosition"> Načítám... </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <pd-map *ngIf="gpsCoords" [center]="gpsCoords" [autoCenter]="true">
+    <!-- zastavka -->
+    <pd-map-marker [coords]="gpsCoords" icon="🧍"></pd-map-marker>
+    <!-- vozidlo -->
+    <pd-map-marker
+      *ngIf="vehiclePosition"
+      [coords]="vehiclePosition.geometry.coordinates"
+      [pointer]="true"
+      [icon]="getRouteIcon(vehiclePosition.properties.trip.gtfs.route_type)"
+      [bearing]="vehiclePosition.properties.last_position.bearing"
+    ></pd-map-marker>
+  </pd-map>
+</ion-content>

@@ -54,7 +54,7 @@ export class DepartureBoardSelectComponent implements OnInit, OnDestroy {
       {} as { [id: string]: boolean }
     );
 
-    this.createCard(definition, "Nejbližší zastávka");
+    this.createCard(definition, stop.name);
   }
 
   selectClosestStop() {

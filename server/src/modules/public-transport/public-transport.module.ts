@@ -9,14 +9,16 @@ import { Stop } from './entities/stop.entity';
 import { DepartureBoardsService } from './services/departure-boards.service';
 import { StopsDownloadService } from './services/stops-download.service';
 import { StopsService } from './services/stops.service';
+import { VehiclePositionsService } from './services/vehicle-positions.service';
+import { VehiclePositionsController } from './controllers/vehicle-positions.controller';
 
 @Module({
-  providers: [StopsService, StopsDownloadService, DepartureBoardsService],
+  providers: [StopsService, StopsDownloadService, DepartureBoardsService, VehiclePositionsService],
   imports: [
     TypeOrmModule.forFeature([Stop, StopPlatform]),
     ConfigModule,
     SharedModule
   ],
-  controllers: [StopsController, DepartureBoardsController]
+  controllers: [StopsController, DepartureBoardsController, VehiclePositionsController]
 })
 export class PublicTransportModule { }

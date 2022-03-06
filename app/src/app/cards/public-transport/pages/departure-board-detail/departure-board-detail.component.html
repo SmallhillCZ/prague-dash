@@ -18,7 +18,12 @@
   </ion-refresher>
 
   <ion-list *ngIf="!loading && departureBoard">
-    <ion-item *ngFor="let departure of departureBoard.departures">
+    <ion-item
+      *ngFor="let departure of departureBoard.departures"
+      (click)="openDeparture(departure)"
+      [button]="hasPosition(departure)"
+      [detail]="hasPosition(departure)"
+    >
       <ion-avatar slot="start">
         <div class="circle" [ngStyle]="departure.route | routeStyle">
           <div class="text">{{ departure.route.short_name }}</div>
@@ -34,7 +39,7 @@
         </h2>
       </ion-label>
 
-      <ion-label class="time" slot="end">
+      <ion-label class="time" slot="end" [class.no-position]="!hasPosition(departure)">
         {{ departure | departureTime: card.definition }}
         <br />
         <ion-text class="delay" [color]="departure | departureDelayColor">

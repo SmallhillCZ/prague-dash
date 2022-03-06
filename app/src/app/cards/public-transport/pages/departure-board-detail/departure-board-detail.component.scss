@@ -18,6 +18,13 @@ ion-item {
   .time {
     text-align: right;
   }
+  .time.no-position.md {
+    margin-right: 20px;
+  }
+  .time.no-position.ios {
+    margin-right: 30px;
+  }
+
   .delay {
     font-size: 0.7em;
   }

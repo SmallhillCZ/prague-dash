@@ -13,6 +13,7 @@ import { DepartureDelayPipe } from "./pipes/departure-delay.pipe";
 import { DepartureTimePipe } from "./pipes/departure-time.pipe";
 import { RouteStylePipe } from "./pipes/route-style.pipe";
 import { PublicTransportRoutingModule } from "./public-transport-routing.module";
+import { VehiclePositionComponent } from "./pages/vehicle-position/vehicle-position.component";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { PublicTransportRoutingModule } from "./public-transport-routing.module"
     RouteStylePipe,
     DepartureDelayPipe,
     DepartureDelayColorPipe,
+    VehiclePositionComponent,
   ],
   imports: [CommonModule, SharedModule, PublicTransportRoutingModule],
   providers: [DatePipe, { provide: CARDS, multi: true, useValue: DepartureBoardsCardType }],

@@ -5,15 +5,17 @@ import { NestApplicationOptions } from '@nestjs/common';
 
 async function bootstrap() {
 
+  var environment = process.env.NODE_ENV || 'development';
+
   const options: NestApplicationOptions = {
-    logger: process.env["NODE_ENV"] === "development" ? ['log', 'debug', 'error', 'verbose', 'warn'] : ['error', 'warn', 'log'],
+    logger: environment === "development" ? ['log', 'debug', 'error', 'verbose', 'warn'] : ['error', 'warn', 'log'],
   };
 
   const app = await NestFactory.create(AppModule, options);
 
   const configService = app.get(ConfigService);
 
-  if (process.env["NODE_ENV"] === "development") app.enableCors({
+  if (environment === "development") app.enableCors({
     origin: [
       "http://localhost:4200"
     ]
