@@ -4,6 +4,7 @@
   "scripts": {
     "build": "ng build",
     "build:docs": "ng build --configuration=demo",
+    "build:android": "cd android && \"./gradlew\" :app:bundleRelease",
     "dev": "ng serve",
     "dev:local": "ng serve --configuration=local",
     "dev:android": "ionic capacitor run android -l --external",
