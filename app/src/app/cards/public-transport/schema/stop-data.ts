@@ -1,15 +1,9 @@
-export interface StopPlatformData {
-  id: string;
-  name: string;
-  lat: number;
-  lon: number;
+import { PlatformData } from "./platform-data";
 
-  lines?: any[]; // TODO: load routes on backend
-}
+export type StopPlatformData = Omit<PlatformData, "stop">;
 
 export interface StopData {
   id: string;
   name: string;
   platforms: StopPlatformData[];
-
 }

@@ -25,7 +25,7 @@
       [detail]="hasPosition(departure)"
     >
       <ion-avatar slot="start">
-        <div class="circle" [ngStyle]="departure.route | routeStyle">
+        <div class="circle" [ngStyle]="departure | departureStyle">
           <div class="text">{{ departure.route.short_name }}</div>
         </div>
       </ion-avatar>

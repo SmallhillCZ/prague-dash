@@ -1,6 +1,5 @@
-import { Component, Input, OnChanges, OnInit } from "@angular/core";
-import { DepartureBoardData } from "../../schema/departure-board-data";
-import { RouteType } from "../../schema/route-type";
+import { Component, Input, OnInit } from "@angular/core";
+import { DepartureData } from "../../schema/departure-board-data";
 
 @Component({
   selector: "pd-route-badge",
@@ -9,7 +8,7 @@ import { RouteType } from "../../schema/route-type";
 })
 export class RouteBadgeComponent implements OnInit {
   @Input()
-  route!: DepartureBoardData["departures"][0]["route"];
+  departure!: DepartureData;
 
   constructor() {}
 
