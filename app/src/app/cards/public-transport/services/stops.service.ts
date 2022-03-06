@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { ApiService } from "src/app/services/api.service";
-import { StopData } from "../schema/stop-data";
 import { Geolocation } from "@capacitor/geolocation";
+import { ApiService } from "src/app/services/api.service";
+import { PlatformData } from "../schema/platform-data";
+import { StopData } from "../schema/stop-data";
 
 @Injectable({
   providedIn: "root",
@@ -22,8 +23,8 @@ export class StopsService {
     return this.api.get<StopData[]>("stops", params);
   }
 
-  async getStop(options: { name: string }) {
-    return this.api.get<StopData>("stops/" + options.name);
+  async getStop(name: string) {
+    return this.api.get<StopData>("stops/" + name);
   }
 
   async getClosestStop() {
@@ -33,5 +34,9 @@ export class StopsService {
     }));
 
     return this.api.get<StopData>("stops/closest", position);
+  }
+
+  async getPlatform(id: string) {
+    return this.api.get<PlatformData>("platforms/" + id);
   }
 }

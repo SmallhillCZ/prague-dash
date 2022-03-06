@@ -11,14 +11,25 @@ import { StopsDownloadService } from './services/stops-download.service';
 import { StopsService } from './services/stops.service';
 import { VehiclePositionsService } from './services/vehicle-positions.service';
 import { VehiclePositionsController } from './controllers/vehicle-positions.controller';
+import { PlatformsController } from './controllers/platforms.controller';
 
 @Module({
-  providers: [StopsService, StopsDownloadService, DepartureBoardsService, VehiclePositionsService],
+  providers: [
+    StopsService,
+    StopsDownloadService,
+    DepartureBoardsService,
+    VehiclePositionsService,
+  ],
   imports: [
     TypeOrmModule.forFeature([Stop, StopPlatform]),
     ConfigModule,
-    SharedModule
+    SharedModule,
   ],
-  controllers: [StopsController, DepartureBoardsController, VehiclePositionsController]
+  controllers: [
+    StopsController,
+    PlatformsController,
+    DepartureBoardsController,
+    VehiclePositionsController,
+  ],
 })
-export class PublicTransportModule { }
+export class PublicTransportModule {}

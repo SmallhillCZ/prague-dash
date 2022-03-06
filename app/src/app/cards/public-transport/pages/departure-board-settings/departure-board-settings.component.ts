@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnChanges, OnInit } from "@angular/core";
+import { Component, OnChanges, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { DepartureBoardCard, DepartureBoardCardDefinition } from "../../schema/departure-board-card";
@@ -35,7 +35,7 @@ export class DepartureBoardSettingsComponent implements OnInit, OnChanges {
 
   async loadDepartureBoard() {
     if (this.definition.name) {
-      this.stop = await this.stopsService.getStop({ name: this.definition.name });
+      this.stop = await this.stopsService.getStop(this.definition.name);
     }
   }
 

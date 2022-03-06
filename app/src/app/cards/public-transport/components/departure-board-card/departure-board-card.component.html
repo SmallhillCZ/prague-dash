@@ -8,7 +8,7 @@
     <table *ngIf="!loading && departureBoard" class="card-table">
       <tr *ngFor="let departure of departureBoard.departures" [class.at-stop]="departure.trip.is_at_stop">
         <td class="route">
-          <pd-route-badge [route]="departure.route"></pd-route-badge>
+          <pd-route-badge [departure]="departure"></pd-route-badge>
         </td>
 
         <td class="headsign">
