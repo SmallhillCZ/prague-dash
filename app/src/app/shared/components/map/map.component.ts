@@ -152,10 +152,13 @@ export class MapComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   private getBearingTransform(bearing: number) {
     let transformDeg = bearing - 270;
-    if (transformDeg > 270) transformDeg -= 180;
-    if (transformDeg < -90) transformDeg += 180;
+    let transformString = `rotate(${transformDeg}deg)`;
 
-    return `rotate(${transformDeg}deg)`;
+    if (transformDeg > 270 || transformDeg < -90) {
+      transformString += ` scaleY(-1)`;
+    }
+
+    return transformString;
   }
 
   private compareCoords(a: [number, number], b: [number, number]) {
