@@ -3,10 +3,10 @@ import { ApiService } from "src/app/services/api.service";
 import { DepartureBoardData } from "../schema/departure-board-data";
 
 export interface LoadDeparturesOptions {
-  allPlatforms: boolean;
-  name: string;
-  platforms: { [id: string]: boolean };
-  limit: number;
+  allPlatforms?: boolean;
+  name?: string;
+  platforms: { [id: string]: boolean } | string[];
+  limit?: number;
   offset?: number;
 }
 
@@ -27,16 +27,25 @@ export class DepartureBoardsService {
     //   const id =
     //   return await this.getDepartureBoard({ name: definition.name, id, limit: definition.limit, offset: definition.offset });
     // }
+    let platforms: string[] | undefined;
+
+    if (options.allPlatforms) {
+      platforms = undefined;
+    } else if (Array.isArray(options.platforms)) {
+      platforms = options.platforms;
+    } else if (typeof options.platforms === "object") {
+      platforms = Object.entries(options.platforms)
+        .filter((entry) => !!entry[1])
+        .map((entry) => entry[0]);
+    }
+
     const params = {
       name: options.name,
-      id: options.allPlatforms
-        ? undefined
-        : Object.entries(options.platforms)
-            .filter((entry) => !!entry[1])
-            .map((entry) => entry[0]),
       limit: options.limit,
       offset: options.offset,
+      id: platforms,
     };
+
     return this.api.get<DepartureBoardData>("departure-boards", params);
   }
 }

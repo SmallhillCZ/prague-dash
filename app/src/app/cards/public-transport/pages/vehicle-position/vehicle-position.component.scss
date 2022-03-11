@@ -29,8 +29,13 @@ ion-footer {
       font-weight: normal;
       text-align: left;
     }
+
+    th.delay,
     td.delay {
-      width: 70px;
+      width: 80px;
+    }
+    td.delay {
+      white-space: nowrap;
     }
   }
 }

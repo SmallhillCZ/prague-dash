@@ -39,7 +39,7 @@ export interface DepartureData {
   };
 }
 
-interface StopData {
+export interface DepartureStopData {
   level_id: string;
   location_type: number;
   parent_station: string;
@@ -58,6 +58,6 @@ interface StopData {
 
 export interface DepartureBoardData {
   departures: DepartureData[];
-  stops: StopData[];
+  stops: DepartureStopData[];
   infotexts: any[];
 }

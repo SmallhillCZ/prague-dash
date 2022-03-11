@@ -6,7 +6,11 @@
 </ion-header>
 <pd-map [autoCenter]="true" [poi]="false">
   <!-- stop -->
-  <pd-map-marker *ngIf="targetPlatform" [coords]="[targetPlatform.lon, targetPlatform.lat]" icon="🚏"></pd-map-marker>
+  <pd-map-marker
+    *ngIf="departurePlatform"
+    [coords]="[departurePlatform.lon, departurePlatform.lat]"
+    icon="🚏"
+  ></pd-map-marker>
 
   <!-- vehicle -->
   <pd-map-marker
@@ -26,19 +30,26 @@
     ➡️ {{ vehiclePosition.properties.trip.gtfs.trip_headsign }}
   </h3>
   <table>
-    <tr>
-      <th>Aktuální zastávka</th>
-      <th class="delay">Zpoždění</th>
-    </tr>
-    <tr>
-      <td>{{ lastPlatform?.stop?.name }}</td>
-      <td class="delay">{{ formatDelay(vehiclePosition.properties.last_position.delay.actual) }}</td>
-    </tr>
-    <tr>
-      <th>Příští zastávka</th>
-    </tr>
-    <tr>
-      <td>{{ nextPlatform?.stop?.name }}</td>
-    </tr>
+    <ng-container *ngIf="lastPlatform">
+      <tr>
+        <th>Informace ze zastávky</th>
+        <th class="delay">Zpoždění</th>
+      </tr>
+      <tr>
+        <td>{{ lastPlatform?.stop?.name }}</td>
+        <td class="delay">{{ delayTime }}</td>
+      </tr>
+    </ng-container>
+    <ng-container *ngIf="departurePlatform">
+      <tr>
+        <th *ngIf="departurePlatformType === 'user'">Vaše zastávka</th>
+        <th *ngIf="departurePlatformType === 'next'">Příští zastávka</th>
+        <th>Příjezd za</th>
+      </tr>
+      <tr>
+        <td>{{ departurePlatform.stop.name }}</td>
+        <td class="delay">{{ departureTime || "-" }}</td>
+      </tr>
+    </ng-container>
   </table>
 </ion-footer>
