@@ -126,7 +126,7 @@ export class VehiclePositionComponent implements OnInit {
     const minutes = Math.abs(diff.minutes);
     const seconds = negative ? Math.abs(Math.ceil(diff.seconds)) : Math.abs(Math.floor(diff.seconds));
     const departureTime = `${minutes}m ${seconds}s`;
-    return `${negative ? "-" : ""}${departureTime}`;
+    return `${negative ? "−" : ""}${departureTime}`;
   }
 
   formatDelay(delay: number) {
