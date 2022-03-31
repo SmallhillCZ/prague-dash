@@ -28,7 +28,7 @@
     "extract-zip": "^2.0.1",
     "fs-extra": "^10.0.0",
     "luxon": "^2.1.1",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
