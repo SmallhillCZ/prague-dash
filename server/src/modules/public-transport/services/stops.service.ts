@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { coordinatesToDistanceSql } from 'src/utils/coordinates-to-distance-sql';
-import { ILike, Like, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { StopPlatform } from '../entities/stop-platform.entity';
 import { Stop } from '../entities/stop.entity';
 
@@ -54,16 +54,16 @@ export class StopsService {
   }
 
   async getStop(options: { name: string }) {
-    return this.stopsRepository.findOne(
-      { name: options.name },
-      { relations: ['platforms'] },
-    );
+    return this.stopsRepository.findOne({
+      where: { name: options.name },
+      relations: ['platforms'],
+    });
   }
 
   async getPlatform(options: { id: string }) {
-    return this.platformsRepository.findOne(
-      { id: options.id },
-      { relations: ['stop'] },
-    );
+    return this.platformsRepository.findOne({
+      where: { id: options.id },
+      relations: ['stop'],
+    });
   }
 }
