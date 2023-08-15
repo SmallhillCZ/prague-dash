@@ -1,43 +1,47 @@
 import { Logger, Module, ModuleMetadata } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import * as minimist from "minimist";
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as minimist from 'minimist';
 import { AppController } from './app.controller';
+import { dbConfig } from './data-source';
 import { Modules } from './modules/modules';
 import { SharedModule } from './shared/shared.module';
 
 /* DECIDE WHICH MODULES TO LOAD */
-const logger = new Logger("AppModule");
+const logger = new Logger('AppModule');
 
 var argv = minimist(process.argv.slice(2));
 
-let loadModules: ModuleMetadata["imports"] = [];
-let modules = argv["_"] || [];
+let loadModules: ModuleMetadata['imports'] = [];
+let modules = argv['_'] || [];
 
 if (modules.length) {
   logger.log(`Loading modules: ${modules}`);
-  loadModules = modules.map(item => Modules[item]);
-}
-else {
+  loadModules = modules.map((item) => Modules[item]);
+} else {
   logger.log(`Loading all modules`);
   loadModules = Object.values(Modules);
 }
+
+const typeOrmConfig: TypeOrmModuleOptions = {
+  ...dbConfig,
+  autoLoadEntities: true,
+};
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
 
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot(typeOrmConfig),
 
-    ConfigModule.forRoot({ isGlobal: true, }),
+    ConfigModule.forRoot({ isGlobal: true }),
 
     SharedModule,
 
-    ...loadModules
-
+    ...loadModules,
   ],
   controllers: [AppController],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

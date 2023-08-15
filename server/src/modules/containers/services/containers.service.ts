@@ -172,11 +172,6 @@ export class ContainersService {
           (item) => item.id === newLog.id && item.type_id === newLog.type_id,
         );
 
-        if (!oldLog) {
-          console.log(newLog);
-          break;
-        }
-
         // skip if exists and is the same
         if (
           oldLog &&
