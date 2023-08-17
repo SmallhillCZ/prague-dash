@@ -1,6 +1,5 @@
-import { parseI18nMeta } from "@angular/compiler/src/render3/view/i18n/meta";
 import { Injectable } from "@angular/core";
-import { Http, HttpOptions, HttpParams, HttpResponse } from "@capacitor-community/http";
+import { CapacitorHttp, HttpOptions, HttpParams, HttpResponse } from "@capacitor/core";
 import { environment } from "src/environments/environment";
 
 export type ApiParams = {
@@ -33,7 +32,7 @@ export class ApiService {
 
     if (!environment.production) console.debug(`Sending HTTP request`, options);
 
-    const res = await Http.get(options);
+    const res = await CapacitorHttp.get(options);
 
     if (res.status >= 300) {
       throw new ApiError(res);

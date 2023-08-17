@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ChartData, ChartOptions, ScriptableLineSegmentContext } from "chart.js";
 import { DateTime, Duration } from "luxon";
 import { Language } from "src/app/schema/language";
@@ -73,7 +73,7 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
   }
 
   async loadHistory() {
-    const since = DateTime.local().minus({ days: 7 }).toISODate();
+    const since = DateTime.local().minus({ days: 7 }).toISODate() || undefined;
     const history = await this.containerService.getHistory(this.card.definition.id, this.type.type, { since });
 
     const labels: string[] = [];
@@ -88,7 +88,7 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
       data.push(item.occupancy);
     });
 
-    labels.push(DateTime.local().toISOTime());
+    labels.push(DateTime.local().toISOTime()!);
     data.push(this.type.occupancy);
 
     this.chartData = {

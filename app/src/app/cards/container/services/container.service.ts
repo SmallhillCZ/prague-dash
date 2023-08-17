@@ -27,6 +27,8 @@ export class ContainerService {
   }
 
   async getHistory(id: string, type: number, options: { since?: string } = {}) {
-    return this.api.get<ContainerHistoryData[]>(`containers/${id}/${type}/history`, { since: options.since });
+    return this.api.get<ContainerHistoryData[]>(`containers/${id}/${type}/history`, {
+      since: options.since,
+    });
   }
 }
