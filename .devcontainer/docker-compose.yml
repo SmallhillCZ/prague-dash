@@ -1,0 +1,27 @@
+
+services:
+  devcontainer:
+    build: .
+    container_name: ${COMPOSE_PROJECT_NAME-prague-dash-dev}.devcontainer
+    environment:
+      DB_HOST: ${COMPOSE_PROJECT_NAME-prague-dash-dev}.db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_DATABASE: postgres
+
+
+  db:
+    image: postgres:14
+    container_name: ${COMPOSE_PROJECT_NAME-prague-dash-dev}.db
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    container_name: ${COMPOSE_PROJECT_NAME-prague-dash-dev}.adminer
+    ports:
+      - 8080:8080
