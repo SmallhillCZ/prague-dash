@@ -6,7 +6,12 @@
 
   <pd-card-content>
     <table *ngIf="!loading && departureBoard" class="card-table">
-      <tr *ngFor="let departure of departureBoard.departures" [class.at-stop]="departure.trip.is_at_stop">
+      <tr
+        *ngFor="let departure of departureBoard.departures"
+        class="departure"
+        [class.at-stop]="departure.trip.is_at_stop"
+        [class.is-cancelled]="departure.trip.is_canceled"
+      >
         <td class="route">
           <pd-route-badge [departure]="departure"></pd-route-badge>
         </td>
@@ -18,14 +23,15 @@
           >
         </td>
 
-        <td class="departure">
-          {{ departure | departureTime: card.definition }}
+        <td class="departureTime">
+          {{ departure | departureTime : card.definition }}
         </td>
 
         <td class="delay">
-          <ion-text [color]="departure | departureDelayColor">{{
-            departure | departureDelay: card.definition
-          }}</ion-text>
+          <ion-text *ngIf="!departure.trip.is_canceled" [color]="departure | departureDelayColor">
+            {{ departure | departureDelay : card.definition }}
+          </ion-text>
+          <ion-text *ngIf="departure.trip.is_canceled" color="danger"> zrušeno </ion-text>
         </td>
       </tr>
     </table>

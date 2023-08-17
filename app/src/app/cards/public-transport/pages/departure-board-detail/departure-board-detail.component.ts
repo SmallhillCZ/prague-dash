@@ -95,13 +95,13 @@ export class DepartureBoardDetailComponent implements OnInit {
   }
 
   openDeparture(departure: DepartureData) {
-    if (this.hasPosition(departure)) {
-      const queryParams: Params = { platform: departure.stop.id };
-      this.navController.navigateForward("/public-transport/vehicle-position/" + departure.trip.id, { queryParams });
-    }
+    if (!this.hasDetail(departure)) return;
+
+    const queryParams: Params = { platform: departure.stop.id };
+    this.navController.navigateForward("/public-transport/vehicle-position/" + departure.trip.id, { queryParams });
   }
 
-  hasPosition(departure: DepartureData) {
-    return RouteTypes[departure.route.type]?.tracked;
+  hasDetail(departure: DepartureData) {
+    return RouteTypes[departure.route.type]?.tracked && !departure.trip.is_canceled;
   }
 }

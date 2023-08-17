@@ -18,10 +18,10 @@ ion-item {
   .time {
     text-align: right;
   }
-  .time.no-position.md {
+  .time.no-detail.md {
     margin-right: 20px;
   }
-  .time.no-position.ios {
+  .time.no-detail.ios {
     margin-right: 30px;
   }
 
@@ -30,6 +30,19 @@ ion-item {
   }
 }
 
+.departure.at-stop {
+  .headsign h2,
+  .time {
+    font-weight: bold;
+  }
+}
+
+.departure.is-cancelled {
+  .headsign,
+  .departureTime {
+    text-decoration: line-through;
+  }
+}
 .load-more {
   text-align: center;
   margin-top: 1em;

@@ -3,13 +3,12 @@ import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { DateTime } from "luxon";
 import { timer } from "rxjs";
 import { take } from "rxjs/operators";
+import { CardComponent } from "src/app/schema/card-component";
 import { ScreenReaderService } from "src/app/services/screen-reader.service";
 import { SettingsService } from "src/app/services/settings.service";
-import { CardComponent } from "src/app/schema/card-component";
-import { DepartureBoardCard, DepartureBoardCardDefinition } from "../../schema/departure-board-card";
+import { DepartureBoardCard } from "../../schema/departure-board-card";
 import { DepartureBoardData } from "../../schema/departure-board-data";
 import { RouteTypes } from "../../schema/route-type";
-import { StopData } from "../../schema/stop-data";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
 
