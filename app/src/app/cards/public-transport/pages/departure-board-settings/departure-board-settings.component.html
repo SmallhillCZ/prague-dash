@@ -24,6 +24,11 @@
     </ion-item>
 
     <ion-item>
+      <ion-label>Označení klimatizovaných spojů</ion-label>
+      <ion-toggle [(ngModel)]="definition.showAirConditioned" (ngModelChange)="save()"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
       <ion-label>Započítat zpoždění do času</ion-label>
       <ion-toggle [(ngModel)]="definition.addDelay" (ngModelChange)="save()"></ion-toggle>
     </ion-item>
