@@ -1,5 +1,5 @@
 import "@angular/common/locales/global/cs";
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
+import { APP_INITIALIZER, LOCALE_ID, NgModule, isDevMode } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouteReuseStrategy } from "@angular/router";
 import { IonicRouteStrategy } from "@ionic/angular";
@@ -15,6 +15,7 @@ import { DashComponent } from "./pages/dash/dash.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { StorageService } from "./services/storage.service";
 import { SharedModule } from "./shared/shared.module";
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,12 @@ import { SharedModule } from "./shared/shared.module";
     /* COMPONENTS */
     DashCardComponent,
   ],
-  imports: [SharedModule, BrowserModule, AppRoutingModule, CardsModule],
+  imports: [SharedModule, BrowserModule, AppRoutingModule, CardsModule, ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: !isDevMode(),
+  // Register the ServiceWorker as soon as the application is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+})],
   providers: [
     { provide: LOCALE_ID, useValue: "cs-CZ" },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
