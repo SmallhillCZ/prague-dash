@@ -40,6 +40,8 @@ export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   renderChart() {
+    if (this.chart) this.chart.destroy();
+
     const config: ChartConfiguration = {
       type: this.type,
       data: this.data,
@@ -59,6 +61,7 @@ export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges 
 
     if (changes["data"]) {
       // TODO: update data
+      this.renderChart();
       this.chart.data = this.data;
     }
 

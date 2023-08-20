@@ -8,6 +8,8 @@ def localProperties = new Properties();
 file("../local.properties").withInputStream { localProperties.load(it) }
 
 android {
+
+    namespace 'cz.smallhill.praguedash'
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "cz.smallhill.praguedash"

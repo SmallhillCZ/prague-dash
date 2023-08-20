@@ -17,6 +17,10 @@
 
     <p *ngIf="type.occupancy === null">Bez senzoru</p>
 
-    <p>Plán svozu: {{ parseCleaningFrequency(type.cleaning_frequency, lang) }}</p>
+    <p>
+      Plán svozu: {{ parseCleaningFrequency(type.cleaning_frequency, lang) }} ({{ type.cleaning_frequency.pick_days }})
+    </p>
+    <p>Příští svoz: {{ type.cleaning_frequency.next_pick | date : "d. M." }}</p>
+    <p>Datum posledního měření: {{ type.last_measurement | date : "d. M. v H:mm" }}</p>
   </ion-card-content>
 </ion-card>

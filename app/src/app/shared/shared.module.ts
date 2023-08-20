@@ -4,13 +4,13 @@ import { FormsModule } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
 import { SwiperModule } from "swiper/angular";
 import { BarChartComponent } from "./components/bar-chart/bar-chart.component";
-import { ChartsjsChartComponent } from "./components/chartsjs-chart/chartsjs-chart.component";
-import { CircleChartComponent } from "./components/circle-chart/circle-chart.component";
-import { CardComponent } from "./components/card/card.component";
 import { CardContentComponent } from "./components/card-content/card-content.component";
 import { CardTitleComponent } from "./components/card-title/card-title.component";
-import { MapComponent } from "./components/map/map.component";
+import { CardComponent } from "./components/card/card.component";
+import { ChartsjsChartComponent } from "./components/chartsjs-chart/chartsjs-chart.component";
+import { CircleChartComponent } from "./components/circle-chart/circle-chart.component";
 import { MapMarkerComponent } from "./components/map-marker/map-marker.component";
+import { MapComponent } from "./components/map/map.component";
 
 @NgModule({
   declarations: [

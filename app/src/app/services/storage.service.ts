@@ -1,27 +1,25 @@
-import { Injectable } from '@angular/core';
-import { Storage } from '@capacitor/storage';
+import { Injectable } from "@angular/core";
+import { Preferences } from "@capacitor/preferences";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class StorageService {
-
-  constructor() { }
+  constructor() {}
 
   async get<T>(key: string): Promise<T | null> {
-    const value = await Storage.get({ key }).then(res => res.value);
+    const value = await Preferences.get({ key }).then((res) => res.value);
 
     if (value === null) return null;
 
     try {
       return JSON.parse(value);
-    }
-    catch (err) {
+    } catch (err) {
       return null;
     }
   }
 
   async set<T = unknown>(key: string, value: T) {
-    return Storage.set({ key, value: JSON.stringify(value) });
+    return Preferences.set({ key, value: JSON.stringify(value) });
   }
 }

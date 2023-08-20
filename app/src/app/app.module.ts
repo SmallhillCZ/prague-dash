@@ -37,5 +37,6 @@ import { SharedModule } from "./shared/shared.module";
     { provide: APP_INITIALIZER, useFactory: DashBoardMigrations, deps: [StorageService], multi: true },
   ],
   bootstrap: [AppComponent],
+  schemas: [],
 })
 export class AppModule {}
