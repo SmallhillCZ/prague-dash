@@ -20,7 +20,7 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
 
   open: boolean = false;
 
-  chartData: ChartData = { datasets: [{ data: [] }] };
+  chartData: ChartData = { datasets: [] };
   chartOptions: ChartOptions = {
     elements: {
       point: {
@@ -31,8 +31,7 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
       },
     },
     scales: {
-      horizontal: {
-        axis: "x",
+      x: {
         type: "time",
         time: {
           unit: "day",
@@ -46,8 +45,7 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
           minRotation: 45,
         },
       },
-      vertical: {
-        axis: "y",
+      y: {
         display: false,
         max: 1,
       },
