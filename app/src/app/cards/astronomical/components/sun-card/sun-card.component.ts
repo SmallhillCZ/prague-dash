@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Geolocation } from "@capacitor/geolocation";
 import { DateTime } from "luxon";
 import { CardComponent } from "src/app/schema/card-component";
+import { GeolocationService } from "src/app/services/geolocation.service";
 import * as SunCalc from "suncalc";
 import { SunCard } from "../../schema/sun-card";
-import { SunValuesData } from "../../schema/sun-values-data";
 
 @Component({
   selector: "pd-sun-card",
@@ -18,14 +17,15 @@ export class SunCardComponent implements CardComponent, OnInit {
 
   wasSun?: boolean;
 
-  constructor() {}
+  constructor(private geolocationService: GeolocationService) {}
 
   ngOnInit(): void {
     this.getSunTimes();
   }
 
   private async getSunTimes() {
-    const position = await Geolocation.getCurrentPosition({ enableHighAccuracy: false });
+    const position = await this.geolocationService.getCurrentPosition({ enableHighAccuracy: false });
+    if (!position) return;
 
     const today = DateTime.local().toJSDate();
     const tomorrow = DateTime.local().plus({ days: 1 }).toJSDate();

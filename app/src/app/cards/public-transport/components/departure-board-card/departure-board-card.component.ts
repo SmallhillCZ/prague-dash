@@ -4,11 +4,9 @@ import { DateTime } from "luxon";
 import { timer } from "rxjs";
 import { take } from "rxjs/operators";
 import { CardComponent } from "src/app/schema/card-component";
-import { ScreenReaderService } from "src/app/services/screen-reader.service";
 import { SettingsService } from "src/app/services/settings.service";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
 import { DepartureBoardData } from "../../schema/departure-board-data";
-import { RouteTypes } from "../../schema/route-type";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
 
@@ -24,13 +22,14 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
   loading: boolean = false;
   loadingDepartures?: any[];
 
+  stopNotFound: boolean = false;
+
   now = DateTime.local();
 
   name?: string;
 
   constructor(
     private departureBoardsService: DepartureBoardsService,
-    private screenReaderService: ScreenReaderService,
     private settingsService: SettingsService,
     private stopsService: StopsService
   ) {}
@@ -49,11 +48,17 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
 
   private async loadDepartures() {
     this.loading = true;
+    this.stopNotFound = false;
 
     if (this.card.definition.name !== null) {
       this.name = this.card.definition.name;
     } else {
       const stop = await this.stopsService.getClosestStop();
+      if (!stop) {
+        this.loading = false;
+        this.stopNotFound = true;
+        return;
+      }
       this.name = stop.name;
     }
 
@@ -68,72 +73,6 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
       .getSettings()
       .then((settings) => settings.screenReaderEnabled);
 
-    if (isScreenReaderEnabled) {
-      this.screenReaderSpeak();
-    }
-
     this.loading = false;
-  }
-
-  async screenReaderSpeak() {
-    if (!this.departureBoard) {
-      this.screenReaderService.speak(`Pro zastávku ${this.name} nebyly nalezeny žádné odjezdy.`);
-      return;
-    }
-
-    this.screenReaderService.speak(`Odjezdy ze zastávky ${this.departureBoard.stops[0].stop_name}: `);
-
-    this.departureBoard.departures.forEach((departure) => {
-      const minutes = Math.floor(
-        Math.abs(DateTime.fromISO(departure.departure_timestamp.predicted).diffNow("minutes").minutes)
-      );
-
-      let minutesString = "";
-
-      switch (minutes) {
-        case 0:
-          minutesString = "nyní";
-          break;
-        case 1:
-          minutesString = "za jednu minutu";
-          break;
-        case 2:
-          minutesString = "za dvě minuty";
-          break;
-        case 3:
-          minutesString = "za tři minuty";
-          break;
-        case 4:
-          minutesString = "za čtyři minuty";
-          break;
-        case 5:
-          minutesString = "za pět minut";
-          break;
-        case 6:
-          minutesString = "za šest minut";
-          break;
-        case 7:
-          minutesString = "za sedm minut";
-          break;
-        case 8:
-          minutesString = "za osm minut";
-          break;
-        case 9:
-          minutesString = "za devět minut";
-          break;
-        case 10:
-          minutesString = "za deset minut";
-          break;
-        default:
-          `za ${minutes} minut`;
-          break;
-      }
-
-      const lineString = RouteTypes[departure.route.type]?.name.cs || "Linka";
-
-      this.screenReaderService.speak(
-        `${lineString} ${departure.route.short_name} směr ${departure.trip.headsign} odjíždí ${minutesString}.`
-      );
-    });
   }
 }

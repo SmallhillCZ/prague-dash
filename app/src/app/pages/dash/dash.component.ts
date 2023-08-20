@@ -1,15 +1,13 @@
-import { ChangeDetectorRef, Component, Inject, NgZone, OnInit } from "@angular/core";
+import { Component, Inject, NgZone, OnInit } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { App } from "@capacitor/app";
 import { AlertController, NavController, Platform, ViewDidEnter, ViewWillLeave } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
+import { BehaviorSubject, Subscription, combineLatest } from "rxjs";
 import { filter } from "rxjs/operators";
-import { DashboardService } from "src/app/services/dashboard.service";
-import { Card } from "src/app/schema/card";
 import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
 import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
+import { DashboardService } from "src/app/services/dashboard.service";
 import SwiperCore, { Parallax, Swiper, SwiperOptions } from "swiper";
 
 SwiperCore.use([Parallax]);
@@ -73,8 +71,6 @@ export class DashComponent implements OnInit, ViewDidEnter, ViewWillLeave {
     this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(-1, async () => {
       if (this.route.snapshot.params["page"]) {
         this.navController.navigateRoot("/");
-      } else {
-        App.exitApp();
       }
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Geolocation } from "@capacitor/geolocation";
 import { ApiService } from "src/app/services/api.service";
+import { GeolocationService } from "src/app/services/geolocation.service";
 import { PlatformData } from "../schema/platform-data";
 import { StopData } from "../schema/stop-data";
 
@@ -8,7 +8,7 @@ import { StopData } from "../schema/stop-data";
   providedIn: "root",
 })
 export class StopsService {
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private geolocationService: GeolocationService) {}
 
   async getStops(options: { search?: string; coordinates?: { lat: number; lon: number } }) {
     const params: any = {};
@@ -28,12 +28,14 @@ export class StopsService {
   }
 
   async getClosestStop() {
-    const position = await Geolocation.getCurrentPosition({ enableHighAccuracy: true }).then((res) => ({
-      lat: res.coords.latitude,
-      lon: res.coords.longitude,
-    }));
+    const position = await this.geolocationService.getCurrentPosition({ enableHighAccuracy: true });
+    if (!position) return null;
 
-    return this.api.get<StopData>("stops/closest", position);
+    const params = {
+      lat: position.coords.latitude,
+      lon: position.coords.longitude,
+    };
+    return this.api.get<StopData>("stops/closest", params);
   }
 
   async getPlatform(id: string) {

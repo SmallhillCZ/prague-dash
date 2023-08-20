@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Geolocation } from "@capacitor/geolocation";
 import { NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { DashboardService } from "src/app/services/dashboard.service";
+import { GeolocationService } from "src/app/services/geolocation.service";
 import { AirQualityStationCard } from "../../schema/air-quality-station-card";
 import { AirQualityStationData } from "../../schema/air-quality-station-data";
 import { AirQualityService } from "../../services/air-quality.service";
@@ -24,7 +24,8 @@ export class CardAirQualityStationSelectComponent implements OnInit {
     private airQualityService: AirQualityService,
     private route: ActivatedRoute,
     private dash: DashboardService,
-    private navController: NavController
+    private navController: NavController,
+    private geolocationService: GeolocationService
   ) {}
 
   ngOnInit(): void {
@@ -32,7 +33,8 @@ export class CardAirQualityStationSelectComponent implements OnInit {
   }
 
   async loadAirQualityStations() {
-    const coordinates = await Geolocation.getCurrentPosition({ enableHighAccuracy: true })
+    const coordinates = await this.geolocationService
+      .getCurrentPosition({ enableHighAccuracy: true })
       .then((position) => {
         if (position) return { lat: position.coords.latitude, lon: position.coords.longitude };
         else return undefined;

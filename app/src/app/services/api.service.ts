@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CapacitorHttp, HttpOptions, HttpParams, HttpResponse } from "@capacitor/core";
+import axios, { AxiosResponse } from "axios";
 import { environment } from "src/environments/environment";
 
 export type ApiParams = {
@@ -9,7 +9,7 @@ export type ApiParams = {
 export class ApiError extends Error {
   status: number;
 
-  constructor(res: HttpResponse) {
+  constructor(res: AxiosResponse) {
     super("ApiError: " + res.status);
 
     this.status = res.status;
@@ -21,18 +21,16 @@ export class ApiError extends Error {
 })
 export class ApiService {
   private root = environment.apiRoot;
+  private http = axios.create({});
 
   constructor() {}
 
   async get<T>(endpoint: string, params: ApiParams = {}) {
-    const options: HttpOptions = {
-      url: this.root + "/" + endpoint,
-      params: this.stringifyParams(params),
-    };
+    const url = this.root + "/" + endpoint;
 
-    if (!environment.production) console.debug(`Sending HTTP request`, options);
+    if (!environment.production) console.debug(`Sending HTTP request`, { url, params });
 
-    const res = await CapacitorHttp.get(options);
+    const res = await this.http.get<T>(url, { params });
 
     if (res.status >= 300) {
       throw new ApiError(res);
@@ -40,19 +38,6 @@ export class ApiService {
 
     if (!environment.production) console.debug(`Receiving HTTP response`, res);
 
-    return res.data as T;
-  }
-
-  private stringifyParams(params: ApiParams): HttpParams {
-    const stringParams: HttpParams = {};
-
-    Object.entries(params).forEach(([key, value]) => {
-      if (value === undefined) return;
-
-      if (Array.isArray(value)) stringParams[key] = value.map((item) => String(item));
-      else stringParams[key] = String(value);
-    });
-
-    return stringParams;
+    return res.data;
   }
 }

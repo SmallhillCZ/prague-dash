@@ -1,10 +1,10 @@
-import { Component, EventEmitter, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Geolocation } from "@capacitor/geolocation";
-import { NavComponentWithProps, NavController } from "@ionic/angular";
+import { NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { Language } from "src/app/schema/language";
 import { DashboardService } from "src/app/services/dashboard.service";
+import { GeolocationService } from "src/app/services/geolocation.service";
 import { ContainerCard } from "../../schema/container-card";
 import { ContainerData, ContainerDataType } from "../../schema/container-data";
 import { ContainerTypes } from "../../schema/container-type";
@@ -26,7 +26,8 @@ export class CardContainerSelectComponent implements OnInit {
     private containerService: ContainerService,
     private dash: DashboardService,
     private route: ActivatedRoute,
-    private navController: NavController
+    private navController: NavController,
+    private geolocationService: GeolocationService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +35,8 @@ export class CardContainerSelectComponent implements OnInit {
   }
 
   async loadContainers() {
-    const coordinates = await Geolocation.getCurrentPosition({ enableHighAccuracy: true })
+    const coordinates = await this.geolocationService
+      .getCurrentPosition({ enableHighAccuracy: true })
       .then((position) => {
         if (position) return { lat: position.coords.latitude, lon: position.coords.longitude };
         else return undefined;

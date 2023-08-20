@@ -1,7 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
-
-import { SplashScreen } from "@capacitor/splash-screen";
 import { IonRouterOutlet, Platform, ViewDidEnter } from "@ionic/angular";
+
 @Component({
   selector: "pd-root",
   templateUrl: "app.component.html",
@@ -23,7 +22,5 @@ export class AppComponent implements ViewDidEnter {
       // StatusBar.setOverlaysWebView({ overlay: true });
       // TODO: make bg image under, but not header
     }
-
-    await SplashScreen.hide();
   }
 }

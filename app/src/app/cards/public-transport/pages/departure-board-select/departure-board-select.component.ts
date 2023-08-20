@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Geolocation } from "@capacitor/geolocation";
 import { NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { DashboardService } from "src/app/services/dashboard.service";
+import { GeolocationService } from "src/app/services/geolocation.service";
 import { DepartureBoardCard, DepartureBoardCardDefinition } from "../../schema/departure-board-card";
 import { StopData } from "../../schema/stop-data";
 import { StopsService } from "../../services/stops.service";
@@ -24,7 +24,8 @@ export class DepartureBoardSelectComponent implements OnInit, OnDestroy {
     private stopsService: StopsService,
     private dash: DashboardService,
     private route: ActivatedRoute,
-    private navController: NavController
+    private navController: NavController,
+    private geolocationService: GeolocationService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +35,8 @@ export class DepartureBoardSelectComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   async loadStops() {
-    const coordinates = await Geolocation.getCurrentPosition({ enableHighAccuracy: true })
+    const coordinates = await this.geolocationService
+      .getCurrentPosition({ enableHighAccuracy: true })
       .then((position) => {
         if (position) return { lat: position.coords.latitude, lon: position.coords.longitude };
         else return undefined;

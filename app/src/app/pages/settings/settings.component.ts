@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { SettingsService } from "src/app/services/settings.service";
 import { AppSettings } from "src/app/schema/app-settings";
-import { App } from "@capacitor/app";
+import { SettingsService } from "src/app/services/settings.service";
+import packageJson from "../../../../package.json";
 
 @UntilDestroy()
 @Component({
@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     this.settings = await this.settingsService.getSettings();
   }
 
-  async loadVersion() {
-    this.appVersion = await App.getInfo().then((info) => info.version);
+  loadVersion() {
+    this.appVersion = packageJson.version;
   }
 }

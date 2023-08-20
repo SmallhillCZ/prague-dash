@@ -20,8 +20,9 @@ export class DepartureBoardDetailComponent implements OnInit {
   limit = 40;
 
   loading: boolean = false;
-
   loadingArray = new Array(10).fill(null);
+
+  stopNotFound: boolean = false;
 
   name?: string;
 
@@ -46,11 +47,17 @@ export class DepartureBoardDetailComponent implements OnInit {
     if (!this.card) return;
 
     this.loading = true;
+    this.stopNotFound = false;
 
     if (this.card.definition.name !== null) {
       this.name = this.card.definition.name;
     } else {
       const stop = await this.stopsService.getClosestStop();
+      if (!stop) {
+        this.loading = false;
+        this.stopNotFound = true;
+        return;
+      }
       this.name = stop.name;
     }
 
