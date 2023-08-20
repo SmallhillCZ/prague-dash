@@ -39,6 +39,9 @@
           <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible">
             ♿
           </ng-container>
+          <ng-container *ngIf="card.definition.showAirConditioned && departure.trip.is_air_conditioned">
+            ❄️
+          </ng-container>
         </h2>
       </ion-label>
 
