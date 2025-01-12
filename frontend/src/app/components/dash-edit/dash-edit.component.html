@@ -5,11 +5,13 @@
 </ion-item>
 
 <ion-reorder-group [disabled]="!sortPages" (ionItemReorder)="onReorder($any($event))">
-  <ion-item *ngFor="let page of dashboard?.pages" [detail]="!sortPages" (click)="onPageClick(page)">
-    <ion-label>
-      <h2>{{ page.title }}</h2>
-      <p>Počet karet: {{ page.cards.length }}</p>
-    </ion-label>
-    <ion-reorder slot="end"></ion-reorder>
-  </ion-item>
+  @for (page of dashboard?.pages; track page.id) {
+    <ion-item [detail]="!sortPages" (click)="onPageClick(page)">
+      <ion-label>
+        <h2>{{ page.title }}</h2>
+        <p>Počet karet: {{ page.cards.length }}</p>
+      </ion-label>
+      <ion-reorder slot="end"></ion-reorder>
+    </ion-item>
+  }
 </ion-reorder-group>

@@ -37,8 +37,13 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Název</ion-label>
-      <ion-input [(ngModel)]="page.title" (ngModelChange)="save()"></ion-input>
+      <ion-input
+        label="Název"
+        labelPlacement="stacked"
+        placeholder="Název stránky"
+        [(ngModel)]="page.title"
+        (ngModelChange)="save()"
+      ></ion-input>
     </ion-item>
 
     <ion-item lines="none" class="title">

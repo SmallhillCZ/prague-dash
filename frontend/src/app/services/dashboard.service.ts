@@ -4,9 +4,9 @@ import { Card } from "src/app/schema/card";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
-import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
-import { Language } from "src/app/schema/language";
+import { Dashboard } from "src/app/schema/dashboard";
 import { StorageService } from "./storage.service";
+import { SyncService } from "./sync.service";
 
 @Injectable({
   providedIn: "root",
@@ -14,7 +14,11 @@ import { StorageService } from "./storage.service";
 export class DashboardService {
   dashboard = new BehaviorSubject<Dashboard | undefined>(undefined);
 
-  constructor(private storage: StorageService, @Inject(CARDS) private cardTypes: CardType[]) {
+  constructor(
+    private storage: StorageService,
+    @Inject(CARDS) private cardTypes: CardType[],
+    private syncService: SyncService,
+  ) {
     // load dashbaord
     this.getDashboard().then((dash) => {
       this.dashboard.next(dash);

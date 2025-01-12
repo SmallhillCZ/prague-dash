@@ -9,16 +9,20 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CardsModule } from "./cards/cards.module";
 import { DashCardComponent } from "./components/dash-card/dash-card.component";
+import { DashEditComponent } from "./components/dash-edit/dash-edit.component";
 import { DashBoardMigrations } from "./migrations/dashboard.migration";
 import { DashCardAddComponent } from "./pages/dash-card-add/dash-card-add.component";
 import { DashEditPageComponent } from "./pages/dash-edit-page/dash-edit-page.component";
-import { DashEditComponent } from "./pages/dash-edit/dash-edit.component";
 import { DashComponent } from "./pages/dash/dash.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { StorageService } from "./services/storage.service";
 import { SharedModule } from "./shared/shared.module";
 // import function to register Swiper custom elements
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { authHttpInterceptorFn, provideAuth0 } from "@auth0/auth0-angular";
 import { register } from "swiper/element/bundle";
+import { AccountSettingsComponent } from "./components/account-settings/account-settings.component";
+import { GlobalSettingsComponent } from "./components/global-settings/global-settings.component";
 
 @NgModule({
   declarations: [
@@ -33,6 +37,8 @@ import { register } from "swiper/element/bundle";
 
     /* COMPONENTS */
     DashCardComponent,
+    GlobalSettingsComponent,
+    AccountSettingsComponent,
   ],
   imports: [
     IonicModule.forRoot({}),
@@ -47,13 +53,6 @@ import { register } from "swiper/element/bundle";
       // or after 30 seconds (whichever comes first).
       registrationStrategy: "registerWhenStable:30000",
     }),
-    // provideAuth0({
-    //   domain: "dev-ljtl0l4e.us.auth0.com",
-    //   clientId: "b0C4kHrNEflWhYt04s4QLTNo510ieb3z",
-    //   authorizationParams: {
-    //     redirect_uri: window.location.origin,
-    //   },
-    // }),
   ],
   providers: [
     { provide: LOCALE_ID, useValue: "cs-CZ" },
@@ -62,6 +61,16 @@ import { register } from "swiper/element/bundle";
       const initializerFn = DashBoardMigrations(inject(StorageService));
       return initializerFn();
     }),
+    provideAuth0({
+      domain: "prague-dash.eu.auth0.com",
+      clientId: "DHJ14XWpTf5zNgo3RmXYiZRT2C1pXFeC",
+      authorizationParams: {
+        redirect_uri: window.location.origin + "/settings",
+        scope: "read:current_user create:current_user_metadata update:current_user_metadata update:users",
+      },
+    }),
+
+    provideHttpClient(withInterceptors([authHttpInterceptorFn])),
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

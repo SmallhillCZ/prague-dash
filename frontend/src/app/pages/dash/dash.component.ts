@@ -75,7 +75,6 @@ export class DashComponent implements OnInit, AfterViewInit, ViewDidEnter, ViewW
   ngAfterViewInit(): void {
     console.log(this.swiperEl);
     if (this.swiperEl?.nativeElement) {
-      console.log(this.swiperEl);
       this.initializeSwiper(this.swiperEl.nativeElement);
     }
   }

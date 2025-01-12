@@ -1,22 +1,25 @@
 import { Component, OnInit } from "@angular/core";
 import { ItemReorderCustomEvent, NavController } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { DashboardService } from "src/app/services/dashboard.service";
 import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
+import { DashboardService } from "src/app/services/dashboard.service";
 
 @UntilDestroy()
 @Component({
-    selector: "pd-dash-edit",
-    templateUrl: "./dash-edit.component.html",
-    styleUrls: ["./dash-edit.component.scss"],
-    standalone: false
+  selector: "pd-dash-edit",
+  templateUrl: "./dash-edit.component.html",
+  styleUrls: ["./dash-edit.component.scss"],
+  standalone: false,
 })
 export class DashEditComponent implements OnInit {
   dashboard?: Dashboard;
 
   sortPages: boolean = false;
 
-  constructor(private dashboardService: DashboardService, private navController: NavController) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private navController: NavController,
+  ) {}
 
   ngOnInit(): void {
     this.dashboardService.dashboard.pipe(untilDestroyed(this)).subscribe((dash) => (this.dashboard = dash));
