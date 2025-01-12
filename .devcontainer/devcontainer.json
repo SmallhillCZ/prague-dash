@@ -1,6 +1,10 @@
 {
   "dockerComposeFile": "docker-compose.yml",
   "service": "devcontainer",
+  "postCreateCommand": "./.devcontainer/post-create.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
