@@ -2,6 +2,7 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "devcontainer",
   "postCreateCommand": "./.devcontainer/post-create.sh",
+  "workspaceFolder": "/workspaces",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {}
   },
