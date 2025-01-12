@@ -1,8 +1,10 @@
 import "@angular/common/locales/global/cs";
-import { APP_INITIALIZER, LOCALE_ID, NgModule, isDevMode } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule, inject, isDevMode, provideAppInitializer } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouteReuseStrategy } from "@angular/router";
-import { IonicRouteStrategy } from "@ionic/angular";
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CardsModule } from "./cards/cards.module";
@@ -15,7 +17,8 @@ import { DashComponent } from "./pages/dash/dash.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { StorageService } from "./services/storage.service";
 import { SharedModule } from "./shared/shared.module";
-import { ServiceWorkerModule } from '@angular/service-worker';
+// import function to register Swiper custom elements
+import { register } from "swiper/element/bundle";
 
 @NgModule({
   declarations: [
@@ -31,18 +34,41 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     /* COMPONENTS */
     DashCardComponent,
   ],
-  imports: [SharedModule, BrowserModule, AppRoutingModule, CardsModule, ServiceWorkerModule.register('ngsw-worker.js', {
-  enabled: !isDevMode(),
-  // Register the ServiceWorker as soon as the application is stable
-  // or after 30 seconds (whichever comes first).
-  registrationStrategy: 'registerWhenStable:30000'
-})],
+  imports: [
+    IonicModule.forRoot({}),
+    FormsModule,
+    SharedModule,
+    BrowserModule,
+    AppRoutingModule,
+    CardsModule,
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: "registerWhenStable:30000",
+    }),
+    // provideAuth0({
+    //   domain: "dev-ljtl0l4e.us.auth0.com",
+    //   clientId: "b0C4kHrNEflWhYt04s4QLTNo510ieb3z",
+    //   authorizationParams: {
+    //     redirect_uri: window.location.origin,
+    //   },
+    // }),
+  ],
   providers: [
     { provide: LOCALE_ID, useValue: "cs-CZ" },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: APP_INITIALIZER, useFactory: DashBoardMigrations, deps: [StorageService], multi: true },
+    provideAppInitializer(() => {
+      const initializerFn = DashBoardMigrations(inject(StorageService));
+      return initializerFn();
+    }),
   ],
   bootstrap: [AppComponent],
-  schemas: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    // register Swiper custom elements
+    register();
+  }
+}

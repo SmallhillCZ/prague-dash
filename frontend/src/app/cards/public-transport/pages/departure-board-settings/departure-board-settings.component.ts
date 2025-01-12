@@ -6,9 +6,10 @@ import { StopData, StopPlatformData } from "../../schema/stop-data";
 import { StopsService } from "../../services/stops.service";
 
 @Component({
-  selector: "pd-departure-board-settings",
-  templateUrl: "./departure-board-settings.component.html",
-  styleUrls: ["./departure-board-settings.component.scss"],
+    selector: "pd-departure-board-settings",
+    templateUrl: "./departure-board-settings.component.html",
+    styleUrls: ["./departure-board-settings.component.scss"],
+    standalone: false
 })
 export class DepartureBoardSettingsComponent implements OnInit, OnChanges {
   card?: DepartureBoardCard;

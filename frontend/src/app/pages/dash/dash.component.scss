@@ -1,14 +1,14 @@
 :host {
-  background-image: url("~src/assets/img/bg.jpg");
+  background-image: url("src/assets/img/bg.jpg");
   background-size: cover;
   background-position: center;
 }
 
 ::ng-deep {
-  .swiper {
+  swiper-container {
     height: 100%;
   }
-  .swiper-slide {
+  swiper-slide {
     display: block !important;
     height: 100%;
   }

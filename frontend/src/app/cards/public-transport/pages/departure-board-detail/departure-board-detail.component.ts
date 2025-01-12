@@ -9,9 +9,10 @@ import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/de
 import { StopsService } from "../../services/stops.service";
 
 @Component({
-  selector: "pd-departure-board-detail",
-  templateUrl: "./departure-board-detail.component.html",
-  styleUrls: ["./departure-board-detail.component.scss"],
+    selector: "pd-departure-board-detail",
+    templateUrl: "./departure-board-detail.component.html",
+    styleUrls: ["./departure-board-detail.component.scss"],
+    standalone: false
 })
 export class DepartureBoardDetailComponent implements OnInit {
   card?: DepartureBoardCard;

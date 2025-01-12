@@ -49,34 +49,35 @@
   </div>
 </ion-content> -->
 
-<ion-content *ngIf="dashboard">
+<ion-content>
   <ion-refresher slot="fixed" [disabled]="!enableRefresh" (ionRefresh)="doRefresh($event, currentPage!)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <swiper
+  <swiper-container
+    #swiper
     [config]="swiperConfig"
-    (swiper)="swiper.next($event)"
-    (observerUpdate)="updateState()"
-    (activeIndexChange)="updateState()"
+    (swiperobserverpdate)="updateState()"
+    (swiperactiveindexchange)="updateState()"
   >
-    <ng-template *ngFor="let page of dashboard.pages" swiperSlide>
-      <div class="page">
-        <div
-          *ngIf="dashboard.pages.length > 1"
-          class="title"
-          data-swiper-parallax="70%"
-          data-swiper-parallax-opacity="0"
-        >
-          {{ page.title || "Hlavní" }}
-        </div>
+    @for (page of dashboard?.pages; track page.id) {
+      <swiper-slide>
+        <div class="page">
+          @if (dashboard!.pages.length > 1) {
+            <div class="title" data-swiper-parallax="70%" data-swiper-parallax-opacity="0">
+              {{ page.title || "Hlavní" }}
+            </div>
+          }
 
-        <div class="cards" (scroll)="onCardsScroll()">
-          <div class="card" *ngFor="let cardData of page.cards">
-            <pd-dash-card [card]="cardData"></pd-dash-card>
+          <div class="cards" (scroll)="onCardsScroll()">
+            @for (cardData of page.cards; track cardData.id) {
+              <div class="card">
+                <pd-dash-card [card]="cardData"></pd-dash-card>
+              </div>
+            }
           </div>
         </div>
-      </div>
-    </ng-template>
-  </swiper>
+      </swiper-slide>
+    }
+  </swiper-container>
 </ion-content>

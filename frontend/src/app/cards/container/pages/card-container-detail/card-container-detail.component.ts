@@ -8,9 +8,10 @@ import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
 @Component({
-  selector: "pd-card-container-detail",
-  templateUrl: "./card-container-detail.component.html",
-  styleUrls: ["./card-container-detail.component.scss"],
+    selector: "pd-card-container-detail",
+    templateUrl: "./card-container-detail.component.html",
+    styleUrls: ["./card-container-detail.component.scss"],
+    standalone: false
 })
 export class CardContainerDetailComponent implements OnInit {
   types?: ContainerDataType[];

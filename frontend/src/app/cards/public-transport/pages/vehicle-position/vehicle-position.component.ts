@@ -15,9 +15,10 @@ import { VehiclePositionService } from "../../services/vehicle-position.service"
 
 @UntilDestroy()
 @Component({
-  selector: "pd-vehicle-position",
-  templateUrl: "./vehicle-position.component.html",
-  styleUrls: ["./vehicle-position.component.scss"],
+    selector: "pd-vehicle-position",
+    templateUrl: "./vehicle-position.component.html",
+    styleUrls: ["./vehicle-position.component.scss"],
+    standalone: false
 })
 export class VehiclePositionComponent implements OnInit {
   tripId?: string;

@@ -9,9 +9,10 @@ import { StopData } from "../../schema/stop-data";
 import { StopsService } from "../../services/stops.service";
 
 @Component({
-  selector: "pd-departure-board-select",
-  templateUrl: "./departure-board-select.component.html",
-  styleUrls: ["./departure-board-select.component.scss"],
+    selector: "pd-departure-board-select",
+    templateUrl: "./departure-board-select.component.html",
+    styleUrls: ["./departure-board-select.component.scss"],
+    standalone: false
 })
 export class DepartureBoardSelectComponent implements OnInit, OnDestroy {
   view: "map" | "list" = "list";

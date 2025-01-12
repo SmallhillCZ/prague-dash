@@ -6,9 +6,10 @@ import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
 
 @UntilDestroy()
 @Component({
-  selector: "pd-dash-edit",
-  templateUrl: "./dash-edit.component.html",
-  styleUrls: ["./dash-edit.component.scss"],
+    selector: "pd-dash-edit",
+    templateUrl: "./dash-edit.component.html",
+    styleUrls: ["./dash-edit.component.scss"],
+    standalone: false
 })
 export class DashEditComponent implements OnInit {
   dashboard?: Dashboard;

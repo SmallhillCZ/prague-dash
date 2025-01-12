@@ -14,9 +14,10 @@ import { MapService } from "src/app/services/map.service";
 import { MapMarkerComponent, MapMarkerIconDirection } from "../map-marker/map-marker.component";
 
 @Component({
-  selector: "pd-map",
-  templateUrl: "./map.component.html",
-  styleUrls: ["./map.component.scss"],
+    selector: "pd-map",
+    templateUrl: "./map.component.html",
+    styleUrls: ["./map.component.scss"],
+    standalone: false
 })
 export class MapComponent implements OnInit, AfterViewInit, AfterContentInit {
   private map: any;

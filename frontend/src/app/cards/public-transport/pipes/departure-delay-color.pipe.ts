@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DepartureData } from '../schema/departure-board-data';
 
 @Pipe({
-  name: 'departureDelayColor'
+    name: 'departureDelayColor',
+    standalone: false
 })
 export class DepartureDelayColorPipe implements PipeTransform {
 

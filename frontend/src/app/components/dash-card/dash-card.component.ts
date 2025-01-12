@@ -14,10 +14,11 @@ import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
 
 @Component({
-  selector: "pd-dash-card",
-  templateUrl: "./dash-card.component.html",
-  styleUrls: ["./dash-card.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "pd-dash-card",
+    templateUrl: "./dash-card.component.html",
+    styleUrls: ["./dash-card.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DashCardComponent implements OnInit, OnChanges {
   @Input() card!: Card;

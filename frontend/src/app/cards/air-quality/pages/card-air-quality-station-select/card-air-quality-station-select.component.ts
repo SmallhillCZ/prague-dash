@@ -9,9 +9,10 @@ import { AirQualityStationData } from "../../schema/air-quality-station-data";
 import { AirQualityService } from "../../services/air-quality.service";
 
 @Component({
-  selector: "pd-card-air-quality-station-select",
-  templateUrl: "./card-air-quality-station-select.component.html",
-  styleUrls: ["./card-air-quality-station-select.component.scss"],
+    selector: "pd-card-air-quality-station-select",
+    templateUrl: "./card-air-quality-station-select.component.html",
+    styleUrls: ["./card-air-quality-station-select.component.scss"],
+    standalone: false
 })
 export class CardAirQualityStationSelectComponent implements OnInit {
   stations: AirQualityStationData[] = [];

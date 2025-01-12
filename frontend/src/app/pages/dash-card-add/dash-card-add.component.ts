@@ -8,9 +8,10 @@ import { DashboardPage } from "src/app/schema/dashboard";
 import { DashboardService } from "src/app/services/dashboard.service";
 
 @Component({
-  selector: "app-dash-card-add",
-  templateUrl: "./dash-card-add.component.html",
-  styleUrls: ["./dash-card-add.component.scss"],
+    selector: "app-dash-card-add",
+    templateUrl: "./dash-card-add.component.html",
+    styleUrls: ["./dash-card-add.component.scss"],
+    standalone: false
 })
 export class DashCardAddComponent implements OnInit {
   page?: DashboardPage;

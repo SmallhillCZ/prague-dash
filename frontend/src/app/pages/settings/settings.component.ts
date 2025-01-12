@@ -7,9 +7,10 @@ import packageJson from "../../../../package.json";
 
 @UntilDestroy()
 @Component({
-  selector: "pd-settings",
-  templateUrl: "./settings.component.html",
-  styleUrls: ["./settings.component.scss"],
+    selector: "pd-settings",
+    templateUrl: "./settings.component.html",
+    styleUrls: ["./settings.component.scss"],
+    standalone: false
 })
 export class SettingsComponent implements OnInit, AfterViewInit {
   settings?: AppSettings;

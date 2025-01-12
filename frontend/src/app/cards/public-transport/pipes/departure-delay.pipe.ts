@@ -3,7 +3,8 @@ import { DepartureBoardCardDefinition } from '../schema/departure-board-card';
 import { DepartureData } from '../schema/departure-board-data';
 
 @Pipe({
-  name: 'departureDelay'
+    name: 'departureDelay',
+    standalone: false
 })
 export class DepartureDelayPipe implements PipeTransform {
 

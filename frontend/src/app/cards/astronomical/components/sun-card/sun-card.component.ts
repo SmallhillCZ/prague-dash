@@ -6,9 +6,10 @@ import * as SunCalc from "suncalc";
 import { SunCard } from "../../schema/sun-card";
 
 @Component({
-  selector: "pd-sun-card",
-  templateUrl: "./sun-card.component.html",
-  styleUrls: ["./sun-card.component.scss"],
+    selector: "pd-sun-card",
+    templateUrl: "./sun-card.component.html",
+    styleUrls: ["./sun-card.component.scss"],
+    standalone: false
 })
 export class SunCardComponent implements CardComponent, OnInit {
   @Input() card!: SunCard;

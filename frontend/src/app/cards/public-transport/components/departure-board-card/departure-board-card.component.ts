@@ -12,9 +12,10 @@ import { StopsService } from "../../services/stops.service";
 
 @UntilDestroy()
 @Component({
-  selector: "pd-departure-board-card",
-  templateUrl: "./departure-board-card.component.html",
-  styleUrls: ["./departure-board-card.component.scss"],
+    selector: "pd-departure-board-card",
+    templateUrl: "./departure-board-card.component.html",
+    styleUrls: ["./departure-board-card.component.scss"],
+    standalone: false
 })
 export class DepartureBoardCardComponent implements CardComponent, OnInit {
   departureBoard?: DepartureBoardData;

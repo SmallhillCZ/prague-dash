@@ -15,9 +15,10 @@ Chart.register(...registerables);
 import "chartjs-adapter-luxon";
 
 @Component({
-  selector: "pd-chartsjs-chart",
-  templateUrl: "./chartsjs-chart.component.html",
-  styleUrls: ["./chartsjs-chart.component.scss"],
+    selector: "pd-chartsjs-chart",
+    templateUrl: "./chartsjs-chart.component.html",
+    styleUrls: ["./chartsjs-chart.component.scss"],
+    standalone: false
 })
 export class ChartsjsChartComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() height!: number | string;

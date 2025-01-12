@@ -8,8 +8,9 @@ import { DepartureData } from '../schema/departure-board-data';
 
 @UntilDestroy()
 @Pipe({
-  name: 'departureTime',
-  pure: false
+    name: 'departureTime',
+    pure: false,
+    standalone: false
 })
 export class DepartureTimePipe implements PipeTransform {
 

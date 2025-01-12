@@ -1,5 +1,5 @@
 {
-  "name": "praguedash-server",
+  "name": "@smallhillcz/prague-dash-backend",
   "version": "1.3.0",
   "private": true,
   "scripts": {

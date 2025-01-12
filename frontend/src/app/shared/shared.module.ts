@@ -1,8 +1,8 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, PercentPipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { IonicModule } from "@ionic/angular";
-import { SwiperModule } from "swiper/angular";
+
 import { BarChartComponent } from "./components/bar-chart/bar-chart.component";
 import { CardContentComponent } from "./components/card-content/card-content.component";
 import { CardTitleComponent } from "./components/card-title/card-title.component";
@@ -26,11 +26,10 @@ import { MapComponent } from "./components/map/map.component";
     MapComponent,
     MapMarkerComponent,
   ],
-  imports: [IonicModule.forRoot({}), CommonModule, FormsModule, SwiperModule],
+  imports: [IonicModule, CommonModule, FormsModule, PercentPipe],
   exports: [
     FormsModule,
     IonicModule,
-    SwiperModule,
 
     BarChartComponent,
     CircleChartComponent,

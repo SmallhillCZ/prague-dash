@@ -2,9 +2,10 @@ import { Component, ViewChild } from "@angular/core";
 import { IonRouterOutlet, Platform, ViewDidEnter } from "@ionic/angular";
 
 @Component({
-  selector: "pd-root",
-  templateUrl: "app.component.html",
-  styleUrls: ["app.component.scss"],
+    selector: "pd-root",
+    templateUrl: "app.component.html",
+    styleUrls: ["app.component.scss"],
+    standalone: false
 })
 export class AppComponent implements ViewDidEnter {
   title = "prague-dash";

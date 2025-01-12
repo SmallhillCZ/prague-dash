@@ -5,9 +5,10 @@ import { SunCard, SunCardDefinition } from "../../schema/sun-card";
 import { SunValueNames, SunValues, SunValuesMeta } from "../../schema/sun-values";
 
 @Component({
-  selector: "app-sun-settings",
-  templateUrl: "./sun-settings.component.html",
-  styleUrls: ["./sun-settings.component.scss"],
+    selector: "app-sun-settings",
+    templateUrl: "./sun-settings.component.html",
+    styleUrls: ["./sun-settings.component.scss"],
+    standalone: false
 })
 export class SunSettingsComponent implements OnInit {
   card?: SunCard;

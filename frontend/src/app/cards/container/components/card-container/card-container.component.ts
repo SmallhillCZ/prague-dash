@@ -7,9 +7,10 @@ import { ContainerService } from "../../services/container.service";
 
 @UntilDestroy()
 @Component({
-  selector: "pd-card-container",
-  templateUrl: "./card-container.component.html",
-  styleUrls: ["./card-container.component.scss"],
+    selector: "pd-card-container",
+    templateUrl: "./card-container.component.html",
+    styleUrls: ["./card-container.component.scss"],
+    standalone: false
 })
 export class CardContainerComponent implements CardComponent, OnInit {
   lang = "cs" as "cs";

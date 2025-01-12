@@ -8,9 +8,10 @@ import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
 @Component({
-  selector: "pd-container-detail-card",
-  templateUrl: "./container-detail-card.component.html",
-  styleUrls: ["./container-detail-card.component.scss"],
+    selector: "pd-container-detail-card",
+    templateUrl: "./container-detail-card.component.html",
+    styleUrls: ["./container-detail-card.component.scss"],
+    standalone: false
 })
 export class ContainerDetailCardComponent implements OnInit, OnChanges {
   @Input() card!: ContainerCard;

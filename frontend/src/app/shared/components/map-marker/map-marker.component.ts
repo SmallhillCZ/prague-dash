@@ -3,9 +3,10 @@ import { Subject } from "rxjs";
 
 export type MapMarkerIconDirection = number | "left" | "right";
 @Component({
-  selector: "pd-map-marker",
-  templateUrl: "./map-marker.component.html",
-  styleUrls: ["./map-marker.component.scss"],
+    selector: "pd-map-marker",
+    templateUrl: "./map-marker.component.html",
+    styleUrls: ["./map-marker.component.scss"],
+    standalone: false
 })
 export class MapMarkerComponent implements OnInit, OnChanges {
   @Input() coords!: [number, number];

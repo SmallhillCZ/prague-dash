@@ -6,6 +6,11 @@
   "features": {
     "ghcr.io/devcontainers/features/java:1": {}
   },
+  "forwardPorts": [
+    4200,
+    3000,
+    9229
+  ],
   "customizations": {
     "vscode": {
       "extensions": [

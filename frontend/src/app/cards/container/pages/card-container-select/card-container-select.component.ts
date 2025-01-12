@@ -11,9 +11,10 @@ import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
 @Component({
-  selector: "pd-card-container-select",
-  templateUrl: "./card-container-select.component.html",
-  styleUrls: ["./card-container-select.component.scss"],
+    selector: "pd-card-container-select",
+    templateUrl: "./card-container-select.component.html",
+    styleUrls: ["./card-container-select.component.scss"],
+    standalone: false
 })
 export class CardContainerSelectComponent implements OnInit {
   containers: ContainerData[] = [];

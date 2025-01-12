@@ -4,9 +4,10 @@ import { DashboardService } from "src/app/services/dashboard.service";
 import { ContainerCard, ContainerCardDefinition } from "../../schema/container-card";
 
 @Component({
-  selector: "pd-card-container-settings",
-  templateUrl: "./card-container-settings.component.html",
-  styleUrls: ["./card-container-settings.component.scss"],
+    selector: "pd-card-container-settings",
+    templateUrl: "./card-container-settings.component.html",
+    styleUrls: ["./card-container-settings.component.scss"],
+    standalone: false
 })
 export class CardContainerSettingsComponent implements OnInit {
   card?: ContainerCard;

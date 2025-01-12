@@ -8,9 +8,10 @@ import { AirQualityService } from "../../services/air-quality.service";
 
 @UntilDestroy()
 @Component({
-  selector: "pd-card-air-quality-station",
-  templateUrl: "./card-air-quality-station.component.html",
-  styleUrls: ["./card-air-quality-station.component.scss"],
+    selector: "pd-card-air-quality-station",
+    templateUrl: "./card-air-quality-station.component.html",
+    styleUrls: ["./card-air-quality-station.component.scss"],
+    standalone: false
 })
 export class CardAirQualityStationComponent implements CardComponent, OnInit {
   types = AirQualityComponents;
