@@ -1,28 +1,78 @@
 import { Injectable } from "@angular/core";
-import { AuthService, User } from "@auth0/auth0-angular";
+import { AuthService } from "@auth0/auth0-angular";
 import axios from "axios";
-import { BehaviorSubject, combineLatest, filter, mergeMap } from "rxjs";
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  firstValueFrom,
+  map,
+  mergeMap,
+  share,
+  skip,
+} from "rxjs";
+import { Logger } from "src/logger";
+import { Dashboard } from "../schema/dashboard";
 import { DashboardService } from "./dashboard.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class SyncService {
+  private logger = new Logger("SyncService");
+
   isAuthenticated = this.authService.isAuthenticated$;
 
   accessToken = new BehaviorSubject<string | undefined>(undefined);
 
-  constructor(private authService: AuthService,private dashboardService: DashboardService) {
+  constructor(
+    private authService: AuthService,
+    private dashboardService: DashboardService,
+  ) {
     this.authService.isAuthenticated$
       .pipe(filter((isAuthenticated) => isAuthenticated))
       .pipe(mergeMap(() => this.getToken()))
       .subscribe(this.accessToken);
+  }
 
-    this.accessToken.subscribe((token) => console.log("token", token));
+  async enableSync() {
+    const userId$ = this.authService.user$
+      .pipe(map((user) => user?.sub))
+      .pipe(filter((user): user is NonNullable<typeof user> => !!user))
+      .pipe(distinctUntilChanged())
+      .pipe(share());
 
-    combineLatest([this.authService.user$,this.accessToken, this.dashboardService.dashboard])
-          .pipe(filter(([user,accessToken, dash]) => !!user && !!accessToken && !!dash))
-          .subscribe(([user,accessToken, dash]) => this.saveDashboard(user,dash));
+    const accessToken$ = this.accessToken
+      .pipe(filter((accessToken): accessToken is NonNullable<typeof accessToken> => !!accessToken))
+      .pipe(distinctUntilChanged())
+      .pipe(share());
+
+    const dashboardChanges$ = this.dashboardService.dashboard
+      .pipe(filter((dashboard): dashboard is NonNullable<typeof dashboard> => !!dashboard))
+      .pipe(map((dash) => JSON.parse(JSON.stringify(dash))))
+      .pipe(distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .pipe(share());
+
+    // load dashboard at start
+    const [userId, accessToken] = await firstValueFrom(combineLatest([userId$, accessToken$]));
+
+    const dashboard = await this.loadDashboard(userId, accessToken);
+
+    if (dashboard) {
+      try {
+        this.dashboardService.saveDashboard(dashboard);
+      } catch (e) {
+        console.error("Error saving dashboard", e);
+      }
+    }
+
+    // set up saving of updated dashboard
+    combineLatest([userId$, accessToken$, dashboardChanges$])
+      .pipe(skip(1))
+      .subscribe(async ([userId, accessToken, dash]) => {
+        await this.saveDashboard(userId, accessToken, dash);
+      });
   }
 
   login() {
@@ -47,27 +97,37 @@ export class SyncService {
       },
     });
 
-    console.log("got token", accessToken);
-
     return accessToken;
   }
 
-  async saveDashboard(user:User,dashboard: any) {
-    console.log("saving dashboard", dashboard, this.accessToken.value);
-    if (!this.accessToken.value) return;
+  async loadDashboard(userId: string, accessToken: string) {
+    const user = await axios.get(`https://prague-dash.eu.auth0.com/api/v2/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
+    const dashboard = user.data.user_metadata.dashboard as Dashboard | undefined;
+
+    this.logger.verbose("loaded dashboard", dashboard);
+    return dashboard;
+  }
+
+  async saveDashboard(userId: string, accessToken: string, dashboard: any) {
     const body = {
       user_metadata: {
         dashboard,
       },
     };
 
-    const response = await axios.patch(`https://prague-dash.eu.auth0.com/api/v2/users/${user.}`, body, {
+    await axios.patch(`https://prague-dash.eu.auth0.com/api/v2/users/${userId}`, body, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.accessToken.value}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    this.logger.verbose("saved dashboard", dashboard);
   }
 }

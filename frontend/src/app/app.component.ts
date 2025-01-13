@@ -1,5 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
-import { IonRouterOutlet, Platform } from "@ionic/angular";
+import { IonRouterOutlet } from "@ionic/angular";
+import { SyncService } from "./services/sync.service";
 
 @Component({
   selector: "pd-root",
@@ -10,5 +11,10 @@ import { IonRouterOutlet, Platform } from "@ionic/angular";
 export class AppComponent {
   @ViewChild(IonRouterOutlet, { static: true }) routerOutlet!: IonRouterOutlet;
 
-  constructor(private platform: Platform) {}
+  constructor(
+    // load sync
+    syncService: SyncService,
+  ) {
+    syncService.enableSync();
+  }
 }

@@ -46,9 +46,11 @@
       ></ion-input>
     </ion-item>
 
-    <ion-item lines="none" class="title">
-      <ion-label><h1>Smazat stránku</h1></ion-label>
-    </ion-item>
+    @if (dashboard?.pages && dashboard!.pages.length > 1) {
+      <ion-item lines="none" class="title">
+        <ion-label><h1>Smazat stránku</h1></ion-label>
+      </ion-item>
+    }
 
     <div class="actions ion-padding">
       <ion-button color="danger" (click)="deletePage()">Smazat stránku</ion-button>
