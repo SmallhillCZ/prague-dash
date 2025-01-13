@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also use other style files */
+@use "src/styles/fonts";
+
+@use "src/styles/ionic";
+@use "src/styles/ionic-theme";
+
+@use "swiper/scss";
+@use "swiper/scss/parallax";
+@use "@ionic/angular/css/ionic-swiper";
+
+@use "src/styles/global";

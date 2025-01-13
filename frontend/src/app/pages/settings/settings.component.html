@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nastavení</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <pd-dash-edit />
+
+  <form #form="ngForm">
+    <ion-list>
+      <ion-item>
+        <ion-label><h2>Jazyk</h2></ion-label>
+        <ion-select name="language" [ngModel]="settings?.language">
+          <ion-select-option value="cs">Česky</ion-select-option>
+          <!-- <ion-select-option value="en">English</ion-select-option> -->
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <h2>Režim pro zrakově postižené</h2>
+          <p>Režim podporuje jen některé karty</p>
+        </ion-label>
+        <ion-toggle name="screenReaderEnabled" [ngModel]="settings?.screenReaderEnabled"></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </form>
+
+  <div class="spacer"></div>
+
+  <div class="footer">
+    <p><a href="https://praguedash.cz/privacy">Ochrana osobních údajů</a></p>
+    <p *ngIf="appVersion">Verze {{ appVersion }}</p>
+  </div>
+</ion-content>
