@@ -73,9 +73,7 @@ export class DashComponent implements OnInit, AfterViewInit, ViewDidEnter, ViewW
   }
 
   ngAfterViewInit(): void {
-    console.log(this.swiperEl);
     if (this.swiperEl?.nativeElement) {
-      console.log(this.swiperEl);
       this.initializeSwiper(this.swiperEl.nativeElement);
     }
   }
@@ -118,7 +116,7 @@ export class DashComponent implements OnInit, AfterViewInit, ViewDidEnter, ViewW
     if (!this.dashboard || !this.swiper.value) return;
 
     const index = this.swiper.value.activeIndex;
-    const page = this.dashboard.pages[index];
+    const page = index in this.dashboard.pages ? this.dashboard.pages[index] : this.dashboard.pages[0];
 
     this.ngZone.run(() => {
       if (page.id !== this.currentPage?.id) {

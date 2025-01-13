@@ -14,28 +14,40 @@
     </ion-item-divider>
 
     <ion-item>
-      <ion-label>Počet spojů</ion-label>
-      <ion-input type="number" min="1" max="20" [(ngModel)]="definition.limit" (ngModelChange)="save()"></ion-input>
+      <ion-input
+        label="Počet spojů"
+        labelPlacement="stacked"
+        type="number"
+        min="1"
+        max="20"
+        [(ngModel)]="definition.limit"
+        (ngModelChange)="save()"
+      ></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label>Označení nízkopodlažních spojů</ion-label>
-      <ion-toggle [(ngModel)]="definition.showWheelchairAccessible" (ngModelChange)="save()"></ion-toggle>
+      <ion-toggle [(ngModel)]="definition.showWheelchairAccessible" (ngModelChange)="save()">
+        Označení nízkopodlažních spojů
+      </ion-toggle>
     </ion-item>
 
     <ion-item>
-      <ion-label>Označení klimatizovaných spojů</ion-label>
-      <ion-toggle [(ngModel)]="definition.showAirConditioned" (ngModelChange)="save()"></ion-toggle>
+      <ion-toggle [(ngModel)]="definition.showAirConditioned" (ngModelChange)="save()">
+        Označení klimatizovaných spojů
+      </ion-toggle>
     </ion-item>
 
     <ion-item>
-      <ion-label>Započítat zpoždění do času</ion-label>
-      <ion-toggle [(ngModel)]="definition.addDelay" (ngModelChange)="save()"></ion-toggle>
+      <ion-toggle [(ngModel)]="definition.addDelay" (ngModelChange)="save()"> Započítat zpoždění do času </ion-toggle>
     </ion-item>
 
     <ion-item>
-      <ion-label>Zobrazení času</ion-label>
-      <ion-select [(ngModel)]="definition.timeDisplay" (ngModelChange)="save()">
+      <ion-select
+        label="Zobrazení času"
+        labelPlacement="stacked"
+        [(ngModel)]="definition.timeDisplay"
+        (ngModelChange)="save()"
+      >
         <ion-select-option value="time">Čas odjezdu</ion-select-option>
         <ion-select-option value="remaining">Počet minut</ion-select-option>
       </ion-select>
@@ -48,8 +60,7 @@
     </ion-item-divider>
 
     <ion-item>
-      <ion-label>Všechna nástupiště</ion-label>
-      <ion-toggle [(ngModel)]="definition.allPlatforms" (ngModelChange)="save()"></ion-toggle>
+      <ion-toggle [(ngModel)]="definition.allPlatforms" (ngModelChange)="save()">Všechna nástupiště</ion-toggle>
     </ion-item>
 
     <ion-item *ngFor="let platform of stop!.platforms" [disabled]="definition.allPlatforms">
@@ -57,7 +68,7 @@
         <h3>Nástupiště {{ platform.name }}</h3>
         <p>{{ getPlatformDirections(platform) }}</p>
       </ion-label>
-      <ion-toggle [(ngModel)]="definition.platforms[platform.id]" (ngModelChange)="save()"></ion-toggle>
+      <ion-toggle slot="end" [(ngModel)]="definition.platforms[platform.id]" (ngModelChange)="save()"></ion-toggle>
     </ion-item>
   </ion-list>
 

@@ -1,89 +1,55 @@
 import { Inject, Injectable } from "@angular/core";
+import { validateSync } from "class-validator";
 import { BehaviorSubject } from "rxjs";
 import { Card } from "src/app/schema/card";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
-import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
-import { Language } from "src/app/schema/language";
+import { Dashboard } from "src/app/schema/dashboard";
+import { Logger } from "src/logger";
 import { StorageService } from "./storage.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class DashboardService {
+  private readonly logger = new Logger("DashboardService");
+
   dashboard = new BehaviorSubject<Dashboard | undefined>(undefined);
 
-  constructor(private storage: StorageService, @Inject(CARDS) private cardTypes: CardType[]) {
+  constructor(
+    private storage: StorageService,
+    @Inject(CARDS) private cardTypes: CardType[],
+  ) {
     // load dashbaord
-    this.getDashboard().then((dash) => {
-      this.dashboard.next(dash);
-    });
+    this.loadDashboard();
   }
 
-  async getDashboard() {
-    const dash = await this.storage.get<Dashboard>("dashboard");
+  getDashboard() {
+    const dash = this.storage.get<Dashboard>("dashboard");
 
-    if (!dash) {
+    if (!dash || !this.validateDashboard(dash)) {
       return {
         pages: [{ id: "0", title: "Hlavní", cards: [] }],
       } as Dashboard;
     }
 
     return dash;
-    // function hasProp<K extends PropertyKey>(data: object, prop: K): data is Record<K, unknown> {
-    //   return prop in data;
-    // }
-
-    // const pages: DashboardPage[] = [];
-    // const cards: Card[] = [];
-
-    // if (dashData && typeof dashData === "object") {
-
-    //   if (hasProp(dashData, "pages") && Array.isArray(dashData.pages)) {
-    //     (<unknown[]>dashData.pages).forEach(item => {
-    //       if (!item || typeof item !== "object") return;
-    //       if (!hasProp(item, "id") || typeof item.id !== "number") return;
-    //       pages.push({
-    //         id: item.id,
-    //         title: hasProp(item, "title") && typeof item.title === "string" ? item.title : undefined,
-    //         cards: []
-    //       });
-    //     });
-    //   }
-
-    //   if (hasProp(dashData, "cards") && Array.isArray(dashData.cards)) {
-    //     (<unknown[]>dashData.cards).forEach(item => {
-    //       if (!item || typeof item !== "object") return;
-    //       if (!hasProp(item, "id") || typeof item.id !== "string") return;
-    //       if (!hasProp(item, "definition") || typeof item.definition !== "object") return;
-    //       if (!hasProp(item, "type") || typeof item.type !== "string" || !this.cardTypes.some(type => type.type === item.type)) return;
-
-    //       const cardTitle = hasProp(item, "title") && typeof item.title === "string" ? item.title : undefined;
-    //       const cardTypeTitle = this.cardTypes.find(cardType => cardType.type === item.type)?.title[this.lang];
-    //       cards.push({
-    //         id: item.id,
-    //         type: item.type,
-    //         definition: item.definition,
-    //         title: cardTitle || cardTypeTitle || "?",
-    //         color: hasProp(item, "color") && typeof item.color === "string" ? item.color : undefined,
-    //         lastUpdate: hasProp(item, "lastUpdate") && typeof item.lastUpdate === "string" ? item.lastUpdate : undefined,
-    //         notifications: hasProp(item, "notifications") && typeof item.notifications === "boolean" ? item.notifications : undefined,
-    //       });
-    //     });
-    //   }
-
-    // }
-
-    // const dash: Dashboard = {
-    //   pages: pages.length > 0 ? pages as [DashboardPage, ...DashboardPage[]] : [{ id: 0, cards: [] }],
-    // };
   }
 
-  async saveDashboard(dash: Dashboard) {
-    await this.storage.set("dashboard", dash);
+  loadDashboard() {
+    this.dashboard.next(this.getDashboard());
+  }
 
-    this.dashboard.next(await this.getDashboard());
+  saveDashboard(dash: Dashboard) {
+    if (!this.validateDashboard(dash)) {
+      throw new Error("Invalid dashboard!");
+    }
+
+    this.storage.set("dashboard", dash);
+    this.logger.verbose("dashboard saved");
+
+    this.dashboard.next(this.getDashboard());
   }
 
   async createPage(title?: string) {
@@ -154,5 +120,14 @@ export class DashboardService {
       }
     }
     return undefined;
+  }
+
+  private validateDashboard(data: Dashboard) {
+    const dashboard = Object.assign(new Dashboard(), data);
+
+    const result = validateSync(dashboard);
+    if (result.length) this.logger.error("Dashboard not valid", result);
+
+    return result.length === 0;
   }
 }

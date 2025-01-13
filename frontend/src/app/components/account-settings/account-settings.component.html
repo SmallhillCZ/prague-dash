@@ -1,0 +1,20 @@
+<ion-item lines="none" class="title">
+  <ion-label><h1>Synchronizace</h1></ion-label>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-label>
+    Synchronizace slouží k ukládání vašich dat na server, abyste je mohli používat na více zařízeních. Pro synchronizaci
+    je potřeba se přihlásit.
+  </ion-label>
+</ion-item>
+
+<ion-item lines="none">
+  <ion-label>
+    @if (syncService.isAuthenticated | async) {
+      <ion-button (click)="syncService.logout()" size="small">Odhlásit se</ion-button>
+    } @else {
+      <ion-button (click)="syncService.login()" size="small">Přihlásit se</ion-button>
+    }
+  </ion-label>
+</ion-item>

@@ -3,19 +3,19 @@ import { ActivatedRoute } from "@angular/router";
 import { AlertController, ItemReorderCustomEvent, NavController } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { combineLatest } from "rxjs";
-import { DashboardService } from "src/app/services/dashboard.service";
-import { SettingsService } from "src/app/services/settings.service";
 import { Card } from "src/app/schema/card";
 import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
 import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
+import { DashboardService } from "src/app/services/dashboard.service";
+import { SettingsService } from "src/app/services/settings.service";
 
 @UntilDestroy()
 @Component({
-    selector: "app-dash-edit-page",
-    templateUrl: "./dash-edit-page.component.html",
-    styleUrls: ["./dash-edit-page.component.scss"],
-    standalone: false
+  selector: "app-dash-edit-page",
+  templateUrl: "./dash-edit-page.component.html",
+  styleUrls: ["./dash-edit-page.component.scss"],
+  standalone: false,
 })
 export class DashEditPageComponent implements OnInit {
   dashboard?: Dashboard;
@@ -30,7 +30,7 @@ export class DashEditPageComponent implements OnInit {
     private navController: NavController,
     private alertController: AlertController,
     @Inject(CARDS) public cardTypes: CardType[],
-    private settings: SettingsService
+    private settings: SettingsService,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ export class DashEditPageComponent implements OnInit {
     const params = this.route.params.pipe(untilDestroyed(this));
 
     combineLatest([dash, params]).subscribe(([dash, params]) => {
-      this.dashboard = dash;
+      this.dashboard = JSON.parse(JSON.stringify(dash));
       this.page = dash?.pages.find((item) => item.id === params["page"]);
     });
   }
@@ -84,7 +84,7 @@ export class DashEditPageComponent implements OnInit {
 
     await this.save();
 
-    this.navController.navigateRoot("/");
+    this.navController.navigateRoot("/settings");
   }
 
   getCardTypeTitle(card: Card): string | undefined {

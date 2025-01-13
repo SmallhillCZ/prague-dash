@@ -1,5 +1,5 @@
-import { StorageService } from "src/app/services/storage.service";
 import { DashboardPage } from "src/app/schema/dashboard";
+import { StorageService } from "src/app/services/storage.service";
 
 export function DashBoardMigrations(storage: StorageService) {
   return async () => {
