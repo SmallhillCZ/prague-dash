@@ -1,7 +1,7 @@
 import { Global, Injectable, Module } from "@nestjs/common";
 import { config } from "dotenv";
 import { readFileSync } from "fs";
-import path from "path";
+import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
@@ -42,6 +42,11 @@ export class Config {
     migrations: [path.join(__dirname, "database/migrations/**/*{.ts,.js}")],
     namingStrategy: new SnakeNamingStrategy(),
     logging: this.logging.debug,
+  };
+
+  golemio = {
+    token: process.env.GOLEMIO_TOKEN || "",
+    apiRoot: process.env.GOLEMIO_API_ROOT || "https://api.golemio.cz/v2",
   };
 
   private getBaseUrl() {

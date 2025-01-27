@@ -5,7 +5,6 @@ import { AppModule } from "./app.module";
 import { Config, StaticConfig } from "./config";
 import { runMigrations } from "./database/run-migrations";
 import { registerOpenAPI } from "./openapi";
-import { registerTemplating } from "./templating";
 
 async function bootstrap() {
   const logger = new Logger("MAIN");
@@ -45,7 +44,7 @@ async function bootstrap() {
   );
 
   // comment to disable templating
-  registerTemplating(app);
+  // registerTemplating(app);
 
   // comment to disable OpenAPI and Swagger
   registerOpenAPI("api", app, config);

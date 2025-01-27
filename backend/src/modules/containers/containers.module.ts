@@ -1,21 +1,13 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { SharedModule } from 'src/shared/shared.module';
-import { ContainersController } from './controllers/containers.controller';
-import { ContainerLog } from './entities/container-log.entity';
-import { ContainersService } from './services/containers.service';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ContainersController } from "./controllers/containers.controller";
+import { ContainerLog } from "./entities/container-log.entity";
+import { ContainersService } from "./services/containers.service";
 
 @Module({
-  providers: [
-    ContainersService,
-  ],
-  imports: [
-    TypeOrmModule.forFeature([ContainerLog]),
-    ConfigModule,
-    SharedModule
-  ],
+  providers: [ContainersService],
+  imports: [TypeOrmModule.forFeature([ContainerLog])],
   controllers: [ContainersController],
-  exports: [ContainersService]
+  exports: [ContainersService],
 })
-export class ContainersModule { }
+export class ContainersModule {}

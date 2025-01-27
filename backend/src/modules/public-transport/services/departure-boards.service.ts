@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { createCipheriv } from 'crypto';
-import { GolemioService } from 'src/shared/services/golemio.service';
-import { DepartureBoardResponse } from '../schema/departure-board-response';
+import { Injectable } from "@nestjs/common";
+import { GolemioOldService } from "src/golemio/services/golemio-old.service";
+import { DepartureBoardResponse } from "../schema/departure-board-response";
 
 export interface GetDepartureBoardOptions {
   name?: string | string[];
@@ -12,13 +11,9 @@ export interface GetDepartureBoardOptions {
 
 @Injectable()
 export class DepartureBoardsService {
-
-  constructor(
-    private golemio: GolemioService
-  ) { }
+  constructor(private golemio: GolemioOldService) {}
 
   async getDepartureBoard(options: GetDepartureBoardOptions) {
-
     if (!options.name && !options.id) {
       throw new Error("You have to select name or id");
     }
@@ -29,17 +24,14 @@ export class DepartureBoardsService {
       // filter: "routeHeadingOnce",
       skip: ["canceled"],
       limit: options.limit ? Math.min(options.limit, 20) : 5,
-      offset: options.offset
+      offset: options.offset,
     };
 
     try {
-      return await this.golemio.get<DepartureBoardResponse[]>("pid/departureboards", params).then(res => res.data);
-    }
-    catch (err: any) {
+      return await this.golemio.get<DepartureBoardResponse[]>("pid/departureboards", params).then((res) => res.data);
+    } catch (err: any) {
       if (err.response.status === 404) return undefined;
       throw err;
     }
   }
-
-
 }

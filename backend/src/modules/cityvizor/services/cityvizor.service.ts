@@ -1,7 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
-import axios from 'axios';
-import { coordinatesToDistanceCompare } from 'src/utils/coordinates-to-distance-compare';
-import { CityvizorPayment, CityvizorProfiles } from '../schema/cityvizor';
+import { Injectable, Logger } from "@nestjs/common";
+import axios from "axios";
+import { coordinatesToDistanceCompare } from "src/utils/coordinates-to-distance-compare";
+import { CityvizorPayment, CityvizorProfiles } from "../schema/cityvizor";
 
 export class GetProfilesOptions {
   coords?: {
@@ -11,14 +11,13 @@ export class GetProfilesOptions {
 }
 
 export class GetPaymentsOptions {
-  profile: number;
-  year: number;
+  profile?: number;
+  year?: number;
   limit: number = 10;
 }
 
 @Injectable()
 export class CityvizorService {
-
   private logger = new Logger(CityvizorService.name);
 
   private cityvizorRoot = "https://cityvizor.cz/api";
@@ -28,13 +27,18 @@ export class CityvizorService {
   }
 
   async getProfiles(options: GetProfilesOptions = {}) {
-
     options = Object.assign(new GetProfilesOptions(), options);
 
-    const profiles = await axios.get<CityvizorProfiles[]>(this.cityvizorRoot + "/exports/profiles").then(res => res.data);
+    const profiles = await axios
+      .get<CityvizorProfiles[]>(this.cityvizorRoot + "/exports/profiles")
+      .then((res) => res.data);
 
     if (options.coords) {
-      profiles.sort((a, b) => coordinatesToDistanceCompare({ lat: a.gpsY, lon: a.gpsX }, { lat: b.gpsY, lon: b.gpsX }, options.coords));
+      profiles.sort((a, b) =>
+        a.gpsY && a.gpsX && b.gpsY && b.gpsX
+          ? coordinatesToDistanceCompare({ lat: a.gpsY, lon: a.gpsX }, { lat: b.gpsY, lon: b.gpsX }, options.coords!)
+          : 0,
+      );
     }
 
     return profiles;
@@ -42,13 +46,14 @@ export class CityvizorService {
 
   // TODO:
   async getPayments(options: GetPaymentsOptions) {
-
     options = Object.assign(new GetPaymentsOptions(), options);
 
-    const payments = await axios.get<CityvizorPayment[]>(this.cityvizorRoot + `/exports/profiles/${options.profile}/payments/${options.year}`).then(res => res.data);
+    const payments = await axios
+      .get<CityvizorPayment[]>(this.cityvizorRoot + `/exports/profiles/${options.profile}/payments/${options.year}`)
+      .then((res) => res.data);
 
-    payments.sort((a, b) => (a.date && b.date) ? a.date.localeCompare(b.date) : 0);
+    payments.sort((a, b) => (a.date && b.date ? a.date.localeCompare(b.date) : 0));
 
-    return payments.slice((-1) * options.limit);
+    return payments.slice(-1 * options.limit);
   }
 }

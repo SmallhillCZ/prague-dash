@@ -1,4 +1,4 @@
-import { FeatureCollection } from 'src/shared/schema/golemio-api';
+import { FeatureCollection } from "src/schema/golemio-api";
 
 export interface ContainerProperties {
   accessibility: {

@@ -1,4 +1,4 @@
-import { FeatureCollection } from "src/shared/schema/golemio-api";
+import { FeatureCollection } from "src/schema/golemio-api";
 
 export enum AirQualityComponentType {
   "SO2" = "SO2",
@@ -11,9 +11,9 @@ export enum AirQualityComponentType {
 export interface AirQualityStationComponent {
   _id: string;
   averaged_time: {
-    averaged_hours: number,
+    averaged_hours: number;
     value: number;
-  },
+  };
   type: AirQualityComponentType;
 }
 
@@ -22,14 +22,12 @@ export interface AirQualityStationMeasurement {
   components: AirQualityStationComponent[];
 }
 
-
 export interface AirQualityStationProperties {
   id: string;
   name: string;
   updated_at: string;
   district: string;
   measurement: AirQualityStationMeasurement;
-
 }
 
 export type AirQualityStationData = FeatureCollection<AirQualityStationProperties>;
