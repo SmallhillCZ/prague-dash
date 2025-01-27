@@ -2,12 +2,11 @@ import { Injectable, Logger } from "@nestjs/common";
 import { Interval } from "@nestjs/schedule";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DateTime } from "luxon";
-import { GolemioOldService } from "src/golemio/services/golemio-old.service";
-import { coordinatesToDistanceCompare } from "src/utils/coordinates-to-distance-compare";
+import { GolemioService } from "src/golemio/services/golemio.service";
 import { Repository } from "typeorm";
 import { ContainerLog } from "../entities/container-log.entity";
-import { Container } from "../schema/container";
-import { ContainerResponse } from "../schema/container-response";
+import { ContainerType } from "../entities/container-type.entity";
+import { Container } from "../entities/container.entity";
 
 export interface GetContainersOptions {
   location?: string;
@@ -28,28 +27,27 @@ export class ContainersService {
   containers: Container[] = [];
 
   constructor(
-    @InjectRepository(ContainerLog)
-    private containerLogRepository: Repository<ContainerLog>,
-    private golemio: GolemioOldService,
+    @InjectRepository(Container) private containerRepository: Repository<Container>,
+    @InjectRepository(ContainerType) private containerTypeRepository: Repository<ContainerType>,
+    @InjectRepository(ContainerLog) private containerLogRepository: Repository<ContainerLog>,
+
+    private golemio: GolemioService,
   ) {
     this.downloadContainers();
   }
 
-  getContainers(options: GetContainersOptions) {
-    const locationString = options.location?.toLocaleLowerCase();
+  async getContainers(options: GetContainersOptions) {
+    const query = this.containerRepository.createQueryBuilder("container");
 
-    let containers = this.containers.filter((item) => {
-      if (locationString && item.location.toLocaleLowerCase().search(locationString) === -1) return false;
-      return true;
-    });
+    if (options.location) query.where("container.location ILIKE :location", { location: `%${options.location}%` });
 
-    if (options.coordinates) {
-      containers.sort((a, b) => coordinatesToDistanceCompare(a, b, options.coordinates!));
+    if (options.coordinates?.lat && options.coordinates?.lon) {
+      query.orderBy("ST_Distance_Sphere(ST_MakePoint(:lon, :lat), ST_MakePoint(container.lon, container.lat))", "ASC");
     } else {
-      containers.sort((a, b) => a.location.localeCompare(b.location));
+      query.orderBy("container.location", "ASC");
     }
 
-    return containers;
+    return await query.getMany();
   }
 
   getContainer(id: Container["id"]) {
@@ -95,89 +93,83 @@ export class ContainersService {
     var timeStart = process.hrtime();
 
     this.logger.verbose("Downloading new container data...");
-    const response = await this.golemio
-      .get<ContainerResponse>("sortedwastestations/?", {
-        onlyMonitored: "true",
-      })
-      .then((res) => res.data);
-
-    let c = 0;
-
-    this.logger.debug("Processing response...");
-    this.containers = response.features
-      .filter((feature) => !!feature.properties.name)
-      .map((feature) => {
-        const container: Container = {
-          id: feature.properties.id.toString(),
-          district: feature.properties.district,
-          lon: feature.geometry.coordinates[0],
-          lat: feature.geometry.coordinates[1],
-          location: feature.properties.name,
-          accessibility: feature.properties.accessibility.id,
-          types: [],
-        };
-
-        container.types = feature.properties.containers.map((container) => ({
-          id: container.container_id.toString(),
-          type: container.trash_type.id || 0,
-          last_measurement: container.last_measurement?.measured_at_utc,
-          occupancy: container.last_measurement?.percent_calculated / 100,
-          cleaning_frequency: container.cleaning_frequency,
-          container_type: container.container_type,
-        }));
-
-        return container;
-      });
-
-    this.logger.debug("Saving to database...");
-    await this.saveLogs(this.containers);
-
-    const timeEnd = process.hrtime(timeStart);
-
-    this.logger.log(
-      `Downloaded ${this.containers.length} containers in ${timeEnd[0] * 1000 + timeEnd[1] / 1000000} ms.`,
-    );
-  }
-
-  private async saveLogs(containers: Container[]) {
-    const newLogs: ContainerLog[] = [];
+    const response = await this.golemio.WasteCollectionV2Api.getWCStations({
+      onlyMonitored: true,
+    }).then((res) => res.data);
 
     const oldLogs = await this.getLatestHistoryValues();
 
-    let skipped = 0;
+    const containers: Container[] = [];
+    const containerTypes: ContainerType[] = [];
+    const containerLogs: ContainerLog[] = [];
 
-    for (let container of containers) {
-      if (!container.id) continue;
+    this.logger.debug("Processing response...");
+    for (let feature of response.features!) {
+      if (!feature.properties?.name) continue;
+      if (!feature.properties?.containers) continue;
+      if (!feature.geometry?.coordinates) continue;
 
-      for (let type of container.types) {
-        if (!type.id || !type.occupancy) continue;
+      const container = {
+        id: feature.properties!.id.toString(),
+        district: feature.properties!.district,
+        lon: feature.geometry?.coordinates?.[0],
+        lat: feature.geometry?.coordinates?.[1],
+        location: feature.properties!.name,
+        accessibility: feature.properties!.accessibility?.id,
+      };
+
+      containers.push(container);
+
+      for (let container of feature.properties!.containers!) {
+        if (!container.container_id) continue;
+
+        const containerType: ContainerType = {
+          id: container.container_id!.toString(),
+          container_id: feature.properties!.id.toString(),
+          type: container.trash_type?.id || 0,
+          last_measurement: container.last_measurement?.measured_at_utc
+            ? DateTime.fromISO(container.last_measurement?.measured_at_utc).toJSDate()
+            : null,
+          occupancy: container.last_measurement?.percent_calculated
+            ? container.last_measurement?.percent_calculated / 100
+            : null,
+          cleaning_frequency: container.cleaning_frequency,
+          container_type: container.container_type,
+        };
+
+        containerTypes.push(containerType);
+
+        if (!containerType.last_measurement) continue;
 
         const newLog: ContainerLog = {
-          id: container.id,
-          timestamp: DateTime.fromISO(type.last_measurement).toJSDate(),
-          type_id: type.id,
-          type: type.type,
-          occupancy: type.occupancy,
+          id: feature.properties!.id.toString(),
+          timestamp: containerType.last_measurement,
+          type_id: containerType.id,
+          type: containerType.type,
+          occupancy: containerType.occupancy,
         };
 
         const oldLog = oldLogs.find((item) => item.id === newLog.id && item.type_id === newLog.type_id);
 
         // skip if exists and is the same
         if (
-          oldLog &&
-          oldLog.occupancy === newLog.occupancy &&
-          oldLog.timestamp.getTime() >= newLog.timestamp.getTime()
+          !oldLog ||
+          (oldLog.occupancy !== newLog.occupancy && oldLog.timestamp.getTime() < newLog.timestamp.getTime())
         ) {
-          skipped++;
-          continue;
+          containerLogs.push(newLog);
         }
-
-        newLogs.push(newLog);
       }
     }
 
-    await this.containerLogRepository.save(newLogs);
+    this.logger.debug("Saving to database...");
+    await this.containerRepository.save(containers);
+    await this.containerTypeRepository.save(containerTypes);
+    await this.containerLogRepository.save(containerLogs);
 
-    this.logger.verbose(`Saved ${newLogs.length} new values, skipped ${skipped} values.`);
+    const timeEnd = process.hrtime(timeStart);
+
+    this.logger.log(
+      `Downloaded ${this.containers.length} containers in ${timeEnd[0] * 1000 + timeEnd[1] / 1000000} ms.`,
+    );
   }
 }

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { ContainerType } from "./container-type.entity";
 
 @Entity()
 export class ContainerLog {
@@ -21,5 +22,9 @@ export class ContainerLog {
     scale: 2,
     transformer: { from: (value: string) => parseFloat(value), to: (value) => value },
   })
-  occupancy?: number;
+  occupancy?: number | null;
+
+  @ManyToOne(() => ContainerType, (log) => log.id)
+  @JoinColumn({ name: "type_id" })
+  containerType?: ContainerType;
 }
