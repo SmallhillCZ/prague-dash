@@ -16,14 +16,18 @@ async function bootstrap() {
 
   const nestOptions: NestApplicationOptions = {
     logger:
-      StaticConfig.environment === "development"
-        ? ["log", "debug", "error", "verbose", "warn"]
-        : ["error", "warn", "log"],
+      StaticConfig.logging.debug || StaticConfig.environment === "development"
+        ? ["log", "error", "warn", "debug", "verbose"]
+        : ["log", "error", "warn"],
   };
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, nestOptions);
 
   const config = app.get(Config);
+
+  if (config.server.globalPrefix) {
+    app.setGlobalPrefix(config.server.globalPrefix);
+  }
 
   if (config.server.cors) {
     app.enableCors({
@@ -31,14 +35,12 @@ async function bootstrap() {
     });
   }
 
-  // uncomment to set global prefix for controllers (doesn't apply to static files and openapi)
-  // app.setGlobalPrefix("api");
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: { enableImplicitConversion: true },
     }),
   );
 
