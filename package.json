@@ -15,6 +15,7 @@
     "prettier": "^3.4.2"
   },
   "dependencies": {
+    "@nestjs/schedule": "^5.0.1",
     "dotenv": "^16.4.7"
   }
 }

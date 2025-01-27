@@ -19,7 +19,7 @@ let modules = argv["_"] || [];
 
 if (modules.length) {
   logger.log(`Loading modules: ${modules}`);
-  loadModules = modules.map((item) => Modules[item]);
+  loadModules = modules.filter((item): item is keyof typeof Modules => item in Modules).map((item) => Modules[item]);
 } else {
   logger.log(`Loading all modules`);
   loadModules = Object.values(Modules);
