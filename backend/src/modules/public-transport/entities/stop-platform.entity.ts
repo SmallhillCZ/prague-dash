@@ -1,22 +1,20 @@
-import { LargeNumberLike } from 'crypto';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Stop } from './stop.entity';
+import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { Stop } from "./stop.entity";
 
 @Entity()
 export class StopPlatform {
-
   @PrimaryColumn()
-  id: string;
+  id!: string;
 
-  @ManyToOne(() => Stop, stop => stop.platforms, { onDelete: "CASCADE", onUpdate: "CASCADE" })
-  stop: Stop;
+  @ManyToOne(() => Stop, (stop) => stop.platforms, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  stop!: Stop;
 
   @Column({ nullable: true })
-  name: string;
+  name!: string;
 
   @Column({ type: "numeric", precision: 8, scale: 5 })
-  lat: number;
+  lat!: number;
 
   @Column({ type: "numeric", precision: 8, scale: 5 })
-  lon: number;
+  lon!: number;
 }

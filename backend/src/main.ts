@@ -1,28 +1,57 @@
-import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
-import { AppModule } from './app.module';
-import { NestApplicationOptions } from '@nestjs/common';
+import { Logger, NestApplicationOptions, ValidationPipe } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { AppModule } from "./app.module";
+import { Config, StaticConfig } from "./config";
+import { runMigrations } from "./database/run-migrations";
+import { registerOpenAPI } from "./openapi";
 
 async function bootstrap() {
+  const logger = new Logger("MAIN");
 
-  var environment = process.env.NODE_ENV || 'development';
+  if (StaticConfig.environment === "production") {
+    await runMigrations(StaticConfig);
+  }
 
-  const options: NestApplicationOptions = {
-    logger: environment === "development" ? ['log', 'debug', 'error', 'verbose', 'warn'] : ['error', 'warn', 'log'],
+  const nestOptions: NestApplicationOptions = {
+    logger:
+      StaticConfig.logging.debug || StaticConfig.environment === "development"
+        ? ["log", "error", "warn", "debug", "verbose"]
+        : ["log", "error", "warn"],
   };
 
-  const app = await NestFactory.create(AppModule, options);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, nestOptions);
 
-  const configService = app.get(ConfigService);
+  const config = app.get(Config);
 
-  if (environment === "development") app.enableCors({
-    origin: [
-      "http://localhost:4200"
-    ]
-  });
+  if (config.server.globalPrefix) {
+    app.setGlobalPrefix(config.server.globalPrefix);
+  }
 
-  const port = configService.get('PORT') ? Number(configService.get('PORT')) : 3000;
+  if (config.server.cors) {
+    app.enableCors({
+      origin: ["http://localhost:4200"],
+    });
+  }
 
-  await app.listen(port);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
+
+  // comment to disable templating
+  // registerTemplating(app);
+
+  // comment to disable OpenAPI and Swagger
+  registerOpenAPI("api", app, config);
+
+  await app.listen(config.server.port, config.server.host);
+
+  logger.log(`Server running on http://${config.server.host}:${config.server.port}`);
 }
+
 bootstrap();

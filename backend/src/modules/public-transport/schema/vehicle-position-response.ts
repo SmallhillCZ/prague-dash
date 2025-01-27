@@ -1,30 +1,26 @@
-import { Feature, FeatureCollection } from "src/shared/schema/golemio-api";
+import { Feature, FeatureCollection } from "src/schema/golemio-api";
 
 export type VehiclePositionResponse = Feature<VehiclePositionProperties>;
 
 export interface VehiclePositionProperties {
-
   last_position: {
     bearing: null | number;
     delay: {
       actual?: null | number;
       last_stop_arrival?: null | number;
       last_stop_departure?: null | number;
-
     };
     last_stop: {
       id: null | string;
       sequence: null | number;
       arrival_time: null | string;
       departure_time: null | string;
-
     };
     next_stop: {
       id: null | string;
       sequence: null | number;
       arrival_time: null | string;
       departure_time: null | string;
-
     };
 
     is_canceled: null | boolean;
@@ -32,7 +28,6 @@ export interface VehiclePositionProperties {
     speed?: null | number;
     shape_dist_traveled?: null | string;
     tracking: boolean;
-
   };
 
   all_positions: FeatureCollection<unknown>;
@@ -57,7 +52,6 @@ export interface VehiclePositionProperties {
       route_type: number;
       trip_id: string;
       trip_headsign?: null | string;
-
     };
 
     start_timestamp: string;
@@ -65,13 +59,8 @@ export interface VehiclePositionProperties {
       id: number;
       description_cs: string;
       description_en: string;
-
     };
     vehicle_registration_number: number;
     wheelchair_accessible: boolean;
-
   };
-
-
-
-};
+}

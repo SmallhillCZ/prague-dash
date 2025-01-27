@@ -1,24 +1,22 @@
-FROM node:18-alpine as builder
+FROM node:22-alpine
 
 WORKDIR /app
 
-# Install packages
+# BUILD
 COPY package.json package-lock.json ./
-
 RUN npm ci
 
-# Build
 COPY . .
-
 RUN npm run build
 
-# remove development dependencies
-RUN npm prune --production
+# CLEAN
+ENV NODE_ENV=production
+RUN npm prune
 
-
-# Run
-ENV NODE_ENV production
+# RUN
+ENV PORT=3000
+ENV HOST=0.0.0.0
 
 EXPOSE 3000
 
-CMD npm start
+CMD ["npm","start"]

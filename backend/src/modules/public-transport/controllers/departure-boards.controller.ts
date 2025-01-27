@@ -1,7 +1,7 @@
-import { Controller, Get, NotFoundException, Param, Query } from '@nestjs/common';
-import { DepartureBoardResponse } from '../schema/departure-board-response';
-import { DepartureBoardsService, GetDepartureBoardOptions } from '../services/departure-boards.service';
-import { StopsService } from '../services/stops.service';
+import { Controller, Get, NotFoundException, Query } from "@nestjs/common";
+import { DepartureBoardResponse } from "../schema/departure-board-response";
+import { DepartureBoardsService, GetDepartureBoardOptions } from "../services/departure-boards.service";
+import { StopsService } from "../services/stops.service";
 
 export interface GetDepartureBoardsQuery {
   name: string | string[];
@@ -17,22 +17,20 @@ export interface GetClosestDepartureBoardsQuery {
   offset?: string;
 }
 
-@Controller('departure-boards')
+@Controller("departure-boards")
 export class DepartureBoardsController {
-
   constructor(
     private departureBoardsService: DepartureBoardsService,
-    private stopsService: StopsService
-  ) { };
+    private stopsService: StopsService,
+  ) {}
 
   @Get("/")
   async getDepartureBoard(@Query() query?: GetDepartureBoardsQuery): Promise<DepartureBoardResponse[]> {
-
     const options: GetDepartureBoardOptions = {
-      name: query.name,
-      id: query.id,
-      limit: query.limit ? Number(query.limit) : undefined,
-      offset: query.offset ? Number(query.offset) : undefined,
+      name: query?.name,
+      id: query?.id,
+      limit: query?.limit ? Number(query?.limit) : undefined,
+      offset: query?.offset ? Number(query?.offset) : undefined,
     };
 
     const board = await this.departureBoardsService.getDepartureBoard(options);
@@ -46,20 +44,18 @@ export class DepartureBoardsController {
    */
   @Get("/closest")
   async getClosestDepartureBoard(@Query() query?: GetClosestDepartureBoardsQuery): Promise<DepartureBoardResponse[]> {
-
     const coordinates = {
-      lat: Number(query.lat),
-      lon: Number(query.lon),
+      lat: Number(query?.lat),
+      lon: Number(query?.lon),
     };
 
-    const closestStop = await this.stopsService.getStops({ coordinates, limit: 1 }).then(stops => stops[0]);
+    const closestStop = await this.stopsService.getStops({ coordinates, limit: 1 }).then((stops) => stops[0]);
     if (!closestStop) throw new NotFoundException();
 
     return this.getDepartureBoard({
       name: closestStop.name,
-      limit: query.limit,
-      offset: query.offset
+      limit: query?.limit,
+      offset: query?.offset,
     });
   }
-
 }

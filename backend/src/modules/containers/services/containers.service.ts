@@ -1,13 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Interval } from '@nestjs/schedule';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DateTime } from 'luxon';
-import { GolemioService } from 'src/shared/services/golemio.service';
-import { coordinatesToDistanceCompare } from 'src/utils/coordinates-to-distance-compare';
-import { Repository } from 'typeorm';
-import { ContainerLog } from '../entities/container-log.entity';
-import { Container } from '../schema/container';
-import { ContainerResponse } from '../schema/container-response';
+import { Injectable, Logger } from "@nestjs/common";
+import { Interval } from "@nestjs/schedule";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DateTime } from "luxon";
+import { GolemioOldService } from "src/golemio/services/golemio-old.service";
+import { coordinatesToDistanceCompare } from "src/utils/coordinates-to-distance-compare";
+import { Repository } from "typeorm";
+import { ContainerLog } from "../entities/container-log.entity";
+import { Container } from "../schema/container";
+import { ContainerResponse } from "../schema/container-response";
 
 export interface GetContainersOptions {
   location?: string;
@@ -15,7 +15,7 @@ export interface GetContainersOptions {
 }
 
 export interface GetHistoryOptions {
-  id?: Container['id'];
+  id?: Container["id"];
   type: number;
   since: Date;
   limit?: number;
@@ -30,7 +30,7 @@ export class ContainersService {
   constructor(
     @InjectRepository(ContainerLog)
     private containerLogRepository: Repository<ContainerLog>,
-    private golemio: GolemioService,
+    private golemio: GolemioOldService,
   ) {
     this.downloadContainers();
   }
@@ -39,18 +39,12 @@ export class ContainersService {
     const locationString = options.location?.toLocaleLowerCase();
 
     let containers = this.containers.filter((item) => {
-      if (
-        locationString &&
-        item.location.toLocaleLowerCase().search(locationString) === -1
-      )
-        return false;
+      if (locationString && item.location.toLocaleLowerCase().search(locationString) === -1) return false;
       return true;
     });
 
     if (options.coordinates) {
-      containers.sort((a, b) =>
-        coordinatesToDistanceCompare(a, b, options.coordinates),
-      );
+      containers.sort((a, b) => coordinatesToDistanceCompare(a, b, options.coordinates!));
     } else {
       containers.sort((a, b) => a.location.localeCompare(b.location));
     }
@@ -58,39 +52,39 @@ export class ContainersService {
     return containers;
   }
 
-  getContainer(id: Container['id']) {
+  getContainer(id: Container["id"]) {
     return this.containers.find((item) => item.id === id);
   }
 
   getHistory(options: GetHistoryOptions) {
     let query = this.containerLogRepository
       .createQueryBuilder()
-      .select(['timestamp', 'occupancy'])
+      .select(["timestamp", "occupancy"])
       .where({ type: options.type, id: options.id })
-      .andWhere('timestamp >= :since', { since: options.since });
+      .andWhere("timestamp >= :since", { since: options.since });
 
     return query.execute();
   }
 
-  getLatestHistoryValues(options: { id?: Container['id'] } = {}) {
+  getLatestHistoryValues(options: { id?: Container["id"] } = {}) {
     let latestTimestampsQuery = this.containerLogRepository
       .createQueryBuilder()
-      .select('id')
-      .addSelect('type_id')
-      .addSelect('MAX(timestamp)', 'timestamp')
-      .groupBy('id,type_id');
+      .select("id")
+      .addSelect("type_id")
+      .addSelect("MAX(timestamp)", "timestamp")
+      .groupBy("id,type_id");
 
     let query = this.containerLogRepository
-      .createQueryBuilder('log')
+      .createQueryBuilder("log")
       .innerJoin(
         `(${latestTimestampsQuery.getQuery()})`,
-        'latest',
-        'log.id = latest.id AND log.type_id = latest.type_id AND log.timestamp = latest.timestamp',
+        "latest",
+        "log.id = latest.id AND log.type_id = latest.type_id AND log.timestamp = latest.timestamp",
       );
 
     if (options.id)
       latestTimestampsQuery = latestTimestampsQuery.where({
-        'log.id': options.id,
+        "log.id": options.id,
       });
 
     return query.getMany();
@@ -100,16 +94,16 @@ export class ContainersService {
   private async downloadContainers() {
     var timeStart = process.hrtime();
 
-    this.logger.verbose('Downloading new container data...');
+    this.logger.verbose("Downloading new container data...");
     const response = await this.golemio
-      .get<ContainerResponse>('sortedwastestations/?', {
-        onlyMonitored: 'true',
+      .get<ContainerResponse>("sortedwastestations/?", {
+        onlyMonitored: "true",
       })
       .then((res) => res.data);
 
     let c = 0;
 
-    this.logger.debug('Processing response...');
+    this.logger.debug("Processing response...");
     this.containers = response.features
       .filter((feature) => !!feature.properties.name)
       .map((feature) => {
@@ -135,15 +129,13 @@ export class ContainersService {
         return container;
       });
 
-    this.logger.debug('Saving to database...');
+    this.logger.debug("Saving to database...");
     await this.saveLogs(this.containers);
 
     const timeEnd = process.hrtime(timeStart);
 
     this.logger.log(
-      `Downloaded ${this.containers.length} containers in ${
-        timeEnd[0] * 1000 + timeEnd[1] / 1000000
-      } ms.`,
+      `Downloaded ${this.containers.length} containers in ${timeEnd[0] * 1000 + timeEnd[1] / 1000000} ms.`,
     );
   }
 
@@ -168,9 +160,7 @@ export class ContainersService {
           occupancy: type.occupancy,
         };
 
-        const oldLog = oldLogs.find(
-          (item) => item.id === newLog.id && item.type_id === newLog.type_id,
-        );
+        const oldLog = oldLogs.find((item) => item.id === newLog.id && item.type_id === newLog.type_id);
 
         // skip if exists and is the same
         if (
@@ -188,8 +178,6 @@ export class ContainersService {
 
     await this.containerLogRepository.save(newLogs);
 
-    this.logger.verbose(
-      `Saved ${newLogs.length} new values, skipped ${skipped} values.`,
-    );
+    this.logger.verbose(`Saved ${newLogs.length} new values, skipped ${skipped} values.`);
   }
 }

@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
-import { SharedModule } from 'src/shared/shared.module';
-import { AirQualityService } from './services/air-quality.service';
-import { AirQualityController } from './controllers/air-quality.controller';
+import { Module } from "@nestjs/common";
+import { GolemioModule } from "src/golemio/golemio.module";
+import { AirQualityController } from "./controllers/air-quality.controller";
+import { AirQualityService } from "./services/air-quality.service";
 
 @Module({
-  imports: [SharedModule],
+  imports: [GolemioModule],
   providers: [AirQualityService],
-  controllers: [AirQualityController]
+  controllers: [AirQualityController],
 })
-export class AirQualityModule { }
+export class AirQualityModule {}
