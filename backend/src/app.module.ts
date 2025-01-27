@@ -1,20 +1,21 @@
-import { Logger, Module, ModuleMetadata } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import * as minimist from 'minimist';
-import { AppController } from './app.controller';
-import { dbConfig } from './data-source';
-import { Modules } from './modules/modules';
-import { SharedModule } from './shared/shared.module';
+import { Logger, Module, ModuleMetadata } from "@nestjs/common";
+import { ScheduleModule } from "@nestjs/schedule";
+import * as minimist from "minimist";
+import { AppController } from "./app.controller";
+import { ConfigModule } from "./config";
+import { DatabaseModule } from "./database/database.module";
+import { Modules } from "./modules/modules";
 
-/* DECIDE WHICH MODULES TO LOAD */
-const logger = new Logger('AppModule');
+/** DECIDE WHICH MODULES TO LOAD
+ *
+ * Usage: npm run dev -- -- containers air-quality
+ */
+const logger = new Logger("AppModule");
 
 var argv = minimist(process.argv.slice(2));
 
-let loadModules: ModuleMetadata['imports'] = [];
-let modules = argv['_'] || [];
+let loadModules: ModuleMetadata["imports"] = [];
+let modules = argv["_"] || [];
 
 if (modules.length) {
   logger.log(`Loading modules: ${modules}`);
@@ -24,23 +25,8 @@ if (modules.length) {
   loadModules = Object.values(Modules);
 }
 
-const typeOrmConfig: TypeOrmModuleOptions = {
-  ...dbConfig,
-  autoLoadEntities: true,
-};
-
 @Module({
-  imports: [
-    ScheduleModule.forRoot(),
-
-    TypeOrmModule.forRoot(typeOrmConfig),
-
-    ConfigModule.forRoot({ isGlobal: true }),
-
-    SharedModule,
-
-    ...loadModules,
-  ],
+  imports: [ScheduleModule.forRoot(), ConfigModule, DatabaseModule, ...loadModules],
   controllers: [AppController],
   providers: [],
 })

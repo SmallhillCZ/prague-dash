@@ -5,21 +5,23 @@ services:
     image: mcr.microsoft.com/devcontainers/typescript-node:22
     command: sleep infinity
     environment:
-      DB_HOST: db
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: password
       DB_DATABASE: postgres
 
-  db:
+  postgres:
     image: postgres:14
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
-    ports:
-      - 5432:5432
 
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
+  pgweb:
+    container_name: pgweb
+    restart: always
+    image: sosedoff/pgweb
+    environment:
+      - PGWEB_DATABASE_URL=postgres://postgres:password@postgres:5432/postgres?sslmode=disable
+    depends_on:
+      - postgres

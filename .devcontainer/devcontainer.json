@@ -9,7 +9,9 @@
   "forwardPorts": [
     4200,
     3000,
-    9229
+    9229,
+    "pgweb:8081",
+    "db:5432"
   ],
   "customizations": {
     "vscode": {
