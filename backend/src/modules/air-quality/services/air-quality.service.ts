@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Interval } from "@nestjs/schedule";
+import { GolemioClient } from "golemio-sdk";
 import { FeaturePoint } from "src/golemio/sdk";
-import { GolemioService } from "src/golemio/services/golemio.service";
 import { Coordinates } from "src/schema/coordinates";
 import { coordinatesFromTuple } from "src/utils/coordinates-from-tuple";
 import { coordinatesToDistanceCompare } from "src/utils/coordinates-to-distance-compare";
@@ -12,7 +12,7 @@ export class AirQualityService {
 
   private data?: FeaturePoint[];
 
-  constructor(private golemio: GolemioService) {
+  constructor(private golemio: GolemioClient) {
     this.updateStations();
   }
 

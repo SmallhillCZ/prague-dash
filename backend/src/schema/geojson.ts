@@ -1,6 +1,5 @@
-
 export interface FeatureCollection<Properties> {
-  type: "FeatureCollection",
+  type: "FeatureCollection";
 
   features: Feature<Properties>[];
 }
@@ -12,6 +11,6 @@ export interface Feature<Properties> {
 }
 
 export interface Geometry {
-  "type": "Point",
+  type: "Point";
   coordinates: [number, number];
 }

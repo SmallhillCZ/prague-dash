@@ -1,16 +1,20 @@
 import { Controller, Get, InternalServerErrorException, NotFoundException, Param } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import axios from "axios";
-import { GolemioOldService } from "src/golemio/services/golemio-old.service";
-import { VehiclePositionResponse } from "../schema/vehicle-position-response";
+import { GolemioPublicTransportClient } from "golemio-sdk";
+import { VehiclePositionResponse } from "../dto/vehicle-position-response.dto";
 
 @Controller("vehicle-positions")
+@ApiTags("Public Transport")
 export class VehiclePositionsController {
-  constructor(private golemio: GolemioOldService) {}
+  constructor(private golemio: GolemioPublicTransportClient) {}
 
   @Get(":trip_id")
-  async getVehiclePosition(@Param("trip_id") tripId: string) {
+  async getVehiclePosition(@Param("trip_id") tripId: string): Promise<VehiclePositionResponse> {
     try {
-      return await this.golemio.get<VehiclePositionResponse>(`vehiclepositions/${tripId}`).then((res) => res.data);
+      return (await this.golemio.PIDRealtimePositionsV2Api.v2VehiclepositionsGtfsTripIdGet(tripId, {}, {}).then(
+        (res) => res.data,
+      )) as VehiclePositionResponse;
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         throw new NotFoundException();

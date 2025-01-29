@@ -1,14 +1,15 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "src/app/services/api.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
-import { PlatformData } from "../schema/platform-data";
-import { StopData } from "../schema/stop-data";
 
 @Injectable({
   providedIn: "root",
 })
 export class StopsService {
-  constructor(private api: ApiService, private geolocationService: GeolocationService) {}
+  constructor(
+    private api: ApiService,
+    private geolocationService: GeolocationService,
+  ) {}
 
   async getStops(options: { search?: string; coordinates?: { lat: number; lon: number } }) {
     const params: any = {};
@@ -20,11 +21,11 @@ export class StopsService {
       params["lon"] = options.coordinates.lon;
     }
 
-    return this.api.get<StopData[]>("stops", params);
+    return this.api.PublicTransportApi.getStops(params).then((res) => res.data);
   }
 
   async getStop(name: string) {
-    return this.api.get<StopData>("stops/" + name);
+    return this.api.PublicTransportApi.getStop(name).then((res) => res.data);
   }
 
   async getClosestStop() {
@@ -35,10 +36,10 @@ export class StopsService {
       lat: position.coords.latitude,
       lon: position.coords.longitude,
     };
-    return this.api.get<StopData>("stops/closest", params);
+    return this.api.PublicTransportApi.getClosestStop(params).then((res) => res.data);
   }
 
   async getPlatform(id: string) {
-    return this.api.get<PlatformData>("platforms/" + id);
+    return this.api.PublicTransportApi.getPlatform(id).then((res) => res.data);
   }
 }

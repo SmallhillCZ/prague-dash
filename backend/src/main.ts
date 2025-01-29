@@ -37,7 +37,6 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: true,
       transform: true,
       transformOptions: { enableImplicitConversion: true },
     }),
@@ -47,7 +46,7 @@ async function bootstrap() {
   // registerTemplating(app);
 
   // comment to disable OpenAPI and Swagger
-  registerOpenAPI("api", app, config);
+  registerOpenAPI("api/openapi", app, config);
 
   await app.listen(config.server.port, config.server.host);
 

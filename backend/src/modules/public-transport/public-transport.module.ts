@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { GolemioModule } from "src/golemio/golemio.module";
 import { DepartureBoardsController } from "./controllers/departure-boards.controller";
 import { PlatformsController } from "./controllers/platforms.controller";
 import { StopsController } from "./controllers/stops.controller";
@@ -13,7 +14,7 @@ import { VehiclePositionsService } from "./services/vehicle-positions.service";
 
 @Module({
   providers: [StopsService, StopsDownloadService, DepartureBoardsService, VehiclePositionsService],
-  imports: [TypeOrmModule.forFeature([Stop, StopPlatform])],
+  imports: [GolemioModule, TypeOrmModule.forFeature([Stop, StopPlatform])],
   controllers: [StopsController, PlatformsController, DepartureBoardsController, VehiclePositionsController],
 })
 export class PublicTransportModule {}

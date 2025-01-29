@@ -22,38 +22,38 @@
       *ngFor="let departure of departureBoard.departures"
       (click)="openDeparture(departure)"
       [button]="hasDetail(departure)"
-      [detail]="hasDetail(departure) && !departure.trip.is_canceled"
+      [detail]="hasDetail(departure) && !departure.trip?.is_canceled"
       class="departure"
-      [class.at-stop]="departure.trip.is_at_stop"
-      [class.is-cancelled]="departure.trip.is_canceled"
+      [class.at-stop]="departure.trip?.is_at_stop"
+      [class.is-cancelled]="departure.trip?.is_canceled"
     >
       <ion-avatar slot="start">
         <div class="circle" [ngStyle]="departure | departureStyle">
-          <div class="text">{{ departure.route.short_name }}</div>
+          <div class="text">{{ departure.route?.short_name }}</div>
         </div>
       </ion-avatar>
 
       <ion-label class="headsign">
         <h2>
-          {{ departure.trip.headsign }}
-          <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible">
+          {{ departure.trip?.headsign }}
+          <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip?.is_wheelchair_accessible">
             ♿
           </ng-container>
-          <ng-container *ngIf="card.definition.showAirConditioned && departure.trip.is_air_conditioned">
+          <ng-container *ngIf="card.definition.showAirConditioned && departure.trip?.is_air_conditioned">
             ❄️
           </ng-container>
         </h2>
       </ion-label>
 
-      <ion-label *ngIf="!departure.trip.is_canceled" class="time" slot="end" [class.no-detail]="!hasDetail(departure)">
-        {{ departure | departureTime : card.definition }}
+      <ion-label *ngIf="!departure.trip?.is_canceled" class="time" slot="end" [class.no-detail]="!hasDetail(departure)">
+        {{ departure | departureTime: card.definition }}
         <br />
         <ion-text class="delay" [color]="departure | departureDelayColor">
-          {{ departure | departureDelay : card.definition }}
+          {{ departure | departureDelay: card.definition }}
         </ion-text>
       </ion-label>
-      <ion-label *ngIf="departure.trip.is_canceled" class="time no-detail" slot="end">
-        <ion-text class="departureTime">{{ departure | departureTime : card.definition }}</ion-text>
+      <ion-label *ngIf="departure.trip?.is_canceled" class="time no-detail" slot="end">
+        <ion-text class="departureTime">{{ departure | departureTime: card.definition }}</ion-text>
         <br />
         <ion-text class="delay" color="danger"> zrušeno </ion-text>
       </ion-label>

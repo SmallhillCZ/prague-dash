@@ -1,4 +1,4 @@
-import { FeatureCollection } from "src/schema/golemio-api";
+import { FeatureCollection } from "src/schema/geojson";
 
 export interface StopProperties {
   location_type: number;

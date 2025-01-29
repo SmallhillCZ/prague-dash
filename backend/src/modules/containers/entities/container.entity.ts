@@ -5,13 +5,12 @@ import { ContainerType } from "./container-type.entity";
 export class Container {
   @PrimaryColumn("varchar") id!: string;
 
-  @Column("varchar") district?: string;
-  @Column("numeric", { nullable: true }) lon?: number | null;
-  @Column("numeric", { nullable: true }) lat?: number | null;
-
   @Column("text") location!: string;
 
-  @Column("smallint") accessibility?: number;
+  @Column("varchar", { nullable: true }) district?: string;
+  @Column("numeric", { nullable: true }) lon?: number | null;
+  @Column("numeric", { nullable: true }) lat?: number | null;
+  @Column("smallint", { nullable: true }) accessibility?: number;
 
   @OneToMany(() => ContainerType, (type) => type.container)
   containerTypes?: ContainerType[];

@@ -1,27 +1,28 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Language } from "src/app/schema/language";
 import { DashboardService } from "src/app/services/dashboard.service";
+import { ContainerType } from "src/sdk";
 import { ContainerCard } from "../../schema/container-card";
 import { ContainerDataType } from "../../schema/container-data";
 import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
 @Component({
-    selector: "pd-card-container-detail",
-    templateUrl: "./card-container-detail.component.html",
-    styleUrls: ["./card-container-detail.component.scss"],
-    standalone: false
+  selector: "pd-card-container-detail",
+  templateUrl: "./card-container-detail.component.html",
+  styleUrls: ["./card-container-detail.component.scss"],
+  standalone: false,
 })
 export class CardContainerDetailComponent implements OnInit {
-  types?: ContainerDataType[];
+  types?: ContainerType[];
 
   lang = Language.cs;
 
   constructor(
     private dash: DashboardService,
     private route: ActivatedRoute,
-    private containerService: ContainerService
+    private containerService: ContainerService,
   ) {}
 
   card?: ContainerCard;
@@ -38,9 +39,9 @@ export class CardContainerDetailComponent implements OnInit {
   async loadData(card: ContainerCard) {
     const data = await this.containerService.getContainer(card.definition.id);
 
-    this.types = data.types;
+    this.types = data.containerTypes;
 
-    this.types.sort((a, b) => {
+    this.types?.sort((a, b) => {
       if (a.occupancy === null) return 1;
       if (b.occupancy === null) return -1;
       return this.getContainerTypeTitle(a, this.lang).localeCompare(this.getContainerTypeTitle(b, this.lang));

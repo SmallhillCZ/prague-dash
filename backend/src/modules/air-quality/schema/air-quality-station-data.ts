@@ -1,4 +1,4 @@
-import { FeatureCollection } from "src/schema/golemio-api";
+import { FeatureCollection } from "src/schema/geojson";
 
 export enum AirQualityComponentType {
   "SO2" = "SO2",

@@ -1,23 +1,12 @@
 import { Controller, Get, NotFoundException, Query } from "@nestjs/common";
-import { DepartureBoardResponse } from "../schema/departure-board-response";
+import { ApiTags } from "@nestjs/swagger";
+import { DepartureBoardResponse } from "../dto/departure-board-response.dto";
+import { GetClosestDepartureBoardsQuery, GetDepartureBoardsQuery } from "../dto/departure-boards.dto";
 import { DepartureBoardsService, GetDepartureBoardOptions } from "../services/departure-boards.service";
 import { StopsService } from "../services/stops.service";
 
-export interface GetDepartureBoardsQuery {
-  name: string | string[];
-  id?: string | string[];
-  limit?: string;
-  offset?: string;
-}
-
-export interface GetClosestDepartureBoardsQuery {
-  lat: string;
-  lon: string;
-  limit?: string;
-  offset?: string;
-}
-
 @Controller("departure-boards")
+@ApiTags("Public Transport")
 export class DepartureBoardsController {
   constructor(
     private departureBoardsService: DepartureBoardsService,
@@ -25,7 +14,7 @@ export class DepartureBoardsController {
   ) {}
 
   @Get("/")
-  async getDepartureBoard(@Query() query?: GetDepartureBoardsQuery): Promise<DepartureBoardResponse[]> {
+  async getDepartureBoard(@Query() query?: GetDepartureBoardsQuery): Promise<DepartureBoardResponse> {
     const options: GetDepartureBoardOptions = {
       name: query?.name,
       id: query?.id,
@@ -43,7 +32,7 @@ export class DepartureBoardsController {
    * @deprecated
    */
   @Get("/closest")
-  async getClosestDepartureBoard(@Query() query?: GetClosestDepartureBoardsQuery): Promise<DepartureBoardResponse[]> {
+  async getClosestDepartureBoard(@Query() query?: GetClosestDepartureBoardsQuery): Promise<DepartureBoardResponse> {
     const coordinates = {
       lat: Number(query?.lat),
       lon: Number(query?.lon),
@@ -53,7 +42,7 @@ export class DepartureBoardsController {
     if (!closestStop) throw new NotFoundException();
 
     return this.getDepartureBoard({
-      name: closestStop.name,
+      name: [closestStop.name],
       limit: query?.limit,
       offset: query?.offset,
     });

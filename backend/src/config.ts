@@ -46,7 +46,6 @@ export class Config {
 
   golemio = {
     token: process.env.GOLEMIO_TOKEN || "",
-    apiRoot: process.env.GOLEMIO_API_ROOT || "https://api.golemio.cz",
   };
 
   private getBaseUrl() {

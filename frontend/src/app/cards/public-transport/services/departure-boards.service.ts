@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "src/app/services/api.service";
-import { DepartureBoardData } from "../schema/departure-board-data";
 
 export interface LoadDeparturesOptions {
   allPlatforms?: boolean;
@@ -40,12 +39,12 @@ export class DepartureBoardsService {
     }
 
     const params = {
-      name: options.name,
+      name: !!options.name ? [options.name] : undefined,
       limit: options.limit,
       offset: options.offset,
-      id: platforms,
+      id: !!platforms ? platforms : undefined,
     };
 
-    return this.api.get<DepartureBoardData>("departure-boards", params);
+    return this.api.PublicTransportApi.getDepartureBoard(params).then((res) => res.data);
   }
 }

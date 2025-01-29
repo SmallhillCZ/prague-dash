@@ -1,19 +1,14 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { ContainerType } from "./container-type.entity";
+import { Container } from "./container.entity";
 
 @Entity()
 export class ContainerLog {
-  @PrimaryColumn({ type: "timestamptz" })
-  timestamp!: Date;
+  @PrimaryColumn({ type: "timestamptz" }) timestamp!: Date;
+  @PrimaryColumn({}) containerTypeId!: string;
 
-  @PrimaryColumn()
-  id!: string;
-
-  @PrimaryColumn({})
-  type_id!: string;
-
-  @Column()
-  type!: number;
+  @Column() containerId!: string;
+  @Column() type!: number;
 
   @Column({
     nullable: true,
@@ -24,7 +19,11 @@ export class ContainerLog {
   })
   occupancy?: number | null;
 
-  @ManyToOne(() => ContainerType, (log) => log.id)
-  @JoinColumn({ name: "type_id" })
+  @ManyToOne(() => ContainerType, (log) => log.container_type, { onDelete: "RESTRICT", onUpdate: "CASCADE" })
+  @JoinColumn({ name: "container_type_id" })
   containerType?: ContainerType;
+
+  @ManyToOne(() => Container, { onDelete: "RESTRICT", onUpdate: "CASCADE" })
+  @JoinColumn({ name: "container_id" })
+  container?: Container;
 }

@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { DepartureData } from "../../schema/departure-board-data";
+import { DepartureBoardItem } from "src/sdk";
 
 @Component({
-    selector: "pd-route-badge",
-    templateUrl: "./route-badge.component.html",
-    styleUrls: ["./route-badge.component.scss"],
-    standalone: false
+  selector: "pd-route-badge",
+  templateUrl: "./route-badge.component.html",
+  styleUrls: ["./route-badge.component.scss"],
+  standalone: false,
 })
 export class RouteBadgeComponent implements OnInit {
   @Input()
-  departure!: DepartureData;
+  departure!: DepartureBoardItem;
 
   constructor() {}
 

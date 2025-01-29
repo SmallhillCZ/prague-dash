@@ -11,18 +11,14 @@ class CleaningFrequency {
 export class ContainerType {
   @PrimaryColumn("varchar") id!: string;
 
-  @Column("varchar") container_id!: string;
+  @Column("varchar") containerId!: string;
 
   @Column("smallint") type!: number;
 
-  @Column("timestamp with time zone") last_measurement?: Date | null;
-  @Column("float") occupancy?: number | null;
-
   @Column(() => CleaningFrequency) cleaning_frequency?: CleaningFrequency;
-
   @Column("varchar", { nullable: true }) container_type?: string;
 
-  @ManyToOne(() => Container, (container) => container.containerTypes)
+  @ManyToOne(() => Container, (container) => container.containerTypes, { onDelete: "RESTRICT", onUpdate: "CASCADE" })
   @JoinColumn({ name: "container_id" })
   container?: Container;
 }

@@ -1,9 +1,7 @@
-import { Feature, FeatureCollection } from "src/schema/golemio-api";
+import { FeatureType } from "src/schema/openapi";
 
-export type VehiclePositionResponse = Feature<VehiclePositionProperties>;
-
-export interface VehiclePositionProperties {
-  last_position: {
+export class VehiclePositionProperties {
+  last_position!: {
     bearing: null | number;
     delay: {
       actual?: null | number;
@@ -30,9 +28,9 @@ export interface VehiclePositionProperties {
     tracking: boolean;
   };
 
-  all_positions: FeatureCollection<unknown>;
+  // all_positions!: object;
 
-  trip: {
+  trip!: {
     agency_name: {
       real: string;
       scheduled: string;
@@ -44,6 +42,7 @@ export interface VehiclePositionProperties {
     };
 
     sequence_id: number;
+
     origin_route_name: string;
 
     gtfs: {
@@ -55,12 +54,17 @@ export interface VehiclePositionProperties {
     };
 
     start_timestamp: string;
+
     vehicle_type: {
       id: number;
       description_cs: string;
       description_en: string;
     };
+
     vehicle_registration_number: number;
+
     wheelchair_accessible: boolean;
   };
 }
+
+export class VehiclePositionResponse extends FeatureType(VehiclePositionProperties) {}

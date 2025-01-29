@@ -8,7 +8,7 @@
     "deploy:docs": "npm run build:docs && npm run sync:docs",
     "dev": "ng serve",
     "dev:local": "ng serve --configuration=local",
-    "version": "git add -A"
+    "build:sdk": "openapi-sdk -i http://localhost:3000/api/openapi-json -o src/sdk --skip-validate-spec"
   },
   "private": true,
   "dependencies": {
@@ -43,6 +43,7 @@
     "@angular/cli": "^19.0.7",
     "@angular/compiler-cli": "^19.0.6",
     "@ionic/cli": "^7.2.0",
+    "@smallhillcz/openapi-sdk": "^1.0.8",
     "@types/chart.js": "^2.9.41",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.10.5",
