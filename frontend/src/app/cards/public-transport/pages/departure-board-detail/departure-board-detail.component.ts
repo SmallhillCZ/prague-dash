@@ -2,21 +2,21 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import { NavController } from "@ionic/angular";
 import { DashboardService } from "src/app/services/dashboard.service";
+import { DepartureBoardItem, DepartureBoardResponse } from "src/sdk";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
-import { DepartureBoardData, DepartureData } from "../../schema/departure-board-data";
 import { RouteTypes } from "../../schema/route-type";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
 
 @Component({
-    selector: "pd-departure-board-detail",
-    templateUrl: "./departure-board-detail.component.html",
-    styleUrls: ["./departure-board-detail.component.scss"],
-    standalone: false
+  selector: "pd-departure-board-detail",
+  templateUrl: "./departure-board-detail.component.html",
+  styleUrls: ["./departure-board-detail.component.scss"],
+  standalone: false,
 })
 export class DepartureBoardDetailComponent implements OnInit {
   card?: DepartureBoardCard;
-  departureBoard?: DepartureBoardData;
+  departureBoard?: DepartureBoardResponse;
 
   limit = 40;
 
@@ -32,7 +32,7 @@ export class DepartureBoardDetailComponent implements OnInit {
     private departureBoardsService: DepartureBoardsService,
     private stopsService: StopsService,
     private route: ActivatedRoute,
-    private navController: NavController
+    private navController: NavController,
   ) {}
 
   ngOnInit(): void {
@@ -82,7 +82,7 @@ export class DepartureBoardDetailComponent implements OnInit {
       ...this.card.definition,
       name: this.name!,
       limit: 20,
-      offset: this.departureBoard?.departures.length,
+      offset: this.departureBoard?.departures?.length ?? 0,
     };
 
     try {
@@ -90,26 +90,36 @@ export class DepartureBoardDetailComponent implements OnInit {
         .loadDepartures(definition)
         .then((departureBoard) => departureBoard.departures);
 
-      this.departureBoard.departures.push(...departures);
+      if (departures?.length) {
+        if (!this.departureBoard.departures) this.departureBoard.departures = [];
+
+        this.departureBoard.departures.push(...departures);
+      }
     } catch (err) {
       // pass
     }
 
     event.target?.complete();
 
-    if (this.departureBoard.departures.length >= 1000) {
+    if (this.departureBoard.departures && this.departureBoard.departures.length >= 1000) {
       event.target.disabled = true;
     }
   }
 
-  openDeparture(departure: DepartureData) {
-    if (!this.hasDetail(departure)) return;
+  openDeparture(departure: DepartureBoardItem) {
+    if (!this.hasDetail(departure) || !departure.stop || !departure.trip) return;
 
     const queryParams: Params = { platform: departure.stop.id };
     this.navController.navigateForward("/public-transport/vehicle-position/" + departure.trip.id, { queryParams });
   }
 
-  hasDetail(departure: DepartureData) {
-    return RouteTypes[departure.route.type]?.tracked && !departure.trip.is_canceled;
+  hasDetail(departure: DepartureBoardItem) {
+    if (!departure.route?.type) return false;
+
+    return (
+      departure.route.type in RouteTypes &&
+      RouteTypes[<keyof typeof RouteTypes>departure.route.type]?.tracked &&
+      !departure.trip?.is_canceled
+    );
   }
 }

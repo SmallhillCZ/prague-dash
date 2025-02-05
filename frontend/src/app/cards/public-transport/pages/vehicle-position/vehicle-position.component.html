@@ -15,7 +15,7 @@
   <!-- vehicle -->
   <pd-map-marker
     *ngIf="vehiclePosition"
-    [coords]="vehiclePosition.geometry.coordinates"
+    [coords]="$any(vehiclePosition.geometry.coordinates)"
     [pointer]="true"
     [icon]="routeType?.icon"
     [iconDirection]="routeType?.iconDirection"

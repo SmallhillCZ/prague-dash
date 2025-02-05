@@ -5,19 +5,19 @@ import { CardCreateData } from "src/app/schema/card-create-data";
 import { Language } from "src/app/schema/language";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
+import { Container, ContainerType } from "src/sdk";
 import { ContainerCard } from "../../schema/container-card";
-import { ContainerData, ContainerDataType } from "../../schema/container-data";
 import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
 @Component({
-    selector: "pd-card-container-select",
-    templateUrl: "./card-container-select.component.html",
-    styleUrls: ["./card-container-select.component.scss"],
-    standalone: false
+  selector: "pd-card-container-select",
+  templateUrl: "./card-container-select.component.html",
+  styleUrls: ["./card-container-select.component.scss"],
+  standalone: false,
 })
 export class CardContainerSelectComponent implements OnInit {
-  containers: ContainerData[] = [];
+  containers: Container[] = [];
 
   search: string = "";
 
@@ -28,7 +28,7 @@ export class CardContainerSelectComponent implements OnInit {
     private dash: DashboardService,
     private route: ActivatedRoute,
     private navController: NavController,
-    private geolocationService: GeolocationService
+    private geolocationService: GeolocationService,
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +50,7 @@ export class CardContainerSelectComponent implements OnInit {
     });
   }
 
-  async onSelect(container: ContainerData) {
+  async onSelect(container: Container) {
     const cardData: CardCreateData<ContainerCard> = {
       type: "container",
       title: container.location,
@@ -63,7 +63,7 @@ export class CardContainerSelectComponent implements OnInit {
     this.navController.navigateRoot("/dash", { queryParams: { page: pageId } });
   }
 
-  getContainerTypeTitle(type: ContainerDataType, lang: Language) {
-    return ContainerTypes[type.type].title[lang];
+  getContainerTypeTitle(type: ContainerType, lang: Language) {
+    return type.type in ContainerTypes ? ContainerTypes[<keyof typeof ContainerTypes>type.type].title[lang] : null;
   }
 }

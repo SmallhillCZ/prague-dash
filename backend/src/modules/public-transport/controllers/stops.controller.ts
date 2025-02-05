@@ -1,20 +1,15 @@
 import { Controller, Get, NotFoundException, Param, Query } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
+import { GetClosestStopQuery, GetStopsQuery } from "../dto/stops.dto";
 import { StopsService } from "../services/stops.service";
 
-export interface GetStopsQuery {
-  q?: string;
-  lat?: string;
-  lon?: string;
-  offset?: string;
-  limit?: string;
-}
-
 @Controller("stops")
+@ApiTags("Public Transport")
 export class StopsController {
   constructor(private stopsService: StopsService) {}
 
   @Get("/")
-  async getStops(@Query() query?: GetStopsQuery) {
+  async getStops(@Query() query: GetStopsQuery) {
     const options = {
       name: query?.q,
       offset: query?.offset ? Number(query.offset) : undefined,
@@ -26,8 +21,8 @@ export class StopsController {
   }
 
   @Get("/closest")
-  async getClosestStop(@Query() coordinates: { lat: string; lon: string }) {
-    const stop = await this.getStops({ ...coordinates, limit: "1" }).then((stops) => stops[0]);
+  async getClosestStop(@Query() query: GetClosestStopQuery) {
+    const stop = await this.getStops({ ...query, limit: "1" }).then((stops) => stops[0]);
     if (!stop) throw new NotFoundException();
     return stop;
   }

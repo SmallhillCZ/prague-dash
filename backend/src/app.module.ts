@@ -1,7 +1,6 @@
 import { Logger, Module, ModuleMetadata } from "@nestjs/common";
 import { ScheduleModule } from "@nestjs/schedule";
-import * as minimist from "minimist";
-import { AppController } from "./app.controller";
+import minimist from "minimist";
 import { ConfigModule } from "./config";
 import { DatabaseModule } from "./database/database.module";
 import { Modules } from "./modules/modules";
@@ -27,7 +26,7 @@ if (modules.length) {
 
 @Module({
   imports: [ScheduleModule.forRoot(), ConfigModule, DatabaseModule, ...loadModules],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}

@@ -1,18 +1,16 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { get } from 'http';
-import { CityvizorService, GetProfilesOptions } from '../services/cityvizor.service';
+import { Controller, Get, Query } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
+import { CityvizorService, GetProfilesOptions } from "../services/cityvizor.service";
 
 interface GetProfilesQuery {
   lat?: number;
   lon?: number;
 }
 
-@Controller('cityvizor/profiles')
+@Controller("cityvizor/profiles")
+@ApiTags("CityVizor")
 export class ProfilesController {
-
-  constructor(
-    private cityvizor: CityvizorService
-  ) { }
+  constructor(private cityvizor: CityvizorService) {}
 
   @Get("")
   getProfiles(@Query() query: GetProfilesQuery) {
@@ -22,5 +20,4 @@ export class ProfilesController {
 
     return this.cityvizor.getProfiles(options);
   }
-
 }

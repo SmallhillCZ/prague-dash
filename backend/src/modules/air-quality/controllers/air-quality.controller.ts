@@ -1,17 +1,16 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { AirQualityService } from '../services/air-quality.service';
+import { Controller, Get, Param, Query } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
+import { AirQualityService } from "../services/air-quality.service";
 
 interface GetStationsQuery {
   lat?: string;
   lon?: string;
 }
 
-@Controller('air-quality')
+@Controller("air-quality")
+@ApiTags("CityVizor")
 export class AirQualityController {
-
-  constructor(
-    private airQualityService: AirQualityService
-  ) { }
+  constructor(private airQualityService: AirQualityService) {}
 
   @Get("/stations")
   getStations(@Query() query: GetStationsQuery) {

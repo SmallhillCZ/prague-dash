@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import axios, { AxiosResponse } from "axios";
-import { environment } from "src/environments/environment";
+import { SDK } from "src/sdk";
+import { ConfigService } from "./config.service";
 
 export type ApiParams = {
   [key: string]: string | string[] | number | number[] | undefined;
@@ -19,25 +20,12 @@ export class ApiError extends Error {
 @Injectable({
   providedIn: "root",
 })
-export class ApiService {
-  private root = environment.apiRoot;
+export class ApiService extends SDK {
   private http = axios.create({});
 
-  constructor() {}
-
-  async get<T>(endpoint: string, params: ApiParams = {}) {
-    const url = this.root + "/" + endpoint;
-
-    if (!environment.production) console.debug(`Sending HTTP request`, { url, params });
-
-    const res = await this.http.get<T>(url, { params });
-
-    if (res.status >= 300) {
-      throw new ApiError(res);
-    }
-
-    if (!environment.production) console.debug(`Receiving HTTP response`, res);
-
-    return res.data;
+  constructor(private configService: ConfigService) {
+    super({
+      basePath: configService.config.apiRoot,
+    });
   }
 }

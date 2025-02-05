@@ -1,12 +1,11 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Interval } from "@nestjs/schedule";
 import { InjectRepository } from "@nestjs/typeorm";
+import { GolemioPublicTransportClient } from "golemio-sdk";
 import { Config } from "src/config";
-import { GolemioOldService } from "src/golemio/services/golemio-old.service";
 import { coordinatesFromTuple } from "src/utils/coordinates-from-tuple";
 import { Repository } from "typeorm";
 import { Stop } from "../entities/stop.entity";
-import { StopsResponse } from "../schema/stops-response";
 
 @Injectable()
 export class StopsDownloadService {
@@ -14,7 +13,7 @@ export class StopsDownloadService {
 
   constructor(
     @InjectRepository(Stop) private stopsRepository: Repository<Stop>,
-    private golemio: GolemioOldService,
+    private golemio: GolemioPublicTransportClient,
     private config: Config,
   ) {
     if (this.config.environment === "production") this.updateStops();
@@ -33,9 +32,9 @@ export class StopsDownloadService {
     while (1) {
       // loop until any data
 
-      const data = await this.golemio.get<StopsResponse>("gtfs/stops", { offset }).then((res) => res.data);
+      const data = await this.golemio.GTFSStaticV2Api.v2GtfsStopsGet({ offset }).then((res) => res.data);
 
-      if (!data.features.length) break; // break when no more data
+      if (!data.features?.length) break; // break when no more data
 
       offset += 10000;
 
@@ -46,8 +45,8 @@ export class StopsDownloadService {
         // • 3: Generic Node. A location within a station, not matching any other location_type, which can be used to link together pathways define in pathways.txt.
         // • 4: Boarding Area. A specific location on a platform, where passengers can board and/or alight vehicles.
         if (item.properties.location_type) return;
-
         if (!item.properties.stop_name) return;
+        if (!item.geometry.coordinates) return;
 
         if (!stopIndex[item.properties.stop_name]) {
           const stop = new Stop();
@@ -64,7 +63,7 @@ export class StopsDownloadService {
           stop,
           id: item.properties.stop_id,
           name: item.properties.platform_code,
-          ...coordinatesFromTuple(item.geometry.coordinates),
+          ...coordinatesFromTuple(item.geometry.coordinates as [number, number]),
         });
       });
     }

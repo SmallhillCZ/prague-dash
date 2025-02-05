@@ -1,19 +1,18 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Interval } from "@nestjs/schedule";
-import { GolemioOldService } from "src/golemio/services/golemio-old.service";
+import { GolemioClient } from "golemio-sdk";
+import { FeaturePoint } from "src/golemio/sdk";
 import { Coordinates } from "src/schema/coordinates";
 import { coordinatesFromTuple } from "src/utils/coordinates-from-tuple";
 import { coordinatesToDistanceCompare } from "src/utils/coordinates-to-distance-compare";
-import { AirQualityStation } from "../schema/air-quality-station";
-import { AirQualityStationData } from "../schema/air-quality-station-data";
 
 @Injectable()
 export class AirQualityService {
   private readonly logger = new Logger(AirQualityService.name);
 
-  private data?: AirQualityStation[];
+  private data?: FeaturePoint[];
 
-  constructor(private golemio: GolemioOldService) {
+  constructor(private golemio: GolemioClient) {
     this.updateStations();
   }
 
@@ -21,9 +20,9 @@ export class AirQualityService {
   async updateStations() {
     this.logger.verbose(`Downloading air quality stations...`);
 
-    this.data = await this.golemio.get<AirQualityStationData>("airqualitystations").then((res) => res.data.features);
+    this.data = await this.golemio.AirQualityV2Api.v2AirqualitystationsGet().then((res) => res.data.features);
 
-    this.logger.log(`Downloaded ${this.data.length} air quality stations.`);
+    this.logger.log(`Downloaded ${this.data?.length ?? 0} air quality stations.`);
   }
 
   getStations(options?: { coordinates?: Coordinates }) {
@@ -44,11 +43,11 @@ export class AirQualityService {
     return this.data?.find((item) => item.properties.id === id);
   }
 
-  private sortStationsByDistance(stations: AirQualityStation[], coordinates: Coordinates) {
+  private sortStationsByDistance(stations: FeaturePoint[], coordinates: Coordinates) {
     return stations.sort((a, b) =>
       coordinatesToDistanceCompare(
-        coordinatesFromTuple(a.geometry.coordinates),
-        coordinatesFromTuple(b.geometry.coordinates),
+        coordinatesFromTuple(a.geometry.coordinates as [number, number]),
+        coordinatesFromTuple(b.geometry.coordinates as [number, number]),
         coordinates,
       ),
     );

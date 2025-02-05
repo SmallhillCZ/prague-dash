@@ -9,31 +9,31 @@
       <tr
         *ngFor="let departure of departureBoard.departures"
         class="departure"
-        [class.at-stop]="departure.trip.is_at_stop"
-        [class.is-cancelled]="departure.trip.is_canceled"
+        [class.at-stop]="departure.trip?.is_at_stop"
+        [class.is-cancelled]="departure.trip?.is_canceled"
       >
         <td class="route">
           <pd-route-badge [departure]="departure"></pd-route-badge>
         </td>
 
         <td class="headsign">
-          {{ departure.trip.headsign }}
-          <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip.is_wheelchair_accessible"
+          {{ departure.trip?.headsign }}
+          <ng-container *ngIf="card.definition.showWheelchairAccessible && departure.trip?.is_wheelchair_accessible"
             >&nbsp;♿</ng-container
-          ><ng-container *ngIf="card.definition.showAirConditioned && departure.trip.is_air_conditioned"
+          ><ng-container *ngIf="card.definition.showAirConditioned && departure.trip?.is_air_conditioned"
             >&nbsp;❄️</ng-container
           >
         </td>
 
         <td class="departureTime">
-          {{ departure | departureTime : card.definition }}
+          {{ departure | departureTime: card.definition }}
         </td>
 
         <td class="delay">
-          <ion-text *ngIf="!departure.trip.is_canceled" [color]="departure | departureDelayColor">
-            {{ departure | departureDelay : card.definition }}
+          <ion-text *ngIf="!departure.trip?.is_canceled" [color]="departure | departureDelayColor">
+            {{ departure | departureDelay: card.definition }}
           </ion-text>
-          <ion-text *ngIf="departure.trip.is_canceled" color="danger"> zrušeno </ion-text>
+          <ion-text *ngIf="departure.trip?.is_canceled" color="danger"> zrušeno </ion-text>
         </td>
       </tr>
     </table>

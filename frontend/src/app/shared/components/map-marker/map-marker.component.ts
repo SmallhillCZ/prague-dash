@@ -3,17 +3,17 @@ import { Subject } from "rxjs";
 
 export type MapMarkerIconDirection = number | "left" | "right";
 @Component({
-    selector: "pd-map-marker",
-    templateUrl: "./map-marker.component.html",
-    styleUrls: ["./map-marker.component.scss"],
-    standalone: false
+  selector: "pd-map-marker",
+  templateUrl: "./map-marker.component.html",
+  styleUrls: ["./map-marker.component.scss"],
+  standalone: false,
 })
 export class MapMarkerComponent implements OnInit, OnChanges {
   @Input() coords!: [number, number];
   @Input() pointer: boolean = false;
   @Input() icon?: string;
   @Input() iconDirection?: MapMarkerIconDirection;
-  @Input() bearing?: number;
+  @Input() bearing?: number | null;
 
   changes = new Subject<SimpleChanges>();
 

@@ -1,32 +1,39 @@
-import { BadRequestException, Controller, Get, Param, Query } from "@nestjs/common";
+import { BadRequestException, Controller, Get, NotFoundException, Param, Query } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { DateTime } from "luxon";
+import { GetContainerHistoryQuery, GetContainersQuery, GetHistoryResponse } from "../dto/containers.dto";
+import { Container } from "../entities/container.entity";
 import { ContainersService, GetHistoryOptions } from "../services/containers.service";
 
-export interface GetContainersQuery {
-  q: string;
-  lat?: string;
-  lon?: string;
-}
-
 @Controller("containers")
+@ApiTags("Containers")
 export class ContainersController {
   constructor(private containersService: ContainersService) {}
 
   @Get("/")
-  getContainers(@Query() query: GetContainersQuery) {
-    return this.containersService.getContainers({
+  async getContainers(@Query() query: GetContainersQuery): Promise<Container[]> {
+    const containers = await this.containersService.getContainers({
       location: query.q,
       coordinates: !!query.lat && !!query.lon ? { lat: Number(query.lat), lon: Number(query.lon) } : undefined,
     });
+
+    return containers;
   }
 
   @Get("/:id")
-  getContainer(@Param("id") id: string) {
-    return this.containersService.getContainer(id);
+  async getContainer(@Param("id") id: string): Promise<Container> {
+    const container = await this.containersService.getContainer(id);
+    if (!container) throw new NotFoundException("Container not found.");
+
+    return container;
   }
 
   @Get("/:id/:type/history")
-  getHistory(@Param("id") id: string, @Param("type") type: string, @Query() query: { since?: string }) {
+  getHistory(
+    @Param("id") id: string,
+    @Param("type") type: string,
+    @Query() query: GetContainerHistoryQuery,
+  ): Promise<GetHistoryResponse[]> {
     const since = query.since && DateTime.fromISO(query.since);
     const monthAgo = DateTime.local().minus({ month: 1 });
 
@@ -35,7 +42,7 @@ export class ContainersController {
     if (query.since && since < monthAgo) throw new BadRequestException("Parameter since more than a month ago.");
 
     const options: GetHistoryOptions = {
-      id,
+      containerId: id,
       type: parseInt(type),
       since: since!.isValid ? since.toJSDate() : monthAgo.toJSDate(),
     };

@@ -5,20 +5,20 @@ import { timer } from "rxjs";
 import { take } from "rxjs/operators";
 import { CardComponent } from "src/app/schema/card-component";
 import { SettingsService } from "src/app/services/settings.service";
+import { DepartureBoardResponse } from "src/sdk";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
-import { DepartureBoardData } from "../../schema/departure-board-data";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
 
 @UntilDestroy()
 @Component({
-    selector: "pd-departure-board-card",
-    templateUrl: "./departure-board-card.component.html",
-    styleUrls: ["./departure-board-card.component.scss"],
-    standalone: false
+  selector: "pd-departure-board-card",
+  templateUrl: "./departure-board-card.component.html",
+  styleUrls: ["./departure-board-card.component.scss"],
+  standalone: false,
 })
 export class DepartureBoardCardComponent implements CardComponent, OnInit {
-  departureBoard?: DepartureBoardData;
+  departureBoard?: DepartureBoardResponse;
 
   loading: boolean = false;
   loadingDepartures?: any[];
@@ -32,7 +32,7 @@ export class DepartureBoardCardComponent implements CardComponent, OnInit {
   constructor(
     private departureBoardsService: DepartureBoardsService,
     private settingsService: SettingsService,
-    private stopsService: StopsService
+    private stopsService: StopsService,
   ) {}
 
   @Input()

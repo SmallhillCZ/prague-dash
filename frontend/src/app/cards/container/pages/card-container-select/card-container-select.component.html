@@ -5,7 +5,7 @@
     <ion-label>
       <h2>{{ container.location }}</h2>
       <p>
-        <ng-container *ngFor="let type of container.types; let isLast = last"
+        <ng-container *ngFor="let type of container.containerTypes; let isLast = last"
           >{{ getContainerTypeTitle(type, lang) }}<ng-container *ngIf="!isLast">, </ng-container></ng-container
         >
       </p>

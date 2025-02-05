@@ -1,32 +1,31 @@
-import { DatePipe } from '@angular/common';
-import { Pipe, PipeTransform } from '@angular/core';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { DateTime } from 'luxon';
-import { timer } from 'rxjs';
-import { DepartureBoardCardDefinition } from '../schema/departure-board-card';
-import { DepartureData } from '../schema/departure-board-data';
+import { DatePipe } from "@angular/common";
+import { Pipe, PipeTransform } from "@angular/core";
+import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
+import { DateTime } from "luxon";
+import { timer } from "rxjs";
+import { DepartureBoardItem } from "src/sdk";
+import { DepartureBoardCardDefinition } from "../schema/departure-board-card";
 
 @UntilDestroy()
 @Pipe({
-    name: 'departureTime',
-    pure: false,
-    standalone: false
+  name: "departureTime",
+  pure: false,
+  standalone: false,
 })
 export class DepartureTimePipe implements PipeTransform {
-
   now: DateTime = DateTime.local();
 
-  constructor(
-    private datePipe: DatePipe
-  ) {
+  constructor(private datePipe: DatePipe) {
     timer(1000, 1000)
       .pipe(untilDestroyed(this))
-      .subscribe(() => this.now = DateTime.local());
+      .subscribe(() => (this.now = DateTime.local()));
   }
 
-  transform(departure: DepartureData, options: DepartureBoardCardDefinition): string | null {
-
-    const departureTime = options.addDelay ? departure.departure_timestamp.predicted : departure.departure_timestamp.scheduled;
+  transform(departure: DepartureBoardItem, options: DepartureBoardCardDefinition): string | null {
+    const departureTime = options.addDelay
+      ? departure.departure_timestamp?.predicted
+      : departure.departure_timestamp?.scheduled;
+    if (!departureTime) return null;
 
     switch (options?.timeDisplay) {
       case "remaining":
@@ -36,7 +35,6 @@ export class DepartureTimePipe implements PipeTransform {
     }
 
     return null;
-
   }
 
   getRemainingTime(departure: string, now: DateTime) {
@@ -44,5 +42,4 @@ export class DepartureTimePipe implements PipeTransform {
     if (diff.minutes <= 0 && diff.seconds <= 0) return "0";
     return String(Math.floor(diff.minutes));
   }
-
 }

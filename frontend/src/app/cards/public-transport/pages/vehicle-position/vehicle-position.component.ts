@@ -5,25 +5,24 @@ import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { DateTime, Duration } from "luxon";
 import { Subscription, timer } from "rxjs";
 import { ApiError } from "src/app/services/api.service";
-import { DepartureData, DepartureStopData } from "../../schema/departure-board-data";
+import { DepartureBoardItem, VehiclePositionResponse } from "src/sdk";
 import { PlatformData } from "../../schema/platform-data";
 import { RouteType, RouteTypes } from "../../schema/route-type";
-import { VehiclePosition } from "../../schema/vehicle-position";
 import { DepartureBoardsService } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
 import { VehiclePositionService } from "../../services/vehicle-position.service";
 
 @UntilDestroy()
 @Component({
-    selector: "pd-vehicle-position",
-    templateUrl: "./vehicle-position.component.html",
-    styleUrls: ["./vehicle-position.component.scss"],
-    standalone: false
+  selector: "pd-vehicle-position",
+  templateUrl: "./vehicle-position.component.html",
+  styleUrls: ["./vehicle-position.component.scss"],
+  standalone: false,
 })
 export class VehiclePositionComponent implements OnInit {
   tripId?: string;
 
-  vehiclePosition?: VehiclePosition;
+  vehiclePosition?: VehiclePositionResponse;
   routeType?: RouteType;
   lastPlatform?: PlatformData;
 
@@ -32,7 +31,7 @@ export class VehiclePositionComponent implements OnInit {
   departurePlatform?: PlatformData;
   departurePlatformType?: "next" | "user";
 
-  departure?: DepartureData;
+  departure?: DepartureBoardItem;
   departureTime?: string;
 
   private updateTimerSubscription?: Subscription;
@@ -43,7 +42,7 @@ export class VehiclePositionComponent implements OnInit {
     private departureBoards: DepartureBoardsService,
     private stops: StopsService,
     private route: ActivatedRoute,
-    private alertController: AlertController
+    private alertController: AlertController,
   ) {}
 
   ngOnInit(): void {
@@ -59,12 +58,18 @@ export class VehiclePositionComponent implements OnInit {
 
     try {
       this.vehiclePosition = await this.vehiclePositions.getVehiclePosition(this.tripId);
-      this.delayTime = this.formatDelay(this.vehiclePosition.properties.last_position.delay.actual);
+      this.delayTime = this.vehiclePosition.properties.last_position.delay.actual
+        ? this.formatDelay(this.vehiclePosition.properties.last_position.delay.actual)
+        : undefined;
 
-      this.routeType = RouteTypes[this.vehiclePosition.properties.trip.gtfs.route_type];
+      this.routeType = this.vehiclePosition.properties.trip.gtfs.route_type
+        ? RouteTypes[<keyof typeof RouteTypes>this.vehiclePosition.properties.trip.gtfs.route_type]
+        : undefined;
 
       if (this.lastPlatform?.id !== this.vehiclePosition.properties.last_position.last_stop.id) {
-        this.lastPlatform = await this.getPlatform(this.vehiclePosition.properties.last_position.last_stop.id);
+        this.lastPlatform = this.vehiclePosition.properties.last_position.last_stop.id
+          ? await this.getPlatform(this.vehiclePosition.properties.last_position.last_stop.id)
+          : undefined;
       }
 
       const platformId =
@@ -93,7 +98,7 @@ export class VehiclePositionComponent implements OnInit {
     this.departurePlatform = await this.getPlatform(id);
 
     const departureBoard = await this.departureBoards.loadDepartures({ platforms: [id], limit: 20 });
-    this.departure = departureBoard.departures.find((item) => item.trip.id === this.tripId);
+    this.departure = departureBoard.departures?.find((item) => item.trip && item.trip.id === this.tripId);
 
     if (this.departure) {
       this.departureTimerSubscription = timer(0, 1000)
@@ -106,10 +111,10 @@ export class VehiclePositionComponent implements OnInit {
   }
 
   updateDepartureTime() {
-    if (this.departure) {
+    if (this.departure?.arrival_timestamp) {
       let arrival = DateTime.fromISO(this.departure.arrival_timestamp.scheduled);
 
-      if (this.vehiclePosition) {
+      if (this.vehiclePosition?.properties.last_position.delay.actual) {
         arrival = arrival.plus({
           seconds: this.vehiclePosition.properties.last_position.delay.actual,
         });
