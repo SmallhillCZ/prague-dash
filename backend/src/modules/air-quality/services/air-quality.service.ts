@@ -1,7 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Interval } from "@nestjs/schedule";
-import { GolemioClient } from "golemio-sdk";
-import { FeaturePoint } from "src/golemio/sdk";
+import { GolemioApi, GolemioClient } from "golemio-sdk";
 import { Coordinates } from "src/schema/coordinates";
 import { coordinatesFromTuple } from "src/utils/coordinates-from-tuple";
 import { coordinatesToDistanceCompare } from "src/utils/coordinates-to-distance-compare";
@@ -10,7 +9,7 @@ import { coordinatesToDistanceCompare } from "src/utils/coordinates-to-distance-
 export class AirQualityService {
   private readonly logger = new Logger(AirQualityService.name);
 
-  private data?: FeaturePoint[];
+  private data?: GolemioApi.FeaturePoint[];
 
   constructor(private golemio: GolemioClient) {
     this.updateStations();
@@ -43,7 +42,7 @@ export class AirQualityService {
     return this.data?.find((item) => item.properties.id === id);
   }
 
-  private sortStationsByDistance(stations: FeaturePoint[], coordinates: Coordinates) {
+  private sortStationsByDistance(stations: GolemioApi.FeaturePoint[], coordinates: Coordinates) {
     return stations.sort((a, b) =>
       coordinatesToDistanceCompare(
         coordinatesFromTuple(a.geometry.coordinates as [number, number]),

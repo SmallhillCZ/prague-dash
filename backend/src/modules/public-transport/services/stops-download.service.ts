@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Interval } from "@nestjs/schedule";
 import { InjectRepository } from "@nestjs/typeorm";
-import { GolemioPublicTransportClient } from "golemio-sdk";
+import { GolemioClient } from "golemio-sdk";
 import { Config } from "src/config";
 import { coordinatesFromTuple } from "src/utils/coordinates-from-tuple";
 import { Repository } from "typeorm";
@@ -13,7 +13,7 @@ export class StopsDownloadService {
 
   constructor(
     @InjectRepository(Stop) private stopsRepository: Repository<Stop>,
-    private golemio: GolemioPublicTransportClient,
+    private golemio: GolemioClient,
     private config: Config,
   ) {
     if (this.config.environment === "production") this.updateStops();
@@ -32,7 +32,9 @@ export class StopsDownloadService {
     while (1) {
       // loop until any data
 
-      const data = await this.golemio.GTFSStaticV2Api.v2GtfsStopsGet({ offset }).then((res) => res.data);
+      const data = await this.golemio.PublicTransport.GTFSStaticV2Api.v2GtfsStopsGet({ offset }).then(
+        (res) => res.data,
+      );
 
       if (!data.features?.length) break; // break when no more data
 

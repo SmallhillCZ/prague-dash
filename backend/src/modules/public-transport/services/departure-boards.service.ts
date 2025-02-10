@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { GolemioPublicTransportClient } from "golemio-sdk";
-import { PIDDepartureBoardsV2ApiV2PidDepartureboardsGetQueryParams } from "node_modules/golemio-sdk/dist/cjs/sdk-vp";
+import { GolemioClient, GolemioPublicTransportApi } from "golemio-sdk";
 
 export interface GetDepartureBoardOptions {
   name?: string | string[];
@@ -11,7 +10,7 @@ export interface GetDepartureBoardOptions {
 
 @Injectable()
 export class DepartureBoardsService {
-  constructor(private golemio: GolemioPublicTransportClient) {}
+  constructor(private golemio: GolemioClient) {}
 
   async getDepartureBoard(options: GetDepartureBoardOptions) {
     if (!options.name && !options.id) {
@@ -19,7 +18,7 @@ export class DepartureBoardsService {
     }
 
     try {
-      const params: PIDDepartureBoardsV2ApiV2PidDepartureboardsGetQueryParams = {
+      const params: GolemioPublicTransportApi.PIDDepartureBoardsV2ApiV2PidDepartureboardsGetQueryParams = {
         names: options.name as string, // FIXME: bad typing in golemio api
         ids: options.id as string, // FIXME: bad typing in golemio api
         // filter: "routeHeadingOnce",
@@ -28,7 +27,9 @@ export class DepartureBoardsService {
         offset: options.offset,
       };
 
-      return await this.golemio.PIDDepartureBoardsV2Api.v2PidDepartureboardsGet(params).then((res) => res.data);
+      return await this.golemio.PublicTransport.PIDDepartureBoardsV2Api.v2PidDepartureboardsGet(params).then(
+        (res) => res.data,
+      );
     } catch (err: any) {
       if (err.response.status === 404) return undefined;
       throw err;

@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { GolemioClient, GolemioPublicTransportClient } from "golemio-sdk";
+import { GolemioClient } from "golemio-sdk";
 import { Config } from "src/config";
 
 @Module({
@@ -11,14 +11,7 @@ import { Config } from "src/config";
         return new GolemioClient({ token: config.golemio.token });
       },
     },
-    {
-      provide: GolemioPublicTransportClient,
-      inject: [Config],
-      useFactory: (config: Config) => {
-        return new GolemioPublicTransportClient({ token: config.golemio.token });
-      },
-    },
   ],
-  exports: [GolemioClient, GolemioPublicTransportClient],
+  exports: [GolemioClient],
 })
 export class GolemioModule {}
