@@ -55,7 +55,7 @@ jobs:
       - publish
     uses: ./.github/workflows/_deploy.yaml
     with:
-      tag: latest
+      images: "ghcr.io/prague-dash/frontend:dev,ghcr.io/prague-dash/backend:dev"
 
   tag:
     name: Tag
