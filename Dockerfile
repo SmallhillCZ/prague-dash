@@ -1,15 +1,15 @@
 
 
 # MARK: frontend
-FROM node:22-alpine as frontend
+FROM node:22-alpine AS frontend
 
 WORKDIR /app
 
 # BUILD
-COPY package.json package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 
-COPY . .
+COPY frontend .
 RUN npm run build
 
 # CLEAN
@@ -25,15 +25,15 @@ EXPOSE 3000
 CMD ["npm","start"]
 
 # MARK: backend
-FROM node:22-alpine as backend
+FROM node:22-alpine AS backend
 
 WORKDIR /app
 
 # BUILD
-COPY package.json package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 
-COPY . .
+COPY backend .
 RUN npm run build
 
 # CLEAN
