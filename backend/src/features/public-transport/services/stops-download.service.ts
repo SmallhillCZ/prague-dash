@@ -71,7 +71,7 @@ export class StopsDownloadService {
     }
 
     this.logger.verbose("Clearing old stops...");
-    await this.stopsRepository.delete({});
+    await this.stopsRepository.deleteAll();
 
     const c = stops.length;
 

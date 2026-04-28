@@ -4,7 +4,8 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
 import { Config, StaticConfig } from "./config";
 import { runMigrations } from "./database/run-migrations";
-import { registerOpenAPI } from "./openapi";
+import { generateOpenAPI } from "./openapi";
+import { addSwaggerUI } from "./swagger-ui";
 
 async function bootstrap() {
   const logger = new Logger("MAIN");
@@ -45,8 +46,10 @@ async function bootstrap() {
   // comment to disable templating
   // registerTemplating(app);
 
-  // comment to disable OpenAPI and Swagger
-  registerOpenAPI("openapi", app, config);
+  // Generate OpenAPI document and serve it using Swagger UI
+  const swaggerPath = config.server.globalPrefix ?? "/";
+  const openapiDocument = generateOpenAPI(app, config);
+  addSwaggerUI(swaggerPath, app, openapiDocument);
 
   await app.listen(config.server.port, config.server.host);
 

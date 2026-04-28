@@ -1,3 +1,20 @@
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { TransformArray } from "src/helpers/helpers/validation";
+
+export class GetDepartureBoardsQuery {
+  @TransformArray() @IsString({ each: true }) @IsOptional() name?: string[];
+  @TransformArray() @IsString({ each: true }) @IsOptional() id?: string[];
+  @IsNumber() @IsOptional() limit?: number;
+  @IsNumber() @IsOptional() offset?: number;
+}
+
+export class GetClosestDepartureBoardsQuery {
+  @IsNumber() lat!: number;
+  @IsNumber() lon!: number;
+  @IsNumber() limit?: number;
+  @IsNumber() offset?: number;
+}
+
 import { GolemioPublicTransportApi } from "golemio-sdk";
 
 export class DepartureBoardResponse implements GolemioPublicTransportApi.PIDDepartureBoard {

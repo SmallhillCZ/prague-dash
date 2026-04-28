@@ -3,9 +3,9 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AlertController, IonicModule } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
+import { isAxiosError } from "axios";
 import { DateTime, Duration } from "luxon";
 import { Subscription, timer } from "rxjs";
-import { ApiError } from "src/app/services/api.service";
 import { MapMarkerComponent } from "src/app/shared/components/map-marker/map-marker.component";
 import { MapComponent } from "src/app/shared/components/map/map.component";
 import { DepartureBoardItem, VehiclePositionResponse } from "src/sdk";
@@ -83,7 +83,7 @@ export class VehiclePositionComponent implements OnInit {
         this.loadDeparture(platformId);
       }
     } catch (err) {
-      if (err instanceof ApiError && err.status === 404) {
+      if (isAxiosError(err) && err.status === 404) {
         this.updateTimerSubscription?.unsubscribe();
         const alert = await this.alertController.create({
           message: "Poloha vozu nenalezena. Buď není monitorovaný, nebo ještě nevyjel z konečné.",
