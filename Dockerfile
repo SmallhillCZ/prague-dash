@@ -16,6 +16,8 @@ RUN npm run build
 # MARK: backend
 FROM node:22-alpine AS backend
 
+ARG VERSION
+
 WORKDIR /app
 
 # BUILD
@@ -35,6 +37,7 @@ COPY --from=frontend /app/www/browser /app/public
 # RUN
 ENV PORT=3000
 ENV HOST=0.0.0.0
+ENV VERSION=${VERSION}
 
 EXPOSE 3000
 
