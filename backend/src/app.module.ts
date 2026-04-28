@@ -36,7 +36,6 @@ if (featureModules.length) {
     RootModule,
     ServeStaticModule.forRoot({
       rootPath: "public",
-      exclude: ["/api*"],
     }),
     ...loadFeatureModules,
   ],
