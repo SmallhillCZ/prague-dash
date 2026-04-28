@@ -7,17 +7,19 @@
         <td class="value">
           <ion-text
             *ngIf="
-              component.typeInfo?.limit && component.averaged_time.value > component.typeInfo!.limit!;
+              component.averaged_time?.value &&
+                component.typeInfo?.limit &&
+                component.averaged_time!.value! > component.typeInfo!.limit!;
               else valueNotLimit
             "
             color="danger"
-            >{{ component.averaged_time.value }} µg/m³</ion-text
+            >{{ component.averaged_time?.value }} µg/m³</ion-text
           >
           <ng-template #valueNotLimit>
-            <ion-text>{{ component.averaged_time.value }} µg/m³</ion-text>
+            <ion-text>{{ component.averaged_time?.value }} µg/m³</ion-text>
           </ng-template>
         </td>
-        <td class="timespan">(Ø {{ component.averaged_time.averaged_hours }} h)</td>
+        <td class="timespan">(Ø {{ component.averaged_time?.averaged_hours }} h)</td>
       </tr>
     </table>
 

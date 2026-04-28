@@ -18,7 +18,6 @@ import { CARDS } from "src/app/schema/cards-token";
     templateUrl: "./dash-card.component.html",
     styleUrls: ["./dash-card.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
 })
 export class DashCardComponent implements OnInit, OnChanges {
   @Input() card!: Card;

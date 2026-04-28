@@ -1,11 +1,21 @@
+import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { IonicModule } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { DateTime } from "luxon";
 import { timer } from "rxjs";
 import { take } from "rxjs/operators";
 import { CardComponent } from "src/app/schema/card-component";
 import { SettingsService } from "src/app/services/settings.service";
+import { CardContentComponent } from "src/app/shared/components/card-content/card-content.component";
+import { CardTitleComponent } from "src/app/shared/components/card-title/card-title.component";
+import { CardComponent as CardElComponent } from "src/app/shared/components/card/card.component";
 import { DepartureBoardResponse } from "src/sdk";
+import { RouteBadgeComponent } from "../../components/route-badge/route-badge.component";
+import { DepartureDelayColorPipe } from "../../pipes/departure-delay-color.pipe";
+import { DepartureDelayPipe } from "../../pipes/departure-delay.pipe";
+import { DepartureTimePipe } from "../../pipes/departure-time.pipe";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
@@ -15,7 +25,18 @@ import { StopsService } from "../../services/stops.service";
   selector: "pd-departure-board-card",
   templateUrl: "./departure-board-card.component.html",
   styleUrls: ["./departure-board-card.component.scss"],
-  standalone: false,
+  imports: [
+    CommonModule,
+    IonicModule,
+    RouterLink,
+    CardElComponent,
+    CardTitleComponent,
+    CardContentComponent,
+    RouteBadgeComponent,
+    DepartureTimePipe,
+    DepartureDelayPipe,
+    DepartureDelayColorPipe,
+  ],
 })
 export class DepartureBoardCardComponent implements CardComponent, OnInit {
   departureBoard?: DepartureBoardResponse;

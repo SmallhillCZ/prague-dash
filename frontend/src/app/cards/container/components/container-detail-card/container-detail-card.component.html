@@ -3,7 +3,7 @@
     <ion-card-title class="name">
       <div class="header-container">
         <h3>{{ getContainerTypeTitle(type, lang) }}</h3>
-        <pd-circle-chart *ngIf="type.occupancy !== null" [percentage]="type.occupancy"></pd-circle-chart>
+        <pd-circle-chart *ngIf="type.occupancy !== null" [percentage]="type.occupancy!"></pd-circle-chart>
       </div>
     </ion-card-title>
   </ion-card-header>
@@ -17,10 +17,9 @@
 
     <p *ngIf="type.occupancy === null">Bez senzoru</p>
 
-    <p>
-      Plán svozu: {{ parseCleaningFrequency(type.cleaning_frequency, lang) }} ({{ type.cleaning_frequency.pick_days }})
-    </p>
-    <p>Příští svoz: {{ type.cleaning_frequency.next_pick | date : "d. M." }}</p>
-    <p>Datum posledního měření: {{ type.last_measurement | date : "d. M. v H:mm" }}</p>
+    @if (type.cleaning_frequency) {
+      <p>Plán svozu: {{ parseCleaningFrequency(type.cleaning_frequency, lang) }}</p>
+    }
+    <p>Datum posledního měření: {{ type.occupancy_timestamp | date: "d. M. v H:mm" }}</p>
   </ion-card-content>
 </ion-card>

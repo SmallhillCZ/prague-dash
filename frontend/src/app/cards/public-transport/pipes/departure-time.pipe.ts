@@ -10,7 +10,6 @@ import { DepartureBoardCardDefinition } from "../schema/departure-board-card";
 @Pipe({
   name: "departureTime",
   pure: false,
-  standalone: false,
 })
 export class DepartureTimePipe implements PipeTransform {
   now: DateTime = DateTime.local();

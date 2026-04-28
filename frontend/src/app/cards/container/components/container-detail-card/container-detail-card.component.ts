@@ -1,21 +1,25 @@
+import { CommonModule } from "@angular/common";
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { IonicModule } from "@ionic/angular";
 import { ChartData, ChartOptions, ScriptableLineSegmentContext } from "chart.js";
 import { DateTime, Duration } from "luxon";
 import { Language } from "src/app/schema/language";
+import { ChartsjsChartComponent } from "src/app/shared/components/chartsjs-chart/chartsjs-chart.component";
+import { CircleChartComponent } from "src/app/shared/components/circle-chart/circle-chart.component";
+import { GetContainerResponseContainerType } from "src/sdk";
 import { ContainerCard } from "../../schema/container-card";
-import { ContainerDataType } from "../../schema/container-data";
 import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
 @Component({
-    selector: "pd-container-detail-card",
-    templateUrl: "./container-detail-card.component.html",
-    styleUrls: ["./container-detail-card.component.scss"],
-    standalone: false
+  selector: "pd-container-detail-card",
+  templateUrl: "./container-detail-card.component.html",
+  styleUrls: ["./container-detail-card.component.scss"],
+  imports: [CommonModule, IonicModule, CircleChartComponent, ChartsjsChartComponent],
 })
 export class ContainerDetailCardComponent implements OnInit, OnChanges {
   @Input() card!: ContainerCard;
-  @Input() type!: ContainerDataType;
+  @Input() type!: GetContainerResponseContainerType;
 
   lang = Language.cs;
 
@@ -79,16 +83,16 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
     const data: number[] = [];
 
     history.forEach((item, i) => {
-      if (i > 0 && history[i - 1].occupancy - item.occupancy > 0) {
+      if (i > 0 && history[i - 1].occupancy! - (item.occupancy ?? 0) > 0) {
         labels.push(item.timestamp);
-        data.push(history[i - 1].occupancy);
+        data.push(history[i - 1].occupancy ?? 0);
       }
       labels.push(item.timestamp);
-      data.push(item.occupancy);
+      data.push(item.occupancy ?? 0);
     });
 
     labels.push(DateTime.local().toISOTime()!);
-    data.push(this.type.occupancy);
+    data.push(this.type.occupancy ?? 0);
 
     this.chartData = {
       labels,
@@ -112,11 +116,16 @@ export class ContainerDetailCardComponent implements OnInit, OnChanges {
       : undefined;
   }
 
-  getContainerTypeTitle(type: ContainerDataType, lang: Language): string {
+  getContainerTypeTitle(type: GetContainerResponseContainerType, lang: Language): string {
     return ContainerTypes[type.type].title[lang]!;
   }
 
-  parseCleaningFrequency(cleaningFrequency: ContainerDataType["cleaning_frequency"], lang: Language): string {
+  parseCleaningFrequency(
+    cleaningFrequency: NonNullable<GetContainerResponseContainerType["cleaning_frequency"]>,
+    lang: Language,
+  ): string {
+    if (!cleaningFrequency.duration || !cleaningFrequency.frequency) return "Neznámý";
+
     const duration = Duration.fromISO(cleaningFrequency.duration);
 
     const numbers = ["jednou", "dvakrát", "třikrát", "čtyřikrát", "pětkrát", "šestkrát", "sedmkrát", "osmkrát"];

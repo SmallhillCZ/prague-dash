@@ -1,5 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnChanges, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { IonicModule } from "@ionic/angular";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { DepartureBoardCard, DepartureBoardCardDefinition } from "../../schema/departure-board-card";
 import { StopData, StopPlatformData } from "../../schema/stop-data";
@@ -9,7 +12,7 @@ import { StopsService } from "../../services/stops.service";
     selector: "pd-departure-board-settings",
     templateUrl: "./departure-board-settings.component.html",
     styleUrls: ["./departure-board-settings.component.scss"],
-    standalone: false
+    imports: [CommonModule, FormsModule, IonicModule],
 })
 export class DepartureBoardSettingsComponent implements OnInit, OnChanges {
   card?: DepartureBoardCard;

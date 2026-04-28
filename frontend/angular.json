@@ -22,9 +22,7 @@
               "base": "www"
             },
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -39,16 +37,12 @@
               },
               "src/manifest.webmanifest"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["node_modules/leaflet/dist/leaflet.css", "src/styles.scss"],
             "scripts": [],
             "serviceWorker": "ngsw-config.json",
             "browser": "src/main.ts",
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "."
-              ]
+              "includePaths": ["."]
             }
           },
           "configurations": {
@@ -65,12 +59,6 @@
                   "maximumError": "4kb"
                 }
               ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "outputHashing": "all"
             },
             "development": {
@@ -83,22 +71,10 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.local.ts"
-                }
-              ]
+              "namedChunks": true
             },
             "demo": {
               "baseHref": "/demo/",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "outputHashing": "all"
             }
           },
@@ -107,7 +83,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "host": "127.0.0.1"
+            "host": "127.0.0.1",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -135,8 +112,7 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
-          "skipTests": true,
-          "standalone": false
+          "skipTests": true
         },
         "@schematics/angular:class": {
           "skipTests": true

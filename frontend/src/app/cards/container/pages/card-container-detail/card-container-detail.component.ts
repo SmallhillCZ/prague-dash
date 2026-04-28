@@ -1,10 +1,12 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { IonicModule } from "@ionic/angular";
 import { Language } from "src/app/schema/language";
 import { DashboardService } from "src/app/services/dashboard.service";
-import { ContainerType } from "src/sdk";
+import { ContainerType, GetContainerResponseContainerType } from "src/sdk";
+import { ContainerDetailCardComponent } from "../../components/container-detail-card/container-detail-card.component";
 import { ContainerCard } from "../../schema/container-card";
-import { ContainerDataType } from "../../schema/container-data";
 import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
@@ -12,10 +14,10 @@ import { ContainerService } from "../../services/container.service";
   selector: "pd-card-container-detail",
   templateUrl: "./card-container-detail.component.html",
   styleUrls: ["./card-container-detail.component.scss"],
-  standalone: false,
+  imports: [CommonModule, IonicModule, RouterLink, ContainerDetailCardComponent],
 })
 export class CardContainerDetailComponent implements OnInit {
-  types?: ContainerType[];
+  types?: GetContainerResponseContainerType[];
 
   lang = Language.cs;
 
@@ -48,7 +50,7 @@ export class CardContainerDetailComponent implements OnInit {
     });
   }
 
-  private getContainerTypeTitle(type: ContainerDataType, lang: Language): string {
+  private getContainerTypeTitle(type: ContainerType, lang: Language): string {
     return ContainerTypes[type.type].title[lang]!;
   }
 }

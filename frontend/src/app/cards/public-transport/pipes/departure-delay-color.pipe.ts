@@ -3,7 +3,6 @@ import { DepartureBoardItem } from "src/sdk";
 
 @Pipe({
   name: "departureDelayColor",
-  standalone: false,
 })
 export class DepartureDelayColorPipe implements PipeTransform {
   transform(departure: DepartureBoardItem): string | null {

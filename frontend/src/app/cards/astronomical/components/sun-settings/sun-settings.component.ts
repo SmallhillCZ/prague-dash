@@ -1,5 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { IonicModule } from "@ionic/angular";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { SunCard, SunCardDefinition } from "../../schema/sun-card";
 import { SunValueNames, SunValues, SunValuesMeta } from "../../schema/sun-values";
@@ -8,7 +11,7 @@ import { SunValueNames, SunValues, SunValuesMeta } from "../../schema/sun-values
     selector: "app-sun-settings",
     templateUrl: "./sun-settings.component.html",
     styleUrls: ["./sun-settings.component.scss"],
-    standalone: false
+    imports: [CommonModule, FormsModule, IonicModule],
 })
 export class SunSettingsComponent implements OnInit {
   card?: SunCard;
