@@ -55,7 +55,7 @@ jobs:
       - publish
     uses: ./.github/workflows/_deploy.yaml
     with:
-      images: ghcr.io/smalhillcz/prague-dash:dev
+      images: ghcr.io/smallhillcz/prague-dash:dev
 
   tag:
     name: Tag
