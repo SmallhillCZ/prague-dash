@@ -11,58 +11,58 @@ import { AirQualityStationCard } from "../../schema/air-quality-station-card";
 import { AirQualityService } from "../../services/air-quality.service";
 
 @Component({
-  selector: "pd-card-air-quality-station-select",
-  templateUrl: "./card-air-quality-station-select.component.html",
-  styleUrls: ["./card-air-quality-station-select.component.scss"],
-  imports: [CommonModule, FormsModule, IonicModule],
+    selector: "pd-card-air-quality-station-select",
+    templateUrl: "./card-air-quality-station-select.component.html",
+    styleUrls: ["./card-air-quality-station-select.component.scss"],
+    imports: [CommonModule, FormsModule, IonicModule],
 })
 export class CardAirQualityStationSelectComponent implements OnInit {
-  stations: GetAirQualityStationResponse[] = [];
+    stations: GetAirQualityStationResponse[] = [];
 
-  search: string = "";
+    search: string = "";
 
-  lang = "cs" as "cs";
+    lang = "cs" as "cs";
 
-  constructor(
-    private airQualityService: AirQualityService,
-    private route: ActivatedRoute,
-    private dash: DashboardService,
-    private navController: NavController,
-    private geolocationService: GeolocationService,
-  ) {}
+    constructor(
+        private airQualityService: AirQualityService,
+        private route: ActivatedRoute,
+        private dash: DashboardService,
+        private navController: NavController,
+        private geolocationService: GeolocationService,
+    ) {}
 
-  ngOnInit(): void {
-    this.loadAirQualityStations();
-  }
+    ngOnInit(): void {
+        this.loadAirQualityStations();
+    }
 
-  async loadAirQualityStations() {
-    const coordinates = await this.geolocationService
-      .getCurrentPosition({ enableHighAccuracy: true })
-      .then((position) => {
-        if (position) return { lat: position.coords.latitude, lon: position.coords.longitude };
-        else return undefined;
-      })
-      .catch((err) => undefined);
+    async loadAirQualityStations() {
+        const coordinates = await this.geolocationService
+            .getCurrentPosition({})
+            .then((position) => {
+                if (position) return { lat: position.coords.latitude, lon: position.coords.longitude };
+                else return undefined;
+            })
+            .catch((err) => undefined);
 
-    this.stations = await this.airQualityService
-      .getAirQualityStations({
-        search: this.search || undefined,
-        coordinates,
-      })
-      .then((res) => res.data);
-  }
+        this.stations = await this.airQualityService
+            .getAirQualityStations({
+                search: this.search || undefined,
+                coordinates,
+            })
+            .then((res) => res.data);
+    }
 
-  async onSelect(station: GetAirQualityStationResponse) {
-    const cardData: CardCreateData<AirQualityStationCard> = {
-      type: "air-quality-station",
-      definition: { id: station.properties.id },
-      title: station.properties.name,
-    };
+    async onSelect(station: GetAirQualityStationResponse) {
+        const cardData: CardCreateData<AirQualityStationCard> = {
+            type: "air-quality-station",
+            definition: { id: station.properties.id },
+            title: station.properties.name,
+        };
 
-    const pageId = this.route.snapshot.queryParams["page"];
+        const pageId = this.route.snapshot.queryParams["page"];
 
-    await this.dash.createCard(cardData, pageId);
+        await this.dash.createCard(cardData, pageId);
 
-    this.navController.navigateRoot("/dash", { queryParams: { page: pageId } });
-  }
+        this.navController.navigateRoot("/dash", { queryParams: { page: pageId } });
+    }
 }
