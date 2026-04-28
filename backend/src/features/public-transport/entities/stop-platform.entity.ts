@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryColumn, VirtualColumn } from "typeorm";
 import { Stop } from "./stop.entity";
 
 @Entity()
@@ -12,9 +12,21 @@ export class StopPlatform {
   @Column({ nullable: true })
   name!: string;
 
-  @Column({ type: "numeric", precision: 8, scale: 5 })
-  lat!: number;
+  @Column("geometry", {
+    spatialFeatureType: "Point",
+    srid: 4326,
+  })
+  geom!: string;
 
-  @Column({ type: "numeric", precision: 8, scale: 5 })
-  lon!: number;
+  @VirtualColumn({
+    type: "double precision",
+    query: (alias) => `ST_Y(${alias}."geom"::geometry)`,
+  })
+  lat?: number;
+
+  @VirtualColumn({
+    type: "double precision",
+    query: (alias) => `ST_X(${alias}."geom"::geometry)`,
+  })
+  lon?: number;
 }

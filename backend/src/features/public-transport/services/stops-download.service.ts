@@ -3,7 +3,6 @@ import { Interval } from "@nestjs/schedule";
 import { InjectRepository } from "@nestjs/typeorm";
 import { GolemioClient } from "golemio-sdk";
 import { Config } from "src/config";
-import { coordinatesFromTuple } from "src/utils/coordinates-from-tuple";
 import { Repository } from "typeorm";
 import { Stop } from "../entities/stop.entity";
 
@@ -61,11 +60,13 @@ export class StopsDownloadService {
 
         const stop = stopIndex[item.properties.stop_name];
 
+        const [lon, lat] = item.geometry.coordinates as [number, number];
+
         stop.platforms.push({
           stop,
           id: item.properties.stop_id,
           name: item.properties.platform_code,
-          ...coordinatesFromTuple(item.geometry.coordinates as [number, number]),
+          geom: `SRID=4326;POINT(${lon} ${lat})`,
         });
       });
     }

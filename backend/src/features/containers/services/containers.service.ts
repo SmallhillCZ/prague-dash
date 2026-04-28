@@ -43,7 +43,7 @@ export class ContainersService {
 
     if (options.coordinates?.lat && options.coordinates?.lon) {
       query.orderBy(
-        `ST_Distance_Sphere(ST_MakePoint(${options.coordinates?.lon}, ${options.coordinates?.lat}), ST_MakePoint(container.lon, container.lat))`,
+        `ST_DistanceSphere(container.geom, ST_SetSRID(ST_MakePoint(${options.coordinates?.lon}, ${options.coordinates?.lat}), 4326))`,
         "ASC",
       );
     } else {
@@ -138,8 +138,7 @@ export class ContainersService {
       const container: Container = {
         id: containerData.properties!.id.toString(),
         district: containerData.properties!.district,
-        lon: containerData.geometry?.coordinates?.[0],
-        lat: containerData.geometry?.coordinates?.[1],
+        geom: `SRID=4326;POINT(${containerData.geometry.coordinates[0]} ${containerData.geometry.coordinates[1]})`,
         location: containerData.properties!.name,
         accessibility: containerData.properties!.accessibility?.id,
       };
