@@ -1,4 +1,5 @@
 import { Global, Injectable, Module } from "@nestjs/common";
+import { ServeStaticModuleOptions } from "@nestjs/serve-static";
 import { config } from "dotenv";
 import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
@@ -49,7 +50,12 @@ export class Config {
     token: process.env.GOLEMIO_TOKEN || "",
   };
 
-  frontend: { config: FrontendConfigResponse } = {
+  frontend: { serve: ServeStaticModuleOptions; config: FrontendConfigResponse } = {
+    serve: {
+      rootPath: path.resolve(__dirname, "../../../../frontend/apps/admin/dist"),
+      serveRoot: "",
+    },
+
     config: {
       mapyComApiKey: process.env.MAPY_COM_API_KEY || "",
     },

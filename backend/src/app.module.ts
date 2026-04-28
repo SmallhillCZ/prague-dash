@@ -2,7 +2,7 @@ import { Logger, Module, ModuleMetadata } from "@nestjs/common";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import minimist from "minimist";
-import { ConfigModule } from "./config";
+import { Config, ConfigModule } from "./config";
 import { DatabaseModule } from "./database/database.module";
 import { FeatureModules } from "./features";
 import { RootModule } from "./modules/root/root.module";
@@ -34,8 +34,22 @@ if (featureModules.length) {
     ConfigModule,
     DatabaseModule,
     RootModule,
-    ServeStaticModule.forRoot({
-      rootPath: "public",
+    ServeStaticModule.forRootAsync({
+      imports: [],
+      inject: [Config],
+      useFactory: (config: Config) => {
+        const logger = new Logger(ServeStaticModule.name);
+        logger.log(`Serving static files from ${config.frontend.serve.rootPath} at ${config.frontend.serve.serveRoot}`);
+        return [
+          {
+            rootPath: config.frontend.serve.rootPath,
+            serveRoot: config.frontend.serve.serveRoot,
+            serveStaticOptions: {
+              fallthrough: true,
+            },
+          },
+        ];
+      },
     }),
     ...loadFeatureModules,
   ],
