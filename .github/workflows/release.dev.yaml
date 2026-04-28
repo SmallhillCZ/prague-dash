@@ -36,7 +36,7 @@ jobs:
       - version
     uses: ./.github/workflows/_build.yaml
     with:
-      version: ${{ needs.version.outputs.new_version }}
+      version: ${{ needs.version.outputs.version }}
 
   test-e2e:
     name: E2E Tests
@@ -65,10 +65,13 @@ jobs:
 
   tag:
     name: Tag
-    needs: publish
+    needs:
+      - publish
+      - version
     uses: ./.github/workflows/_tag.yaml
     with:
       tag: DEV
+      version: ${{ needs.version.outputs.version }}
 
   cleanup:
     name: Cleanup artifacts
