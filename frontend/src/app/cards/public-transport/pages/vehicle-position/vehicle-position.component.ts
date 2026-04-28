@@ -1,10 +1,13 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { AlertController } from "@ionic/angular";
+import { AlertController, IonicModule } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { DateTime, Duration } from "luxon";
 import { Subscription, timer } from "rxjs";
 import { ApiError } from "src/app/services/api.service";
+import { MapMarkerComponent } from "src/app/shared/components/map-marker/map-marker.component";
+import { MapComponent } from "src/app/shared/components/map/map.component";
 import { DepartureBoardItem, VehiclePositionResponse } from "src/sdk";
 import { PlatformData } from "../../schema/platform-data";
 import { RouteType, RouteTypes } from "../../schema/route-type";
@@ -17,7 +20,7 @@ import { VehiclePositionService } from "../../services/vehicle-position.service"
   selector: "pd-vehicle-position",
   templateUrl: "./vehicle-position.component.html",
   styleUrls: ["./vehicle-position.component.scss"],
-  standalone: false,
+  imports: [CommonModule, IonicModule, MapComponent, MapMarkerComponent],
 })
 export class VehiclePositionComponent implements OnInit {
   tripId?: string;

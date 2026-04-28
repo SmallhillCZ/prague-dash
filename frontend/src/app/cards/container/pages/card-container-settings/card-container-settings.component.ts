@@ -1,5 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { IonicModule } from "@ionic/angular";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { ContainerCard, ContainerCardDefinition } from "../../schema/container-card";
 
@@ -7,7 +10,7 @@ import { ContainerCard, ContainerCardDefinition } from "../../schema/container-c
     selector: "pd-card-container-settings",
     templateUrl: "./card-container-settings.component.html",
     styleUrls: ["./card-container-settings.component.scss"],
-    standalone: false
+    imports: [CommonModule, FormsModule, IonicModule],
 })
 export class CardContainerSettingsComponent implements OnInit {
   card?: ContainerCard;

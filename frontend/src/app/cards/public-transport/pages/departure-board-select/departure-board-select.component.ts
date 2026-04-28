@@ -1,6 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { IonicModule, NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
@@ -12,7 +14,7 @@ import { StopsService } from "../../services/stops.service";
     selector: "pd-departure-board-select",
     templateUrl: "./departure-board-select.component.html",
     styleUrls: ["./departure-board-select.component.scss"],
-    standalone: false
+    imports: [CommonModule, FormsModule, IonicModule],
 })
 export class DepartureBoardSelectComponent implements OnInit, OnDestroy {
   view: "map" | "list" = "list";

@@ -1,6 +1,7 @@
+import { CommonModule } from "@angular/common";
 import { Component, Inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { IonicModule, NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
@@ -11,7 +12,7 @@ import { DashboardService } from "src/app/services/dashboard.service";
     selector: "app-dash-card-add",
     templateUrl: "./dash-card-add.component.html",
     styleUrls: ["./dash-card-add.component.scss"],
-    standalone: false
+    imports: [CommonModule, IonicModule],
 })
 export class DashCardAddComponent implements OnInit {
   page?: DashboardPage;

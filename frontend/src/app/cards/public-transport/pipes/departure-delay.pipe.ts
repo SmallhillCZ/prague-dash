@@ -4,7 +4,6 @@ import { DepartureBoardCardDefinition } from "../schema/departure-board-card";
 
 @Pipe({
   name: "departureDelay",
-  standalone: false,
 })
 export class DepartureDelayPipe implements PipeTransform {
   transform(departure: DepartureBoardItem, options: DepartureBoardCardDefinition): string | null {

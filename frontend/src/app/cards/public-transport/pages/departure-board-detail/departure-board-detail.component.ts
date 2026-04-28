@@ -1,8 +1,13 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { ActivatedRoute, Params, RouterLink } from "@angular/router";
+import { IonicModule, NavController } from "@ionic/angular";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { DepartureBoardItem, DepartureBoardResponse } from "src/sdk";
+import { DepartureDelayColorPipe } from "../../pipes/departure-delay-color.pipe";
+import { DepartureDelayPipe } from "../../pipes/departure-delay.pipe";
+import { DepartureStylePipe } from "../../pipes/departure-style.pipe";
+import { DepartureTimePipe } from "../../pipes/departure-time.pipe";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
 import { RouteTypes } from "../../schema/route-type";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
@@ -12,7 +17,15 @@ import { StopsService } from "../../services/stops.service";
   selector: "pd-departure-board-detail",
   templateUrl: "./departure-board-detail.component.html",
   styleUrls: ["./departure-board-detail.component.scss"],
-  standalone: false,
+  imports: [
+    CommonModule,
+    IonicModule,
+    RouterLink,
+    DepartureTimePipe,
+    DepartureDelayPipe,
+    DepartureDelayColorPipe,
+    DepartureStylePipe,
+  ],
 })
 export class DepartureBoardDetailComponent implements OnInit {
   card?: DepartureBoardCard;

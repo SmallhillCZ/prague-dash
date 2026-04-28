@@ -1,7 +1,11 @@
+import { CommonModule } from "@angular/common";
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { IonicModule } from "@ionic/angular";
 import { ChartData, ChartOptions, ScriptableLineSegmentContext } from "chart.js";
 import { DateTime, Duration } from "luxon";
 import { Language } from "src/app/schema/language";
+import { ChartsjsChartComponent } from "src/app/shared/components/chartsjs-chart/chartsjs-chart.component";
+import { CircleChartComponent } from "src/app/shared/components/circle-chart/circle-chart.component";
 import { GetContainerResponseContainerType } from "src/sdk";
 import { ContainerCard } from "../../schema/container-card";
 import { ContainerTypes } from "../../schema/container-type";
@@ -11,7 +15,7 @@ import { ContainerService } from "../../services/container.service";
   selector: "pd-container-detail-card",
   templateUrl: "./container-detail-card.component.html",
   styleUrls: ["./container-detail-card.component.scss"],
-  standalone: false,
+  imports: [CommonModule, IonicModule, CircleChartComponent, ChartsjsChartComponent],
 })
 export class ContainerDetailCardComponent implements OnInit, OnChanges {
   @Input() card!: ContainerCard;

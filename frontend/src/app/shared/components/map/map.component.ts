@@ -17,7 +17,6 @@ import { MapMarkerComponent, MapMarkerIconDirection } from "../map-marker/map-ma
   selector: "pd-map",
   templateUrl: "./map.component.html",
   styleUrls: ["./map.component.scss"],
-  standalone: false,
 })
 export class MapComponent implements OnInit, AfterViewInit, AfterContentInit {
   private map: any;

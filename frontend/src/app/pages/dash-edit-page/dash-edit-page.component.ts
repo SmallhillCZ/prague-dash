@@ -1,6 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { Component, Inject, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { AlertController, ItemReorderCustomEvent, NavController } from "@ionic/angular";
+import { AlertController, IonicModule, ItemReorderCustomEvent, NavController } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { combineLatest } from "rxjs";
 import { Card } from "src/app/schema/card";
@@ -15,7 +17,7 @@ import { SettingsService } from "src/app/services/settings.service";
   selector: "app-dash-edit-page",
   templateUrl: "./dash-edit-page.component.html",
   styleUrls: ["./dash-edit-page.component.scss"],
-  standalone: false,
+  imports: [CommonModule, FormsModule, IonicModule],
 })
 export class DashEditPageComponent implements OnInit {
   dashboard?: Dashboard;
