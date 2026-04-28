@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { DateTime } from "luxon";
@@ -18,7 +19,6 @@ import { DepartureTimePipe } from "../../pipes/departure-time.pipe";
 import { DepartureBoardCard } from "../../schema/departure-board-card";
 import { DepartureBoardsService, LoadDeparturesOptions } from "../../services/departure-boards.service";
 import { StopsService } from "../../services/stops.service";
-import { RouterLink } from "@angular/router";
 
 @UntilDestroy()
 @Component({
