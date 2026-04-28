@@ -52,7 +52,7 @@ export class Config {
 
   frontend: { serve: ServeStaticModuleOptions; config: FrontendConfigResponse } = {
     serve: {
-      rootPath: path.resolve(__dirname, "../../../../frontend/apps/admin/dist"),
+      rootPath: path.resolve(__dirname, "../public"),
       serveRoot: "",
     },
 
