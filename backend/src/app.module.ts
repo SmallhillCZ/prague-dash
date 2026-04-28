@@ -1,5 +1,6 @@
 import { Logger, Module, ModuleMetadata } from "@nestjs/common";
 import { ScheduleModule } from "@nestjs/schedule";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import minimist from "minimist";
 import { ConfigModule } from "./config";
 import { DatabaseModule } from "./database/database.module";
@@ -28,7 +29,17 @@ if (featureModules.length) {
 }
 
 @Module({
-  imports: [ScheduleModule.forRoot(), ConfigModule, DatabaseModule, RootModule, ...loadFeatureModules],
+  imports: [
+    ScheduleModule.forRoot(),
+    ConfigModule,
+    DatabaseModule,
+    RootModule,
+    ServeStaticModule.forRoot({
+      rootPath: "public",
+      exclude: ["/api*"],
+    }),
+    ...loadFeatureModules,
+  ],
   controllers: [],
   providers: [],
 })

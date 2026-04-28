@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         target:
-          - prague-dash
+          - backend
     steps:
       - name: Checkout the updated source code
         uses: actions/checkout@v6

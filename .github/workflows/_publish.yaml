@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - { target: prague-dash, publish-name: ghcr.io/smallhillcz/prague-dash }
+          - { target: backend, publish-name: ghcr.io/smallhillcz/prague-dash }
     steps:
       - name: Checkout the updated source code
         uses: actions/checkout@v6

@@ -1,5 +1,7 @@
-# MARK: backend
-FROM node:22-alpine as backend
+
+
+# MARK: frontend
+FROM node:22-alpine as frontend
 
 WORKDIR /app
 
@@ -22,8 +24,8 @@ EXPOSE 3000
 
 CMD ["npm","start"]
 
-# MARK: frontend
-FROM node:22-alpine as frontend
+# MARK: backend
+FROM node:22-alpine as backend
 
 WORKDIR /app
 
@@ -37,6 +39,9 @@ RUN npm run build
 # CLEAN
 ENV NODE_ENV=production
 RUN npm prune
+
+# COPY FRONTEND
+COPY --from=frontend /app/dist /app/public
 
 # RUN
 ENV PORT=3000
