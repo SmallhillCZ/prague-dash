@@ -42,10 +42,12 @@ export class ContainersService {
     if (options.location) query.where("container.location ILIKE :location", { location: `%${options.location}%` });
 
     if (options.coordinates?.lat && options.coordinates?.lon) {
-      query.orderBy(
-        `ST_Distance_Sphere(ST_MakePoint(${options.coordinates?.lon}, ${options.coordinates?.lat}), ST_MakePoint(container.lon, container.lat))`,
-        "ASC",
-      );
+      query
+        .orderBy(
+          `ST_DistanceSphere(ST_MakePoint(:lon::float8, :lat::float8), ST_MakePoint(container.lon::float8, container.lat::float8))`,
+          "ASC",
+        )
+        .setParameters({ lon: options.coordinates.lon, lat: options.coordinates.lat });
     } else {
       query.orderBy("container.location", "ASC");
     }
