@@ -10,25 +10,25 @@ concurrency:
 jobs:
   version:
     name: Resolve version
-    uses: ./.github/workflows/version.yml
+    uses: ./.github/workflows/_version.yml
     with:
       semver: none
       prerelease: false
 
   test-unit:
     name: Unit Tests
-    uses: ./.github/workflows/test-unit.yml
+    uses: ./.github/workflows/_test-unit.yml
 
   build:
     name: Build
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/_build.yml
     with:
-      version: ${{ needs.version.outputs.new_version }}
+      version: ${{ needs.version.outputs.version }}
 
   test-e2e:
     name: E2E Tests
     needs: build
-    uses: ./.github/workflows/test-e2e.yml
+    uses: ./.github/workflows/_test-e2e.yml
 
   publish:
     name: Publish
@@ -36,7 +36,7 @@ jobs:
       - build
       - test-unit
       - test-e2e
-    uses: ./.github/workflows/publish.yml
+    uses: ./.github/workflows/_publish.yml
     with:
       tag: latest
       version-tags: true
@@ -51,11 +51,13 @@ jobs:
 
   tag:
     name: Tag
-    needs: publish
+    needs:
+      - publish
+      - version
     uses: ./.github/workflows/_tag.yml
     with:
       tag: PRODUCTION
-      version: ${{ needs.version.outputs.new_tag }}
+      version: ${{ needs.version.outputs.version }}
 
   cleanup:
     name: Cleanup artifacts
