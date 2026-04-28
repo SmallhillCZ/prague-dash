@@ -37,9 +37,8 @@ export class StopsService {
     }
 
     if (options.coordinates) {
-      query = query.orderBy(
-        coordinatesToDistanceSql('platforms', options.coordinates),
-      );
+      const distance = coordinatesToDistanceSql('platforms', options.coordinates);
+      query = query.orderBy(distance.sql).setParameters(distance.parameters);
     } else {
       query = query.orderBy({ 'stops.name': 'ASC' });
     }
