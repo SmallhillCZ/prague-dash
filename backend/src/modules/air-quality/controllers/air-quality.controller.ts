@@ -1,27 +1,27 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import { Controller, Get, NotFoundException, Param, Query } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
+import { GetAirQualityStationResponse, GetAirQualityStationsQuery } from "../dto/air-quality.dto";
 import { AirQualityService } from "../services/air-quality.service";
 
-interface GetStationsQuery {
-  lat?: string;
-  lon?: string;
-}
-
 @Controller("air-quality")
-@ApiTags("CityVizor")
+@ApiTags("AirQuality")
 export class AirQualityController {
   constructor(private airQualityService: AirQualityService) {}
 
   @Get("/stations")
-  getStations(@Query() query: GetStationsQuery) {
+  getStations(@Query() query: GetAirQualityStationsQuery): GetAirQualityStationResponse[] {
     const options = {
-      coordinates: query.lat && query.lon ? { lat: Number(query.lat), lon: Number(query.lon) } : undefined,
+      q: query.q,
+      coordinates: query.lat && query.lon ? { lat: query.lat, lon: query.lon } : undefined,
     };
     return this.airQualityService.getStations(options);
   }
 
   @Get("/stations/:id")
-  getStation(@Param("id") id: string) {
-    return this.airQualityService.getStation(id);
+  getStation(@Param("id") id: string): GetAirQualityStationResponse {
+    const station = this.airQualityService.getStation(id);
+    if (!station) throw new NotFoundException("Air quality station not found.");
+
+    return station;
   }
 }

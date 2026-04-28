@@ -70,7 +70,7 @@ export interface Container {
      * @type {string}
      * @memberof Container
      */
-    'district'?: string;
+    'district'?: string | null;
     /**
      * 
      * @type {number}
@@ -119,7 +119,7 @@ export interface ContainerType {
      * @type {number}
      * @memberof ContainerType
      */
-    'type': number;
+    'type': ContainerTypeTypeEnum;
     /**
      * 
      * @type {CleaningFrequency}
@@ -139,6 +139,21 @@ export interface ContainerType {
      */
     'container'?: Container;
 }
+
+export const ContainerTypeTypeEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3,
+    NUMBER_4: 4,
+    NUMBER_5: 5,
+    NUMBER_6: 6,
+    NUMBER_7: 7,
+    NUMBER_8: 8,
+    NUMBER_9: 9
+} as const;
+
+export type ContainerTypeTypeEnum = typeof ContainerTypeTypeEnum[keyof typeof ContainerTypeTypeEnum];
+
 /**
  * 
  * @export
@@ -375,6 +390,263 @@ export const GeometryTypeEnum = {
 } as const;
 
 export type GeometryTypeEnum = typeof GeometryTypeEnum[keyof typeof GeometryTypeEnum];
+
+/**
+ * 
+ * @export
+ * @interface GetAirQualityStationResponse
+ */
+export interface GetAirQualityStationResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAirQualityStationResponse
+     */
+    'type': string;
+    /**
+     * 
+     * @type {GetAirQualityStationResponseGeometry}
+     * @memberof GetAirQualityStationResponse
+     */
+    'geometry': GetAirQualityStationResponseGeometry;
+    /**
+     * 
+     * @type {GetAirQualityStationResponseProperties}
+     * @memberof GetAirQualityStationResponse
+     */
+    'properties': GetAirQualityStationResponseProperties;
+}
+/**
+ * 
+ * @export
+ * @interface GetAirQualityStationResponseAveragedTime
+ */
+export interface GetAirQualityStationResponseAveragedTime {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetAirQualityStationResponseAveragedTime
+     */
+    'averaged_hours'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetAirQualityStationResponseAveragedTime
+     */
+    'value'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface GetAirQualityStationResponseComponent
+ */
+export interface GetAirQualityStationResponseComponent {
+    /**
+     * 
+     * @type {GetAirQualityStationResponseAveragedTime}
+     * @memberof GetAirQualityStationResponseComponent
+     */
+    'averaged_time'?: GetAirQualityStationResponseAveragedTime;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAirQualityStationResponseComponent
+     */
+    'type'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetAirQualityStationResponseGeometry
+ */
+export interface GetAirQualityStationResponseGeometry {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAirQualityStationResponseGeometry
+     */
+    'type': string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof GetAirQualityStationResponseGeometry
+     */
+    'coordinates': Array<number>;
+}
+/**
+ * 
+ * @export
+ * @interface GetAirQualityStationResponseMesurement
+ */
+export interface GetAirQualityStationResponseMesurement {
+    /**
+     * 
+     * @type {number}
+     * @memberof GetAirQualityStationResponseMesurement
+     */
+    'AQ_hourly_index'?: number;
+    /**
+     * 
+     * @type {Array<GetAirQualityStationResponseComponent>}
+     * @memberof GetAirQualityStationResponseMesurement
+     */
+    'components'?: Array<GetAirQualityStationResponseComponent>;
+}
+/**
+ * 
+ * @export
+ * @interface GetAirQualityStationResponseProperties
+ */
+export interface GetAirQualityStationResponseProperties {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAirQualityStationResponseProperties
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAirQualityStationResponseProperties
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAirQualityStationResponseProperties
+     */
+    'district'?: string;
+    /**
+     * 
+     * @type {GetAirQualityStationResponseMesurement}
+     * @memberof GetAirQualityStationResponseProperties
+     */
+    'measurement'?: GetAirQualityStationResponseMesurement;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetAirQualityStationResponseProperties
+     */
+    'updated_at'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetContainerResponse
+ */
+export interface GetContainerResponse {
+    /**
+     * 
+     * @type {Array<GetContainerResponseContainerType>}
+     * @memberof GetContainerResponse
+     */
+    'containerTypes': Array<GetContainerResponseContainerType>;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetContainerResponse
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetContainerResponse
+     */
+    'location': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetContainerResponse
+     */
+    'district'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetContainerResponse
+     */
+    'lon'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetContainerResponse
+     */
+    'lat'?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetContainerResponse
+     */
+    'accessibility'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface GetContainerResponseContainerType
+ */
+export interface GetContainerResponseContainerType {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetContainerResponseContainerType
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetContainerResponseContainerType
+     */
+    'containerId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetContainerResponseContainerType
+     */
+    'type': GetContainerResponseContainerTypeTypeEnum;
+    /**
+     * 
+     * @type {CleaningFrequency}
+     * @memberof GetContainerResponseContainerType
+     */
+    'cleaning_frequency'?: CleaningFrequency;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetContainerResponseContainerType
+     */
+    'container_type'?: string;
+    /**
+     * 
+     * @type {Container}
+     * @memberof GetContainerResponseContainerType
+     */
+    'container'?: Container;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetContainerResponseContainerType
+     */
+    'occupancy'?: number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetContainerResponseContainerType
+     */
+    'occupancy_timestamp'?: string | null;
+}
+
+export const GetContainerResponseContainerTypeTypeEnum = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3,
+    NUMBER_4: 4,
+    NUMBER_5: 5,
+    NUMBER_6: 6,
+    NUMBER_7: 7,
+    NUMBER_8: 8,
+    NUMBER_9: 9
+} as const;
+
+export type GetContainerResponseContainerTypeTypeEnum = typeof GetContainerResponseContainerTypeTypeEnum[keyof typeof GetContainerResponseContainerTypeTypeEnum];
 
 /**
  * 
@@ -795,6 +1067,145 @@ export type VehiclePositionResponseTypeEnum = typeof VehiclePositionResponseType
 
 
 
+/**
+ * Query parameters for getStations operation in AirQualityApi.
+ * @export
+ * @interface AirQualityApiGetStationsQueryParams
+ */
+export interface AirQualityApiGetStationsQueryParams {
+    //q
+    /**
+     * 
+     * @type {string}
+     * @memberof AirQualityApiGetStations
+     */
+    q?: string
+
+    //lat
+    /**
+     * 
+     * @type {number}
+     * @memberof AirQualityApiGetStations
+     */
+    lat?: number
+
+    //lon
+    /**
+     * 
+     * @type {number}
+     * @memberof AirQualityApiGetStations
+     */
+    lon?: number
+}
+
+
+
+
+/**
+ * AirQualityApi - object-oriented interface
+ * @export
+ * @class AirQualityApi
+ * @extends {BaseAPI}
+ */
+export class AirQualityApi extends BaseAPI {
+
+    constructor(protected override configuration: Configuration, protected override axios: AxiosInstance = globalAxios) {
+        super(configuration, configuration.basePath, axios);
+    }
+
+    /**
+     * 
+
+     * @param {string} id 
+     * @param {AxiosRequestConfig} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AirQualityApi
+     */
+    
+    public async getStation(
+        id: string,
+        options: AxiosRequestConfig = {}
+    ) {
+
+        // verify required parameter 'id' is not null or undefined
+        assertParamExists('getStation', 'id', id)
+        
+        const localVarPath = `/api/air-quality/stations/{id}`
+            .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        // use dummy base URL string because the URL constructor only accepts absolute URLs.
+        const requestUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+        let baseOptions;
+        if (this.configuration) {
+            baseOptions = this.configuration.baseOptions;
+        }
+
+        const axiosRequestConfig: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+        const requestHeaderParameter = {} as any;
+        const requestQueryParameter = {} as any;
+
+
+
+        setSearchParams(requestUrlObj, requestQueryParameter);
+        let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+        axiosRequestConfig.headers = {...requestHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+        axiosRequestConfig["url"] = toPathString(requestUrlObj);
+        axiosRequestConfig["baseURL"] = this.configuration.basePath;
+        
+        return this.axios.request<GetAirQualityStationResponse>(axiosRequestConfig);
+    }
+
+    /**
+     * 
+
+     * @param {AirQualityApiGetStationsQueryParams} queryParams Query parameters.
+     * @param {AxiosRequestConfig} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AirQualityApi
+     */
+    
+    public async getStations(
+        queryParams: AirQualityApiGetStationsQueryParams = {},
+        options: AxiosRequestConfig = {}
+    ) {
+
+        const localVarPath = `/api/air-quality/stations`;
+        // use dummy base URL string because the URL constructor only accepts absolute URLs.
+        const requestUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+        let baseOptions;
+        if (this.configuration) {
+            baseOptions = this.configuration.baseOptions;
+        }
+
+        const axiosRequestConfig: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+        const requestHeaderParameter = {} as any;
+        const requestQueryParameter = {} as any;
+
+        if (queryParams.q !== undefined) {
+            requestQueryParameter['q'] = queryParams.q;
+        }
+
+        if (queryParams.lat !== undefined) {
+            requestQueryParameter['lat'] = queryParams.lat;
+        }
+
+        if (queryParams.lon !== undefined) {
+            requestQueryParameter['lon'] = queryParams.lon;
+        }
+
+
+
+        setSearchParams(requestUrlObj, requestQueryParameter);
+        let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+        axiosRequestConfig.headers = {...requestHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+        axiosRequestConfig["url"] = toPathString(requestUrlObj);
+        axiosRequestConfig["baseURL"] = this.configuration.basePath;
+        
+        return this.axios.request<Array<GetAirQualityStationResponse>>(axiosRequestConfig);
+    }
+}
+
 
 
 
@@ -873,84 +1284,6 @@ export class CityVizorApi extends BaseAPI {
     ) {
 
         const localVarPath = `/api/cityvizor/profiles`;
-        // use dummy base URL string because the URL constructor only accepts absolute URLs.
-        const requestUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-        let baseOptions;
-        if (this.configuration) {
-            baseOptions = this.configuration.baseOptions;
-        }
-
-        const axiosRequestConfig: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
-        const requestHeaderParameter = {} as any;
-        const requestQueryParameter = {} as any;
-
-
-
-        setSearchParams(requestUrlObj, requestQueryParameter);
-        let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-        axiosRequestConfig.headers = {...requestHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-        axiosRequestConfig["url"] = toPathString(requestUrlObj);
-        axiosRequestConfig["baseURL"] = this.configuration.basePath;
-        
-        return this.axios.request<Array<object>>(axiosRequestConfig);
-    }
-
-    /**
-     * 
-
-     * @param {string} id 
-     * @param {AxiosRequestConfig} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CityVizorApi
-     */
-    
-    public async getStation(
-        id: string,
-        options: AxiosRequestConfig = {}
-    ) {
-
-        // verify required parameter 'id' is not null or undefined
-        assertParamExists('getStation', 'id', id)
-        
-        const localVarPath = `/api/air-quality/stations/{id}`
-            .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-        // use dummy base URL string because the URL constructor only accepts absolute URLs.
-        const requestUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-        let baseOptions;
-        if (this.configuration) {
-            baseOptions = this.configuration.baseOptions;
-        }
-
-        const axiosRequestConfig: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
-        const requestHeaderParameter = {} as any;
-        const requestQueryParameter = {} as any;
-
-
-
-        setSearchParams(requestUrlObj, requestQueryParameter);
-        let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-        axiosRequestConfig.headers = {...requestHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-        axiosRequestConfig["url"] = toPathString(requestUrlObj);
-        axiosRequestConfig["baseURL"] = this.configuration.basePath;
-        
-        return this.axios.request<object>(axiosRequestConfig);
-    }
-
-    /**
-     * 
-
-     * @param {AxiosRequestConfig} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CityVizorApi
-     */
-    
-    public async getStations(
-        options: AxiosRequestConfig = {}
-    ) {
-
-        const localVarPath = `/api/air-quality/stations`;
         // use dummy base URL string because the URL constructor only accepts absolute URLs.
         const requestUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
         let baseOptions;
@@ -1087,7 +1420,7 @@ export class ContainersApi extends BaseAPI {
         axiosRequestConfig["url"] = toPathString(requestUrlObj);
         axiosRequestConfig["baseURL"] = this.configuration.basePath;
         
-        return this.axios.request<Container>(axiosRequestConfig);
+        return this.axios.request<GetContainerResponse>(axiosRequestConfig);
     }
 
     /**
@@ -1884,6 +2217,7 @@ export class RootApi extends BaseAPI {
 
 
 export class SDK {
+    AirQualityApi: AirQualityApi;
     CityVizorApi: CityVizorApi;
     ContainersApi: ContainersApi;
     PublicTransportApi: PublicTransportApi;
@@ -1894,6 +2228,7 @@ export class SDK {
 
         if(!axios) axios = globalAxios.create();
 
+        this.AirQualityApi = new AirQualityApi(configuration, axios!);
         this.CityVizorApi = new CityVizorApi(configuration, axios!);
         this.ContainersApi = new ContainersApi(configuration, axios!);
         this.PublicTransportApi = new PublicTransportApi(configuration, axios!);

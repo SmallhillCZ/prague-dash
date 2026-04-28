@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { GolemioClient } from "golemio-sdk";
 import { DateTime } from "luxon";
 import { Repository } from "typeorm";
+import { GetContainerResponse } from "../dto/containers.dto";
 import { ContainerLog } from "../entities/container-log.entity";
 import { ContainerType } from "../entities/container-type.entity";
 import { Container } from "../entities/container.entity";
@@ -31,7 +32,9 @@ export class ContainersService {
     @InjectRepository(ContainerType) private containerTypeRepository: Repository<ContainerType>,
     @InjectRepository(ContainerLog) private containerLogRepository: Repository<ContainerLog>,
     private golemio: GolemioClient,
-  ) {}
+  ) {
+    // this.downloadContainers();
+  }
 
   async getContainers(options: GetContainersOptions) {
     const query = this.containerRepository.createQueryBuilder("container");
@@ -47,8 +50,31 @@ export class ContainersService {
     return await query.getMany();
   }
 
-  getContainer(id: Container["id"]) {
-    return this.containerRepository.findOne({ where: { id }, relations: ["containerTypes"] });
+  async getContainer(id: Container["id"]): Promise<GetContainerResponse | null> {
+    const wasteStation = await this.containerRepository.findOne({ where: { id }, relations: ["containerTypes"] });
+    if (!wasteStation) return null;
+
+    const occupancy = await this.containerLogRepository
+      .createQueryBuilder("log")
+      .distinctOn(["log.container_type_id"])
+      .select("log.container_type_id", "container_type_id")
+      .addSelect("log.occupancy", "occupancy")
+      .addSelect("log.timestamp", "occupancy_timestamp")
+      .orderBy("log.container_type_id", "ASC")
+      .addOrderBy("log.timestamp", "DESC")
+      .where("log.container_id = :id", { id })
+      .getRawMany<{ container_type_id: string; occupancy: string; occupancy_timestamp: string }>();
+
+    const occupancyMap = new Map(occupancy.map((item) => [item.container_type_id, item]));
+
+    const response = wasteStation as GetContainerResponse;
+
+    response.containerTypes?.forEach((containerType, i) => {
+      containerType.occupancy = parseFloat(occupancyMap.get(containerType.id)?.occupancy ?? "null");
+      containerType.occupancy_timestamp = occupancyMap.get(containerType.id)?.occupancy_timestamp ?? null;
+    });
+
+    return response;
   }
 
   async getHistory(options: GetHistoryOptions): Promise<Pick<ContainerLog, "timestamp" | "occupancy">[]> {
@@ -87,7 +113,7 @@ export class ContainersService {
 
   @Interval(15 * 60 * 1000)
   private async downloadContainers() {
-    var timeStart = process.hrtime();
+    var timeStart = process.hrtime.bigint();
 
     this.logger.verbose("Downloading new container data...");
     const response = await this.golemio.WasteCollectionV2Api.getWCStations({
@@ -157,17 +183,17 @@ export class ContainersService {
     }
 
     this.logger.debug(`Saving ${containers.length} containers`);
-    await this.containerRepository.save(containers);
+    await this.containerRepository.save(containers, { chunk: 5000 });
 
     this.logger.debug(`Saving ${containerTypes.length} container types`);
-    await this.containerTypeRepository.save(containerTypes);
+    await this.containerTypeRepository.save(containerTypes, { chunk: 5000 });
 
     this.logger.debug(`Saving ${containerLogs.length} container logs`);
-    await this.containerLogRepository.save(containerLogs);
+    await this.containerLogRepository.save(containerLogs, { chunk: 5000 });
 
     const rows = containers.length + containerTypes.length + containerLogs.length;
-    const timeEnd = process.hrtime(timeStart);
+    const timeEnd = process.hrtime.bigint();
 
-    this.logger.log(`Saved ${rows} rows in ${timeEnd[0] * 1000 + timeEnd[1] / 1000000} ms.`);
+    this.logger.log(`Saved ${rows} rows in ${Number(timeEnd - timeStart) / 1_000_000_000} s`);
   }
 }

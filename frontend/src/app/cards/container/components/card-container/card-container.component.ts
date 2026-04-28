@@ -7,10 +7,10 @@ import { ContainerService } from "../../services/container.service";
 
 @UntilDestroy()
 @Component({
-    selector: "pd-card-container",
-    templateUrl: "./card-container.component.html",
-    styleUrls: ["./card-container.component.scss"],
-    standalone: false
+  selector: "pd-card-container",
+  templateUrl: "./card-container.component.html",
+  styleUrls: ["./card-container.component.scss"],
+  standalone: false,
 })
 export class CardContainerComponent implements CardComponent, OnInit {
   lang = "cs" as "cs";
@@ -33,11 +33,11 @@ export class CardContainerComponent implements CardComponent, OnInit {
     const data = await this.containerService.getContainer(this.card.definition.id);
     this.location = data.location;
 
-    this.types = data.types
+    this.types = data.containerTypes
       .filter((item) => this.card.definition?.showNotMetered || !!item.occupancy)
-      .map((item) => ({ name: ContainerTypes[item.type].title[this.lang], occupancy: item.occupancy }));
+      .map((item) => ({ name: ContainerTypes[item.type].title[this.lang], occupancy: item.occupancy! }));
 
-    this.types.sort((a, b) => {
+    this.types!.sort((a, b) => {
       if (a.occupancy === null) return 1;
       if (b.occupancy === null) return -1;
       return a.name.localeCompare(b.name);

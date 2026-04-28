@@ -46,7 +46,7 @@ async function bootstrap() {
   // registerTemplating(app);
 
   // comment to disable OpenAPI and Swagger
-  registerOpenAPI("api/openapi", app, config);
+  registerOpenAPI("openapi", app, config);
 
   await app.listen(config.server.port, config.server.host);
 

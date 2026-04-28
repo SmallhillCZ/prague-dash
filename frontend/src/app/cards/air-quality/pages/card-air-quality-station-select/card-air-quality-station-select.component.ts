@@ -4,18 +4,18 @@ import { NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
+import { GetAirQualityStationResponse } from "src/sdk";
 import { AirQualityStationCard } from "../../schema/air-quality-station-card";
-import { AirQualityStationData } from "../../schema/air-quality-station-data";
 import { AirQualityService } from "../../services/air-quality.service";
 
 @Component({
-    selector: "pd-card-air-quality-station-select",
-    templateUrl: "./card-air-quality-station-select.component.html",
-    styleUrls: ["./card-air-quality-station-select.component.scss"],
-    standalone: false
+  selector: "pd-card-air-quality-station-select",
+  templateUrl: "./card-air-quality-station-select.component.html",
+  styleUrls: ["./card-air-quality-station-select.component.scss"],
+  standalone: false,
 })
 export class CardAirQualityStationSelectComponent implements OnInit {
-  stations: AirQualityStationData[] = [];
+  stations: GetAirQualityStationResponse[] = [];
 
   search: string = "";
 
@@ -26,7 +26,7 @@ export class CardAirQualityStationSelectComponent implements OnInit {
     private route: ActivatedRoute,
     private dash: DashboardService,
     private navController: NavController,
-    private geolocationService: GeolocationService
+    private geolocationService: GeolocationService,
   ) {}
 
   ngOnInit(): void {
@@ -42,13 +42,15 @@ export class CardAirQualityStationSelectComponent implements OnInit {
       })
       .catch((err) => undefined);
 
-    this.stations = await this.airQualityService.getAirQualityStations({
-      search: this.search || undefined,
-      coordinates,
-    });
+    this.stations = await this.airQualityService
+      .getAirQualityStations({
+        search: this.search || undefined,
+        coordinates,
+      })
+      .then((res) => res.data);
   }
 
-  async onSelect(station: AirQualityStationData) {
+  async onSelect(station: GetAirQualityStationResponse) {
     const cardData: CardCreateData<AirQualityStationCard> = {
       type: "air-quality-station",
       definition: { id: station.properties.id },

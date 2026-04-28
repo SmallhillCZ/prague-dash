@@ -2,9 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Language } from "src/app/schema/language";
 import { DashboardService } from "src/app/services/dashboard.service";
-import { ContainerType } from "src/sdk";
+import { ContainerType, GetContainerResponseContainerType } from "src/sdk";
 import { ContainerCard } from "../../schema/container-card";
-import { ContainerDataType } from "../../schema/container-data";
 import { ContainerTypes } from "../../schema/container-type";
 import { ContainerService } from "../../services/container.service";
 
@@ -15,7 +14,7 @@ import { ContainerService } from "../../services/container.service";
   standalone: false,
 })
 export class CardContainerDetailComponent implements OnInit {
-  types?: ContainerType[];
+  types?: GetContainerResponseContainerType[];
 
   lang = Language.cs;
 
@@ -48,7 +47,7 @@ export class CardContainerDetailComponent implements OnInit {
     });
   }
 
-  private getContainerTypeTitle(type: ContainerDataType, lang: Language): string {
+  private getContainerTypeTitle(type: ContainerType, lang: Language): string {
     return ContainerTypes[type.type].title[lang]!;
   }
 }

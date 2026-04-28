@@ -7,7 +7,7 @@ export class Container {
 
   @Column("text") location!: string;
 
-  @Column("varchar", { nullable: true }) district?: string;
+  @Column("varchar", { nullable: true }) district?: string | null;
   @Column("numeric", { nullable: true }) lon?: number | null;
   @Column("numeric", { nullable: true }) lat?: number | null;
   @Column("smallint", { nullable: true }) accessibility?: number;

@@ -24,11 +24,13 @@ export class AirQualityService {
     this.logger.log(`Downloaded ${this.data?.length ?? 0} air quality stations.`);
   }
 
-  getStations(options?: { coordinates?: Coordinates }) {
-    const stations = this.data ?? [];
-    if (options?.coordinates) {
-      this.sortStationsByDistance(stations, options.coordinates);
-    }
+  getStations(options?: { q?: string; coordinates?: Coordinates }) {
+    let stations = this.data ?? [];
+
+    if (options?.coordinates) this.sortStationsByDistance(stations, options.coordinates);
+    if (options?.q)
+      stations = stations.filter((item) => item.properties.name.toLowerCase().includes(options.q!.toLowerCase()));
+
     return stations;
   }
 

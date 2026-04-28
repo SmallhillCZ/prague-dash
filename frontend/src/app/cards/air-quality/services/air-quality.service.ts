@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "src/app/services/api.service";
-import { AirQualityStationData } from "../schema/air-quality-station-data";
+import { AirQualityApiGetStationsQueryParams, GetAirQualityStationResponse } from "src/sdk";
 
 @Injectable({
   providedIn: "root",
@@ -8,12 +8,12 @@ import { AirQualityStationData } from "../schema/air-quality-station-data";
 export class AirQualityService {
   constructor(private api: ApiService) {}
 
-  async getAirQualityStation(id: string): Promise<AirQualityStationData> {
-    return await this.api.get<AirQualityStationData>(`air-quality/stations/${id}`);
+  async getAirQualityStation(id: string): Promise<GetAirQualityStationResponse> {
+    return await this.api.AirQualityApi.getStation(id).then((res) => res.data);
   }
 
   async getAirQualityStations(options: { search?: string; coordinates?: { lat: number; lon: number } }) {
-    const params: any = {};
+    const params: AirQualityApiGetStationsQueryParams = {};
 
     if (options.search) params["q"] = options.search;
 
@@ -22,6 +22,6 @@ export class AirQualityService {
       params["lon"] = options.coordinates.lon;
     }
 
-    return this.api.get<AirQualityStationData[]>("air-quality/stations", params);
+    return this.api.AirQualityApi.getStations(params);
   }
 }

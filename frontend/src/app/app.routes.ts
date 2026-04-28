@@ -1,12 +1,11 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 import { DashEditComponent } from "./components/dash-edit/dash-edit.component";
 import { DashCardAddComponent } from "./pages/dash-card-add/dash-card-add.component";
 import { DashEditPageComponent } from "./pages/dash-edit-page/dash-edit-page.component";
 import { DashComponent } from "./pages/dash/dash.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: "dash/edit", component: DashEditComponent },
 
   { path: "dash", component: DashComponent },
@@ -21,9 +20,3 @@ const routes: Routes = [
 
   // { path: "**", redirectTo: "" },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

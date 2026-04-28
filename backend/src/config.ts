@@ -13,6 +13,7 @@ export class Config {
   environment = process.env.NODE_ENV || "development";
   logging = {
     debug: process.env.LOG_DEBUG === "true" || process.env.LOG_DEBUG === "1",
+    query: process.env.LOG_QUERY === "true" || process.env.LOG_QUERY === "1",
   };
 
   server = {
@@ -41,7 +42,7 @@ export class Config {
     migrationsRun: false,
     migrations: [path.join(__dirname, "database/migrations/**/*{.ts,.js}")],
     namingStrategy: new SnakeNamingStrategy(),
-    logging: this.logging.debug,
+    logging: this.logging.query,
   };
 
   golemio = {
