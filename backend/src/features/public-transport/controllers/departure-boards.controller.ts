@@ -1,7 +1,10 @@
 import { Controller, Get, NotFoundException, Query } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { DepartureBoardResponse } from "../dto/departure-board-response.dto";
-import { GetClosestDepartureBoardsQuery, GetDepartureBoardsQuery } from "../dto/departure-boards.dto";
+import {
+  DepartureBoardResponse,
+  GetClosestDepartureBoardsQuery,
+  GetDepartureBoardsQuery,
+} from "../dto/departure-boards.dto";
 import { DepartureBoardsService, GetDepartureBoardOptions } from "../services/departure-boards.service";
 import { StopsService } from "../services/stops.service";
 
@@ -37,6 +40,8 @@ export class DepartureBoardsController {
       lat: Number(query?.lat),
       lon: Number(query?.lon),
     };
+
+    console.log("Query", query);
 
     const closestStop = await this.stopsService.getStops({ coordinates, limit: 1 }).then((stops) => stops[0]);
     if (!closestStop) throw new NotFoundException();

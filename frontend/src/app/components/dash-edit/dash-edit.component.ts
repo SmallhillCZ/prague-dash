@@ -1,5 +1,6 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { ItemReorderCustomEvent, NavController } from "@ionic/angular";
+import { IonicModule, ItemReorderCustomEvent, NavController } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
 import { DashboardService } from "src/app/services/dashboard.service";
@@ -9,7 +10,7 @@ import { DashboardService } from "src/app/services/dashboard.service";
   selector: "pd-dash-edit",
   templateUrl: "./dash-edit.component.html",
   styleUrls: ["./dash-edit.component.scss"],
-  standalone: false,
+  imports: [CommonModule, IonicModule],
 })
 export class DashEditComponent implements OnInit {
   dashboard?: Dashboard;

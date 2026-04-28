@@ -5,7 +5,6 @@ import { RouteTypeID } from "../schema/route-type";
 
 @Pipe({
   name: "departureStyle",
-  standalone: false,
 })
 export class DepartureStylePipe implements PipeTransform {
   transform(departure: DepartureBoardItem): { [name: string]: any } {

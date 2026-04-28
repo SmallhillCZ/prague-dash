@@ -1,9 +1,20 @@
-import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Params, Router } from "@angular/router";
-import { AlertController, NavController, Platform, ViewDidEnter, ViewWillLeave } from "@ionic/angular";
+import { CommonModule } from "@angular/common";
+import {
+  AfterViewInit,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  Inject,
+  NgZone,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { ActivatedRoute, Params, Router, RouterLink } from "@angular/router";
+import { AlertController, IonicModule, NavController, Platform, ViewDidEnter, ViewWillLeave } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { BehaviorSubject, Subscription, combineLatest } from "rxjs";
+import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
+import { DashCardComponent } from "src/app/components/dash-card/dash-card.component";
 import { CardType } from "src/app/schema/card-type";
 import { CARDS } from "src/app/schema/cards-token";
 import { Dashboard, DashboardPage } from "src/app/schema/dashboard";
@@ -16,7 +27,8 @@ import { Swiper, SwiperOptions } from "swiper/types";
   selector: "pd-dash",
   templateUrl: "./dash.component.html",
   styleUrls: ["./dash.component.scss"],
-  standalone: false,
+  imports: [CommonModule, IonicModule, RouterLink, DashCardComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashComponent implements OnInit, AfterViewInit, ViewDidEnter, ViewWillLeave {
   dashboard?: Dashboard;

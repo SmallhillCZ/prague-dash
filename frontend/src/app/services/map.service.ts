@@ -1,45 +1,26 @@
 import { Injectable } from "@angular/core";
+import * as L from "leaflet";
+import { filter, firstValueFrom, take } from "rxjs";
+import { ConfigService } from "./config.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class MapService {
-  SMap?: Promise<any>;
+  constructor(private configService: ConfigService) {}
 
-  constructor() {
-    this.SMap = new Promise<any>(async (resolve, reject) => {
-      const loader = await this.loadScript();
+  async createTileLayer(): Promise<L.TileLayer> {
+    const config = await firstValueFrom(
+      this.configService.config.pipe(
+        filter((c): c is NonNullable<typeof c> => c !== null),
+        take(1),
+      ),
+    );
 
-      loader.async = true;
-      loader.load(null, { poi: true }, () => {
-        const win = window as any;
-        resolve(win.SMap);
-      });
-    });
-  }
-
-  private async loadScript() {
-    const win = window as any;
-    const SMapLoader = win.Loader;
-
-    if (SMapLoader) {
-      return Promise.resolve(SMapLoader);
-    }
-
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = `https://api.mapy.cz/loader.js`;
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
-      script.onload = () => {
-        const SMapLoader2 = win.Loader;
-        if (SMapLoader2) {
-          resolve(SMapLoader2);
-        } else {
-          reject("mapy.cz not available");
-        }
-      };
+    return L.tileLayer(`https://api.mapy.cz/v1/maptiles/basic/256/{z}/{x}/{y}?apikey=${config.mapyComApiKey}`, {
+      minZoom: 0,
+      maxZoom: 19,
+      attribution: '© <a href="https://api.mapy.cz/copyright" target="_blank">Mapy.cz</a>',
     });
   }
 }

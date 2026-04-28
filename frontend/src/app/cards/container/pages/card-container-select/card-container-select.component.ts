@@ -1,6 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { IonicModule, NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { Language } from "src/app/schema/language";
 import { DashboardService } from "src/app/services/dashboard.service";
@@ -14,7 +16,7 @@ import { ContainerService } from "../../services/container.service";
   selector: "pd-card-container-select",
   templateUrl: "./card-container-select.component.html",
   styleUrls: ["./card-container-select.component.scss"],
-  standalone: false,
+  imports: [CommonModule, FormsModule, IonicModule],
 })
 export class CardContainerSelectComponent implements OnInit {
   containers: Container[] = [];

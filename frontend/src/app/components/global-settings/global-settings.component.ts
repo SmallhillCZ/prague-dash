@@ -1,5 +1,7 @@
+import { CommonModule } from "@angular/common";
 import { Component, ViewChild } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { FormsModule, NgForm } from "@angular/forms";
+import { IonicModule } from "@ionic/angular";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
 import { AppSettings } from "src/app/schema/app-settings";
 import { SettingsService } from "src/app/services/settings.service";
@@ -10,7 +12,7 @@ import packageJson from "../../../../package.json";
   selector: "pd-global-settings",
   templateUrl: "./global-settings.component.html",
   styleUrl: "./global-settings.component.scss",
-  standalone: false,
+  imports: [CommonModule, FormsModule, IonicModule],
 })
 export class GlobalSettingsComponent {
   settings?: AppSettings;

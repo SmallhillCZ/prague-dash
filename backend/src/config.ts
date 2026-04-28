@@ -1,16 +1,16 @@
 import { Global, Injectable, Module } from "@nestjs/common";
 import { config } from "dotenv";
-import { readFileSync } from "fs";
 import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import { FrontendConfigResponse } from "./modules/root/dto/root.dto";
 
 config({ override: true, debug: true });
 
 @Injectable()
 export class Config {
-  packageJson = JSON.parse(readFileSync("./package.json", "utf-8"));
   environment = process.env.NODE_ENV || "development";
+
   logging = {
     debug: process.env.LOG_DEBUG === "true" || process.env.LOG_DEBUG === "1",
     query: process.env.LOG_QUERY === "true" || process.env.LOG_QUERY === "1",
@@ -25,8 +25,8 @@ export class Config {
   };
 
   app = {
-    name: this.packageJson.name,
-    version: this.packageJson.version,
+    name: "PragueDash",
+    version: process.env["VERSION"] || "DEV",
     baseUrl: this.getBaseUrl(),
   };
 
@@ -47,6 +47,12 @@ export class Config {
 
   golemio = {
     token: process.env.GOLEMIO_TOKEN || "",
+  };
+
+  frontend: { config: FrontendConfigResponse } = {
+    config: {
+      mapyComApiKey: process.env.MAPY_COM_API_KEY || "",
+    },
   };
 
   private getBaseUrl() {

@@ -1,6 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { IonicModule, NavController } from "@ionic/angular";
 import { CardCreateData } from "src/app/schema/card-create-data";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
@@ -12,7 +14,7 @@ import { AirQualityService } from "../../services/air-quality.service";
   selector: "pd-card-air-quality-station-select",
   templateUrl: "./card-air-quality-station-select.component.html",
   styleUrls: ["./card-air-quality-station-select.component.scss"],
-  standalone: false,
+  imports: [CommonModule, FormsModule, IonicModule],
 })
 export class CardAirQualityStationSelectComponent implements OnInit {
   stations: GetAirQualityStationResponse[] = [];
