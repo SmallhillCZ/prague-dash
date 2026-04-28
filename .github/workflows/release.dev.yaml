@@ -2,6 +2,17 @@ name: Release to DEV
 
 on:
   workflow_dispatch:
+    inputs:
+      semver:
+        description: "Version bump"
+        required: true
+        type: choice
+        default: none
+        options:
+          - none
+          - patch
+          - minor
+          - major
 
 concurrency:
   group: ${{ github.workflow }}
@@ -10,15 +21,10 @@ concurrency:
 jobs:
   version:
     name: Resolve version
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set_short_sha.outputs.short_sha }}
-    steps:
-      - name: Set short SHA
-        id: set_short_sha
-        run: echo "short_sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
-      - name: Print resolved version
-        run: 'echo "Version: ${{ steps.set_short_sha.outputs.short_sha }}"'
+    uses: ./.github/workflows/_version.yaml
+    with:
+      semver: ${{ github.event.inputs.semver }}
+      prerelease: false
 
   test-unit:
     name: Unit Tests
