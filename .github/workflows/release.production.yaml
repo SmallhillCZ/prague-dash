@@ -21,6 +21,7 @@ jobs:
 
   build:
     name: Build
+    needs: version
     uses: ./.github/workflows/_build.yaml
     with:
       version: ${{ needs.version.outputs.version }}
@@ -39,7 +40,6 @@ jobs:
     uses: ./.github/workflows/_publish.yaml
     with:
       tag: latest
-      version-tags: true
     secrets: inherit
 
   deploy:

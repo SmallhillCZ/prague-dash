@@ -26,13 +26,16 @@ jobs:
 
   build:
     name: Build
+    needs:
+      - version
     uses: ./.github/workflows/_build.yaml
     with:
       version: ${{ needs.version.outputs.new_version }}
 
   test-e2e:
     name: E2E Tests
-    needs: build
+    needs:
+      - build
     uses: ./.github/workflows/_test-e2e.yaml
 
   publish:
@@ -43,13 +46,13 @@ jobs:
       - test-e2e
     uses: ./.github/workflows/_publish.yaml
     with:
-      tag: latest
-      version-tags: true
+      tag: dev
     secrets: inherit
 
   deploy:
     name: Deploy
-    needs: publish
+    needs:
+      - publish
     uses: ./.github/workflows/_deploy.yaml
     with:
       tag: latest
